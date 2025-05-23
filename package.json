@@ -1,0 +1,33 @@
+{
+  "name": "hellmapmanager.ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha.js -r ts-node/register tests/**/*.test.ts --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hellclient-scripts/hellmapmanager.ts.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hellclient-scripts/hellmapmanager.ts/issues"
+  },
+  "homepage": "https://github.com/hellclient-scripts/hellmapmanager.ts#readme",
+  "devDependencies": {
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "@types/sinon": "^17.0.4",
+    "@types/typescript": "^2.0.0",
+    "chai": "^5.2.0",
+    "mocha": "^11.4.0",
+    "sinon": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
