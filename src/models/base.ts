@@ -5,6 +5,9 @@ export class Condition {
     }
     Key: string;
     Not: boolean;
+    static New(key: string, not: boolean): Condition {
+        return new Condition(key, not);
+    }
     public Validated(): boolean {
         return this.Key !== "";
     }
@@ -23,6 +26,7 @@ export class ValueTag {
     }
     Key: string;
     Value: number;
+    static New(key: string, value: number) { return new ValueTag(key, value); }
     Validated(): boolean {
         return this.Key !== "";
     }
@@ -63,6 +67,9 @@ export class ValueCondition {
         this.Value = value;
         this.Not = not;
     }
+    static New(key: string, value: number, not: boolean): ValueCondition {
+        return new ValueCondition(key, value, not);
+    }
     Key: string;
     Not: boolean;
     Value: number;
@@ -76,7 +83,7 @@ export class ValueCondition {
         return new ValueCondition(this.Key, this.Value, this.Not);
     }
     ToString(): string {
-        var label = this.Not ? `!${this.Key}` : this.Key;
+        let label = this.Not ? `!${this.Key}` : this.Key;
         return this.Value == 0 ? label : `${label}:${this.Value}`;
     }
 }
@@ -87,6 +94,9 @@ export class TypedConditions {
         this.Key = key;
         this.Conditions = conditions;
         this.Not = not;
+    }
+    static New(key: string, conditions: string[], not: boolean): TypedConditions {
+        return new TypedConditions(key, conditions, not);
     }
     Key: string;
     Conditions: string[];
@@ -101,7 +111,7 @@ export class TypedConditions {
         if (this.Conditions.length !== model.Conditions.length) {
             return false;
         }
-        for (var i = 0; i < this.Conditions.length; i++) {
+        for (let i = 0; i < this.Conditions.length; i++) {
             if (this.Conditions[i] != model.Conditions[i]) {
                 return false;
             }
@@ -117,6 +127,9 @@ export class Data {
     constructor(key: string, value: string) {
         this.Key = key;
         this.Value = value;
+    }
+    static New(key: string, value: string): Data {
+        return new Data(key, value);
     }
     public Key: string;
     public Value: string;
@@ -140,6 +153,9 @@ export class RegionItem {
         this.Type = type;
         this.Value = value;
         this.Not = not;
+    }
+    static New(type: RegionItemType, value: string, not: boolean): RegionItem {
+        return new RegionItem(type, value, not);
     }
     Not: boolean;
     Type: RegionItemType;

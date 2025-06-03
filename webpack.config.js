@@ -8,7 +8,7 @@ module.exports = {
         main: "./src/index.ts",
     },
     output: {
-        path: path.resolve(__dirname, './build'),
+        path: path.resolve(__dirname, './dist'),
         filename: "hmm.umd.js",// <--- Will be compiled to this single file
         // library:"HellMapManager",
         libraryTarget: "umd"

@@ -104,6 +104,11 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
+  "tstl": {
+    "luaTarget": "5.1", /* Specify the Lua version to target. */
+    "luaBundle": "hmm.lua",
+    "luaBundleEntry": "src/index.ts", /* Specify the entry point for the Lua bundle. */
+  },
   "exclude": [
     "tests/**/*"
   ]

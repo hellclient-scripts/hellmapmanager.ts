@@ -1,6 +1,9 @@
 import { ValueCondition } from "./base";
 export class Exit {
     public Exit() { }
+    static New(): Exit {
+        return new Exit();
+    }
     //路径指令
     public Command: string = "";
     //目标房间
@@ -26,7 +29,7 @@ export class Exit {
         if (this.Conditions.length != model.Conditions.length) {
             return false;
         }
-        for (var i = 0; i < this.Conditions.length; i++) {
+        for (let i = 0; i < this.Conditions.length; i++) {
             if (!this.Conditions[i].Equal(model.Conditions[i])) {
                 return false;
             }

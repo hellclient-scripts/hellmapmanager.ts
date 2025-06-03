@@ -17,6 +17,9 @@ export class Command {
         this.Escaped = escaped;
         this.Encoded = ControlCode.PreEscape(raw);
     }
+    static New(raw: string, rawcode: string, escaped: string): Command {
+        return new Command(raw, rawcode, escaped);
+    }
     //转义后的字符
     Escaped: string;
     //编码后的控制代码
@@ -45,7 +48,7 @@ export class ControlCode {
     public static EncodeCommand(val: string): string {
         return ControlCode.CodeStart + ControlCode.PreEscape(val) + ControlCode.CodeEnd;
     }
-    public Commands:Command[] = [];
+    public Commands: Command[] = [];
     public WithCommand(command: Command): ControlCode {
         this.Commands.push(command);
         return this;
@@ -62,7 +65,7 @@ export class ControlCode {
     }
     public Decode(val: string): string {
         for (let i = 0; i < this.Commands.length; i++) {
-            var c = this.Commands[i];
+            let c = this.Commands[i];
             if (c.Raw !== c.EncodedCode && c.EncodedCode !== "") {
                 val = val.replaceAll(c.EncodedCode, c.Encoded);
             }
@@ -73,7 +76,7 @@ export class ControlCode {
 
     public Pack(val: string): string {
         for (let i = 0; i < this.Commands.length; i++) {
-            var c = this.Commands[i];
+            let c = this.Commands[i];
             if (c.EncodedCode !== c.Escaped && c.EncodedCode !== "") {
                 val = val.replaceAll(c.EncodedCode, c.Escaped);
             }
@@ -84,7 +87,7 @@ export class ControlCode {
     public Unpack(val: string): string {
         val = ControlCode.PreEscape(val);
         for (let i = 0; i < this.Commands.length; i++) {
-            var c = this.Commands[i];
+            let c = this.Commands[i];
             if (c.EncodedCode !== c.Escaped && c.Escaped !== "") {
                 val = val.replaceAll(c.Escaped, c.EncodedCode);
             }

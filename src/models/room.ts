@@ -112,6 +112,7 @@ export class Room {
     Validated(): boolean {
         return ItemKey.Validate(this.Key);
     }
+    static New(): Room { return new Room() };
     Clone(): Room {
         let result = new Room();
         result.Key = this.Key
@@ -150,21 +151,21 @@ export class Room {
         );
     }
     public static Sort(list: Room[]) {
-        list.sort((x, y) => x.Group != y.Group ? x.Group.localeCompare(y.Group) : x.Key.localeCompare(y.Key));
+        list.sort((x, y) => x.Group != y.Group ? (x.Group < y.Group ? -1 : 1) : (x.Key < y.Key ? -1 : 1));
 
     }
     static Decode(val: string): Room {
-        var result = new Room();
-        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
-        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
+        let result = new Room();
+        let kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        let list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Name = HMMFormatter.UnescapeAt(list, 1);
         result.Group = HMMFormatter.UnescapeAt(list, 2);
         result.Desc = HMMFormatter.UnescapeAt(list, 3);
         result.Tags = HMMFormatter.DecodeList(HMMFormatter.Level2, HMMFormatter.At(list, 4)).map(e => HMMFormatter.DecodeKeyValue(HMMFormatter.Level3, e).ToValueTag());
         result.Exits = HMMFormatter.DecodeList(HMMFormatter.Level2, HMMFormatter.At(list, 5)).map(d => {
-            var list = HMMFormatter.DecodeList(HMMFormatter.Level3, d);
-            var exit = new Exit();
+            let list = HMMFormatter.DecodeList(HMMFormatter.Level3, d);
+            let exit = new Exit();
 
             exit.Command = HMMFormatter.UnescapeAt(list, 0)
             exit.To = HMMFormatter.UnescapeAt(list, 1)
@@ -180,7 +181,7 @@ export class Room {
         return ValueTag.HasTag(this.Tags, key, value);
     }
     public GetData(key: string): string {
-        for (var data of this.Data) {
+        for (let data of this.Data) {
             if (data.Key == key) {
                 return data.Value;
             }
@@ -188,7 +189,7 @@ export class Room {
         return "";
     }
     public HasExitTo(key: string): boolean {
-        for (var exit of this.Exits) {
+        for (let exit of this.Exits) {
             if (exit.To == key) {
                 return true;
             }
@@ -206,15 +207,15 @@ export class Room {
         this.Arrange();
     }
     public SetDatas(list: Data[]) {
-        for (var rd of list) {
+        for (let rd of list) {
             this.DoAddData(rd);
         }
         this.Arrange();
     }
 
     public Arrange() {
-        this.Data.sort((x, y) => x.Key.localeCompare(y.Key))
-        this.Tags.sort((x, y) => x.Key.localeCompare(y.Key))
+        this.Data.sort((x, y) => (x.Key < y.Key ? -1 : 1))
+        this.Tags.sort((x, y) => (x.Key < y.Key ? -1 : 1))
         this.Exits.forEach(e => e.Arrange());
     }
     public Filter(val: string): boolean {
@@ -224,17 +225,17 @@ export class Room {
             this.Group.includes(val)) {
             return true;
         }
-        for (var tag of this.Tags) {
+        for (let tag of this.Tags) {
             if (tag.Key.includes(val)) {
                 return true;
             }
         }
-        for (var data of this.Data) {
+        for (let data of this.Data) {
             if (data.Key.includes(val) || data.Value.includes(val)) {
                 return true;
             }
         }
-        for (var exit of this.Exits) {
+        for (let exit of this.Exits) {
             if (exit.Command.includes(val) || exit.To.includes(val)) {
                 return true;
             }
@@ -254,7 +255,7 @@ export class Room {
         if (this.Exits.length != this.Exits.length) {
             return false;
         }
-        for (var i = 0; i < this.Exits.length; i++) {
+        for (let i = 0; i < this.Exits.length; i++) {
             if (!this.Exits[i].Equal(model.Exits[i])) {
                 return false;
             }
@@ -262,7 +263,7 @@ export class Room {
         if (this.Tags.length != model.Tags.length) {
             return false;
         }
-        for (var i = 0; i < this.Tags.length; i++) {
+        for (let i = 0; i < this.Tags.length; i++) {
             if (!this.Tags[i].Equal(model.Tags[i])) {
                 return false;
             }
@@ -270,7 +271,7 @@ export class Room {
         if (Data.length != model.Data.length) {
             return false;
         }
-        for (var i = 0; i < Data.length; i++) {
+        for (let i = 0; i < Data.length; i++) {
             if (!this.Data[i].Equal(model.Data[i])) {
                 return false;
             }

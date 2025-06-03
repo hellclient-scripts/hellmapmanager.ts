@@ -11,7 +11,7 @@ export class Marker {
         return ItemKey.Validate(this.Key) && this.Value != "";
     }
     public Clone(): Marker {
-        var result = new Marker();
+        let result = new Marker();
         result.Key = this.Key
         result.Value = this.Value
         result.Desc = this.Desc
@@ -33,9 +33,9 @@ export class Marker {
         );
     }
     public static Decode(val: string): Marker {
-        var result = new Marker();
-        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
-        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
+        let result = new Marker();
+        let kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        let list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Value = HMMFormatter.UnescapeAt(list, 1);
         result.Group = HMMFormatter.UnescapeAt(list, 2);
@@ -44,7 +44,7 @@ export class Marker {
         return result;
     }
     public static Sort(list: Marker[]) {
-        list.sort((x, y) => x.Group != y.Group ? x.Group.localeCompare(y.Group) : x.Key.localeCompare(y.Key));
+        list.sort((x, y) => x.Group != y.Group ? (x.Group < y.Group ? -1 : 1) : (x.Key < y.Key ? -1 : 1));
     }
     public Filter(val: string): boolean {
         if (this.Key.includes(val) ||

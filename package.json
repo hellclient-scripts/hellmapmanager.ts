@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
+    "build-lua":"tstl",
     "test": "./node_modules/mocha/bin/mocha.js -r ts-node/register tests/**/*.test.ts --reporter spec"
   },
   "repository": {
@@ -31,6 +32,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
+    "typescript-to-lua": "^1.31.1",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1"
   }

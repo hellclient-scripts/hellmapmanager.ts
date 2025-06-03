@@ -24,9 +24,9 @@ export class Route {
         );
     }
     public static Decode(val: string): Route {
-        var result = new Route();
-        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
-        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
+        let result = new Route();
+        let kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        let list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
@@ -35,7 +35,7 @@ export class Route {
         return result;
     }
     public Clone(): Route {
-        var result = new Route();
+        let result = new Route();
         result.Key = this.Key
         result.Rooms = [...this.Rooms]
         result.Group = this.Group
@@ -47,7 +47,7 @@ export class Route {
 
     }
     public static Sort(list: Route[]) {
-        list.sort((x, y) => x.Group != y.Group ? x.Group.localeCompare(y.Group) : x.Key.localeCompare(y.Key));
+        list.sort((x, y) => x.Group != y.Group ? (x.Group < y.Group ? -1 : 1) : (x.Key < y.Key ? -1 : 1));
     }
     public Filter(val: string): boolean {
         if (this.Key.includes(val) ||
@@ -56,7 +56,7 @@ export class Route {
             this.Message.includes(val)) {
             return true;
         }
-        for (var room of this.Rooms) {
+        for (let room of this.Rooms) {
             if (room.includes(val)) {
                 return true;
             }
@@ -70,7 +70,7 @@ export class Route {
         if (this.Rooms.length != model.Rooms.length) {
             return false;
         }
-        for (var i = 0; i < this.Rooms.length; i++) {
+        for (let i = 0; i < this.Rooms.length; i++) {
             if (this.Rooms[i] !== model.Rooms[i]) {
                 return false;
             }

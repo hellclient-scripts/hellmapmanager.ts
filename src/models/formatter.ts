@@ -5,6 +5,9 @@ export class KeyValue {
         this.Key = key;
         this.Value = value;
     }
+    public static New(key: string, value: string): KeyValue {
+        return new KeyValue(key, value);
+    }
     Key: string;
     Value: string;;
     UnescapeKey(): string {
@@ -33,6 +36,9 @@ export class ToggleValue {
         this.Value = value;
         this.Not = not;
     }
+    static New(value: string, not: boolean): ToggleValue {
+        return new ToggleValue(value, not);
+    }
     Not: boolean;
     Value: string;
     UnescapeValue(): string {
@@ -50,6 +56,9 @@ export class ToggleKeyValue {
         this.Not = not;
         this.Value = value;
         this.Key = key;
+    }
+    static New(key: string, value: string, not: boolean): ToggleKeyValue {
+        return new ToggleKeyValue(key, value, not);
     }
     Not: boolean;
     Key: string;
@@ -82,6 +91,9 @@ export class ToggleKeyValues {
         this.Values = values;
         this.Not = not;
     }
+    static New(key: string, values: string[], not: boolean): ToggleKeyValues {
+        return new ToggleKeyValues(key, values, not);
+    }
     Not: boolean;
     Key: string;
     Values: string[];
@@ -98,6 +110,9 @@ export class HMMLevel {
     constructor(keyToken: Command, sepToken: Command) {
         this.KeyToken = keyToken;
         this.SepToken = sepToken;
+    }
+    public static New(keyToken: Command, sepToken: Command): HMMLevel {
+        return new HMMLevel(keyToken, sepToken);
     }
     KeyToken: Command;
     SepToken: Command;
@@ -144,15 +159,15 @@ export class HMMFormatter {
     }
 
     static DecodeKeyValue(level: HMMLevel, val: string): KeyValue {
-        var decoded = val.split(level.KeyToken.Raw, 2);
+        let decoded = val.split(level.KeyToken.Raw, 2);
         return new KeyValue(decoded[0], decoded.length > 1 ? decoded[1] : "");
     }
     static EncodeToggleKeyValue(level: HMMLevel, kv: ToggleKeyValue): string {
         return HMMFormatter.EncodeToggleValue(new ToggleValue(HMMFormatter.EncodeKeyAndValue(level, kv.Key, kv.Value), kv.Not));
     }
     static DecodeToggleKeyValue(level: HMMLevel, val: string): ToggleKeyValue {
-        var v = HMMFormatter.DecodeToggleValue(val);
-        var kv = HMMFormatter.DecodeKeyValue(level, v.Value);
+        let v = HMMFormatter.DecodeToggleValue(val);
+        let kv = HMMFormatter.DecodeKeyValue(level, v.Value);
         return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
     }
 
@@ -160,8 +175,8 @@ export class HMMFormatter {
         return HMMFormatter.EncodeToggleValue(new ToggleValue(HMMFormatter.EncodeKeyAndValue(level, kv.Key, HMMFormatter.EncodeList(level, kv.Values)), kv.Not));
     }
     static DecodeToggleKeyValues(level: HMMLevel, val: string): ToggleKeyValues {
-        var v = HMMFormatter.DecodeToggleValue(val);
-        var kv = HMMFormatter.DecodeKeyValue(level, v.Value);
+        let v = HMMFormatter.DecodeToggleValue(val);
+        let kv = HMMFormatter.DecodeKeyValue(level, v.Value);
         return new ToggleKeyValues(kv.Key, HMMFormatter.DecodeList(level, kv.Value), v.Not);
     }
     static EncodeList(level: HMMLevel, items: string[]): string {
@@ -181,7 +196,7 @@ export class HMMFormatter {
         return HMMFormatter.Unescape(HMMFormatter.At(list, index));
     }
     static UnescapeInt(val: string, defaultValue: number): number {
-        var result = Number.parseInt(HMMFormatter.Unescape(val))
+        let result = Number.parseInt(HMMFormatter.Unescape(val))
         return isNaN(result) || (val.indexOf(".") != -1) ? defaultValue : result;
     }
     static UnescapeIntAt(list: string[], index: number, defaultValue: number): number {
@@ -191,7 +206,7 @@ export class HMMFormatter {
         return (v.Not ? HMMFormatter.TokenNot.Raw : "") + v.Value;
     }
     static DecodeToggleValue(val: string): ToggleValue {
-        var not = val.length > 0 && val.startsWith(HMMFormatter.TokenNot.Raw);
+        let not = val.length > 0 && val.startsWith(HMMFormatter.TokenNot.Raw);
         let key: string = "";
         if (not) {
             key = val.substring(1);
