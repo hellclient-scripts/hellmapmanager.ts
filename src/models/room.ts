@@ -149,7 +149,7 @@ export class Room {
             ])
         );
     }
-    public Sort(list: Room[]) {
+    public static Sort(list: Room[]) {
         list.sort((x, y) => x.Group != y.Group ? x.Group.localeCompare(y.Group) : x.Key.localeCompare(y.Key));
 
     }
