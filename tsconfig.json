@@ -108,6 +108,7 @@
     "luaTarget": "5.1", /* Specify the Lua version to target. */
     "luaBundle": "hmm.lua",
     "luaBundleEntry": "src/index.ts", /* Specify the entry point for the Lua bundle. */
+    "luaLibImport":"require-minimal"
   },
   "exclude": [
     "tests/**/*"
