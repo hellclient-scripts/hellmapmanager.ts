@@ -45,7 +45,7 @@ export class ControlCode {
     public static EncodeCommand(val: string): string {
         return ControlCode.CodeStart + ControlCode.PreEscape(val) + ControlCode.CodeEnd;
     }
-    public Commands: Command[] = [];
+    public Commands:Command[] = [];
     public WithCommand(command: Command): ControlCode {
         this.Commands.push(command);
         return this;
