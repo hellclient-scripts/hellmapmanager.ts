@@ -1,5 +1,5 @@
-local lu = dofile('./luatests/luaunit.lua')
-local hmm = dofile('./dist/hmm.lua')
+local lu = require('luatests/luaunit')
+local hmm = require('dist/hmm')
 
 
 
@@ -62,4 +62,4 @@ function TestMulti()
     lu.assertEquals("\\n", cc:Unescape("\\\\n"));
 end
 
-os.exit(lu.LuaUnit.run())
+-- os.exit(lu.LuaUnit.run())

@@ -1,7 +1,7 @@
 import { Condition, ValueTag, ValueCondition, TypedConditions, Data, RegionItemType, RegionItem } from "./models/base";
 export { Condition, ValueTag, ValueCondition, TypedConditions, Data, RegionItemType, RegionItem }
-import { HMMFormatter, ToggleKeyValue, KeyValue, ToggleValue } from "./models/formatter";
-export { HMMFormatter, ToggleKeyValue, KeyValue, ToggleValue }
+import { HMMFormatter, ToggleKeyValue, KeyValue, ToggleValue,ToggleKeyValues} from "./models/formatter";
+export { HMMFormatter, ToggleKeyValue, KeyValue, ToggleValue,ToggleKeyValues}
 import { ItemKey } from "./models/base";
 export { ItemKey }
 import { Exit } from "./models/exit";

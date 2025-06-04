@@ -10,7 +10,7 @@
     "build": "webpack --config webpack.config.js",
     "build-lua":"tstl",
     "test": "./node_modules/mocha/bin/mocha.js -r ts-node/register tests/**/*.test.ts --reporter spec",
-    "test-lua":"lua luatests/*.test.lua"
+    "test-lua":"lua luatests/test.lua -o TAP"
   },
   "repository": {
     "type": "git",
