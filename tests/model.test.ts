@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { Data, Condition, TypedConditions, ValueTag, ValueCondition, KeyValue, ToggleKeyValue, Exit, Room, RoomFilter, Marker, Route, Trace, Region, RegionItem, RegionItemType, Landmark, Shortcut, Variable, Snapshot, SnapshotKey, MapEncoding, Map, MapInfo, MapSettings, MapFile } from "../src/index.ts";
-import { LandmarkKey, ItemKey } from "../src/index.ts";
+import { LandmarkKey, ItemKey, Context, RoomConditionExit, Path, Link, Environment, CommandCost } from "../src/index.ts";
 
 describe("ModelTest", () => {
     it("TestBase", () => {
@@ -1165,43 +1165,65 @@ describe("ModelTest", () => {
         assert.equal(2, ctx.Tags["tag2"]);
         assert.isEmpty(ctx.RoomConditions);
         assert.equal(ctx, ctx.WithRoomConditions([new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)]));
-        assert.equal(2, ctx.RoomConditions.Count);
+        assert.equal(2, ctx.RoomConditions.length);
         assert.equal("con1", ctx.RoomConditions[0].Key);
         assert.equal(0, ctx.RoomConditions[0].Value);
         assert.isFalse(ctx.RoomConditions[0].Not);
         assert.equal("con2", ctx.RoomConditions[1].Key);
         assert.isEmpty(ctx.Rooms);
-        assert.equal(ctx, ctx.WithRooms([new Room() { Key = "room1" }, new Room() { Key = "room2" }]));
-        assert.equal(2, ctx.Rooms.Count);
+        let r1 = new Room()
+        r1.Key = "room1"
+        let r2 = new Room()
+        r2.Key = "room2"
+        assert.equal(ctx, ctx.WithRooms([r1, r2]));
+        assert.equal(2, Object.keys(ctx.Rooms).length);
         assert.equal("room1", ctx.Rooms["room1"].Key);
         assert.equal("room2", ctx.Rooms["room2"].Key);
         assert.isEmpty(ctx.Whitelist);
         assert.equal(ctx, ctx.WithWhitelist(["room1", "room2"]));
-        assert.equal(2, ctx.Whitelist.Count);
+        assert.equal(2, Object.keys(ctx.Whitelist).length);
         assert.isTrue(ctx.Whitelist["room1"]);
         assert.isTrue(ctx.Whitelist["room2"]);
         assert.isEmpty(ctx.Blacklist);
         assert.equal(ctx, ctx.WithBlacklist(["room3", "room4"]));
-        assert.equal(2, ctx.Blacklist.Count);
+        assert.equal(2, Object.keys(ctx.Blacklist).length);
         assert.isTrue(ctx.Blacklist["room3"]);
         assert.isTrue(ctx.Blacklist["room4"]);
         assert.isEmpty(ctx.Shortcuts);
+        let rce1 = new RoomConditionExit()
+        rce1.Command = "cmd1"
+        rce1.To = "to1"
+        let rce2 = new RoomConditionExit()
+        rce2.Command = "cmd2"
+        rce2.To = "to2"
         assert.equal(ctx, ctx.WithShortcuts([
-            new RoomConditionExit() { Command = "cmd1", To="to1" },
-            new RoomConditionExit() { Command = "cmd2", To="to2" },
+            rce1,
+            rce2,
         ]));
-        assert.equal(2, ctx.Shortcuts.Count);
+        assert.equal(2, ctx.Shortcuts.length);
         assert.equal("to1", ctx.Shortcuts[0].To);
         assert.equal("cmd1", ctx.Shortcuts[0].Command);
         assert.equal("to2", ctx.Shortcuts[1].To);
         assert.equal("cmd2", ctx.Shortcuts[1].Command);
         assert.isEmpty(ctx.Paths);
+        let path1 = new Path()
+        path1.To = "to1"
+        path1.From = "from1"
+        path1.Command = "cmd1"
+        let path2 = new Path()
+        path2.To = "to2"
+        path2.From = "from2"
+        path2.Command = "cmd2"
+        let path3 = new Path()
+        path3.To = "to3"
+        path3.From = "from1"
+        path3.Command = "cmd3"
         assert.equal(ctx, ctx.WithPaths([
-            new HellMapManager.Models.Path() { To = "to1", From="from1", Command="cmd1" },
-            new HellMapManager.Models.Path() { To = "to2", From="from2", Command="cmd2" },
-            new HellMapManager.Models.Path() { To = "to3", From="from1", Command="cmd3" },
+            path1,
+            path2,
+            path3,
         ]));
-        assert.equal(2, ctx.Paths.Count);
+        assert.equal(2, Object.keys(ctx.Paths).length);
         assert.equal("to1", ctx.Paths["from1"][0].To);
         assert.equal("cmd1", ctx.Paths["from1"][0].Command);
         assert.equal("to3", ctx.Paths["from1"][1].To);
@@ -1211,10 +1233,10 @@ describe("ModelTest", () => {
         assert.isEmpty(ctx.BlockedLinks);
         assert.equal(ctx, ctx.WithBlockedLinks([
             new Link("from1", "to1"),
-            new Link("from2", "to2") {},
+            new Link("from2", "to2"),
             new Link("from1", "to3"),
         ]));
-        assert.equal(2, ctx.BlockedLinks.Count);
+        assert.equal(2, Object.keys(ctx.BlockedLinks).length);
         assert.isTrue(ctx.BlockedLinks["from1"]["to1"]);
         assert.isTrue(ctx.BlockedLinks["from1"]["to3"]);
         assert.isTrue(ctx.BlockedLinks["from2"]["to2"]);
@@ -1234,7 +1256,7 @@ describe("ModelTest", () => {
             new CommandCost("cmd2", "to1", 2),
             new CommandCost("cmd1", "to3", 3),
         ]));
-        assert.equal(2, ctx.CommandCosts.Count);
+        assert.equal(2, Object.keys(ctx.CommandCosts).length);
         assert.equal(1, ctx.CommandCosts["cmd1"]["to1"]);
         assert.equal(2, ctx.CommandCosts["cmd2"]["to1"]);
         assert.equal(3, ctx.CommandCosts["cmd1"]["to3"]);
@@ -1259,116 +1281,142 @@ describe("ModelTest", () => {
     })
 
     it("TestEnvironment", () => {
-        var env = new HellMapManager.Models.Environment()
-        {
-            Tags = [new ValueTag("tag1", 1), new ValueTag("tag2", 2)],
-                RoomConditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)],
-                Rooms = [new Room() { Key = "room1" }, new Room() { Key = "room2" }],
-                Whitelist = ["room1", "room2"],
-                Blacklist = ["room3", "room4"],
-                Shortcuts = [new RoomConditionExit() { Command = "cmd1", To = "to1" }, new RoomConditionExit() { Command = "cmd2", To = "to2" }],
-                Paths = [new HellMapManager.Models.Path() { To = "to1", From = "from1", Command = "cmd1" }, new HellMapManager.Models.Path() { To = "to2", From = "from2", Command = "cmd2" }, new HellMapManager.Models.Path() { To = "to3", From = "from1", Command = "cmd3" }],
-                BlockedLinks = [new Link("from1", "to1"), new Link("from2", "to2"), new Link("from1", "to3")],
-                CommandCosts = [new CommandCost("cmd1", "to1", 1), new CommandCost("cmd2", "to1", 2), new CommandCost("cmd1", "to3", 3)],
-        };
+        var env = new Environment()
+
+        env.Tags = [new ValueTag("tag1", 1), new ValueTag("tag2", 2)]
+        env.RoomConditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)]
+        let r1 = new Room()
+        r1.Key = "room1"
+        let r2 = new Room()
+        r2.Key = "room2"
+        env.Rooms = [r1, r2]
+        env.Whitelist = ["room1", "room2"]
+        env.Blacklist = ["room3", "room4"]
+        let rce1 = new RoomConditionExit()
+        rce1.Command = "cmd1"
+        rce1.To = "to1"
+        let rce2 = new RoomConditionExit()
+        rce2.Command = "cmd2"
+        rce2.To = "to2"
+        env.Shortcuts = [rce1, rce2]
+        let path1 = new Path();
+        path1.To = "to1"
+        path1.From = "from1"
+        path1.Command = "cmd1"
+        let path2 = new Path();
+        path2.To = "to2"
+        path2.From = "from2"
+        path2.Command = "cmd2"
+        let path3 = new Path();
+        path3.To = "to3"
+        path3.From = "from1"
+        path3.Command = "cmd3"
+        env.Paths = [
+            path1,
+            path2,
+            path3
+        ]
+        env.BlockedLinks = [new Link("from1", "to1"), new Link("from2", "to2"), new Link("from1", "to3")]
+        env.CommandCosts = [new CommandCost("cmd1", "to1", 1), new CommandCost("cmd2", "to1", 2), new CommandCost("cmd1", "to3", 3)]
+
         var ctx = Context.FromEnvironment(env);
         assert.equal(2, ctx.Tags.Count);
         assert.equal(1, ctx.Tags["tag1"]);
         assert.equal(2, ctx.Tags["tag2"]);
-        assert.equal(2, ctx.RoomConditions.Count);
+        assert.equal(2, ctx.RoomConditions.length);
         assert.equal("con1", ctx.RoomConditions[0].Key);
         assert.equal(0, ctx.RoomConditions[0].Value);
         assert.isFalse(ctx.RoomConditions[0].Not);
         assert.equal("con2", ctx.RoomConditions[1].Key);
-        assert.equal(2, ctx.Rooms.Count);
+        assert.equal(2, Object.keys(ctx.Rooms).length);
         assert.equal("room1", ctx.Rooms["room1"].Key);
         assert.equal("room2", ctx.Rooms["room2"].Key);
-        assert.equal(2, ctx.Whitelist.Count);
+        assert.equal(2, Object.keys(ctx.Whitelist).length);
         assert.isTrue(ctx.Whitelist["room1"]);
         assert.isTrue(ctx.Whitelist["room2"]);
-        assert.equal(2, ctx.Blacklist.Count);
+        assert.equal(2, Object.keys(ctx.Blacklist).length);
         assert.isTrue(ctx.Blacklist["room3"]);
         assert.isTrue(ctx.Blacklist["room4"]);
-        assert.equal(2, ctx.Shortcuts.Count);
+        assert.equal(2, ctx.Shortcuts.length);
         assert.equal("to1", ctx.Shortcuts[0].To);
         assert.equal("cmd1", ctx.Shortcuts[0].Command);
         assert.equal("to2", ctx.Shortcuts[1].To);
         assert.equal("cmd2", ctx.Shortcuts[1].Command);
-        assert.equal(2, ctx.Paths.Count);
+        assert.equal(2, Object.keys(ctx.Paths).length);
         assert.equal("to1", ctx.Paths["from1"][0].To);
         assert.equal("cmd1", ctx.Paths["from1"][0].Command);
         assert.equal("to3", ctx.Paths["from1"][1].To);
         assert.equal("cmd3", ctx.Paths["from1"][1].Command);
         assert.equal("to2", ctx.Paths["from2"][0].To);
         assert.equal("cmd2", ctx.Paths["from2"][0].Command);
-        assert.equal(2, ctx.BlockedLinks.Count);
+        assert.equal(2, Object.keys(ctx.BlockedLinks).length);
         assert.isTrue(ctx.BlockedLinks["from1"]["to1"]);
         assert.isTrue(ctx.BlockedLinks["from1"]["to3"]);
         assert.isTrue(ctx.BlockedLinks["from2"]["to2"]);
-        assert.equal(2, ctx.CommandCosts.Count);
+        assert.equal(2, Object.keys(ctx.CommandCosts).length);
         assert.equal(1, ctx.CommandCosts["cmd1"]["to1"]);
         assert.equal(2, ctx.CommandCosts["cmd2"]["to1"]);
         assert.equal(3, ctx.CommandCosts["cmd1"]["to3"]);
         var env2 = ctx.ToEnvironment();
-        assert.equal(env.Tags.Count, env2.Tags.Count);
-        env.Tags.Sort((a, b) => a.Key.CompareTo(b.Key));
-        env2.Tags.Sort((a, b) => a.Key.CompareTo(b.Key));
-        for (var i = 0; i < env.Tags.Count; i++) {
+        assert.equal(env.Tags.length, env2.Tags.length);
+        env.Tags.sort((a, b) => a.Key < b.Key ? -1 : 1);
+        env2.Tags.sort((a, b) => a.Key < b.Key ? -1 : 1);
+        for (var i = 0; i < env.Tags.length; i++) {
             assert.equal(env.Tags[i].Key, env2.Tags[i].Key);
             assert.equal(env.Tags[i].Value, env2.Tags[i].Value);
         }
-        assert.equal(env.RoomConditions.Count, env2.RoomConditions.Count);
-        env.RoomConditions.Sort((a, b) => a.Key.CompareTo(b.Key));
-        env2.RoomConditions.Sort((a, b) => a.Key.CompareTo(b.Key));
-        for (var i = 0; i < env.RoomConditions.Count; i++) {
+        assert.equal(env.RoomConditions.length, env2.RoomConditions.length);
+        env.RoomConditions.sort((a, b) => a.Key < b.Key ? -1 : 1);
+        env2.RoomConditions.sort((a, b) => a.Key < b.Key ? -1 : 1);
+        for (var i = 0; i < env.RoomConditions.length; i++) {
             assert.equal(env.RoomConditions[i].Key, env2.RoomConditions[i].Key);
             assert.equal(env.RoomConditions[i].Value, env2.RoomConditions[i].Value);
             assert.equal(env.RoomConditions[i].Not, env2.RoomConditions[i].Not);
         }
-        assert.equal(env.Rooms.Count, env2.Rooms.Count);
-        env.Rooms.Sort((a, b) => a.Key.CompareTo(b.Key));
-        env2.Rooms.Sort((a, b) => a.Key.CompareTo(b.Key));
-        for (var i = 0; i < env.Rooms.Count; i++) {
+        assert.equal(env.Rooms.length, env2.Rooms.length);
+        env.Rooms.sort((a, b) => a.Key < b.Key ? -1 : 1);
+        env2.Rooms.sort((a, b) => a.Key < b.Key ? -1 : 1);
+        for (var i = 0; i < env.Rooms.length; i++) {
             assert.equal(env.Rooms[i].Key, env2.Rooms[i].Key);
         }
-        assert.equal(env.Whitelist.Count, env2.Whitelist.Count);
-        env.Whitelist.Sort();
-        env2.Whitelist.Sort();
-        for (var i = 0; i < env.Whitelist.Count; i++) {
+        assert.equal(env.Whitelist.length, env2.Whitelist.length);
+        env.Whitelist.sort();
+        env2.Whitelist.sort();
+        for (var i = 0; i < env.Whitelist.length; i++) {
             assert.equal(env.Whitelist[i], env2.Whitelist[i]);
         }
-        assert.equal(env.Blacklist.Count, env2.Blacklist.Count);
-        env.Blacklist.Sort();
-        env2.Blacklist.Sort();
-        for (var i = 0; i < env.Blacklist.Count; i++) {
+        assert.equal(env.Blacklist.length, env2.Blacklist.length);
+        env.Blacklist.sort();
+        env2.Blacklist.sort();
+        for (var i = 0; i < env.Blacklist.length; i++) {
             assert.equal(env.Blacklist[i], env2.Blacklist[i]);
         }
-        assert.equal(env.Shortcuts.Count, env2.Shortcuts.Count);
-        env.Shortcuts.Sort((a, b) => a.To.CompareTo(b.To));
-        env2.Shortcuts.Sort((a, b) => a.To.CompareTo(b.To));
-        for (var i = 0; i < env.Shortcuts.Count; i++) {
+        assert.equal(env.Shortcuts.length, env2.Shortcuts.length);
+        env.Shortcuts.sort((a, b) => a.To < b.To ? -1 : 1);
+        env2.Shortcuts.sort((a, b) => a.To < b.To ? -1 : 1);
+        for (var i = 0; i < env.Shortcuts.length; i++) {
             assert.equal(env.Shortcuts[i].Command, env2.Shortcuts[i].Command);
             assert.equal(env.Shortcuts[i].To, env2.Shortcuts[i].To);
         }
-        assert.equal(env.Paths.Count, env2.Paths.Count);
-        env.Paths.Sort((a, b) => a.To.CompareTo(b.To));
-        env2.Paths.Sort((a, b) => a.To.CompareTo(b.To));
-        for (var i = 0; i < env.Paths.Count; i++) {
+        assert.equal(env.Paths.length, env2.Paths.length);
+        env.Paths.sort((a, b) => a.To < b.To ? -1 : 1);
+        env2.Paths.sort((a, b) => a.To < b.To ? -1 : 1);
+        for (var i = 0; i < env.Paths.length; i++) {
             assert.equal(env.Paths[i].To, env2.Paths[i].To);
             assert.equal(env.Paths[i].From, env2.Paths[i].From);
             assert.equal(env.Paths[i].Command, env2.Paths[i].Command);
         }
-        assert.equal(env.BlockedLinks.Count, env2.BlockedLinks.Count);
-        env.BlockedLinks.Sort((a, b) => a.From.CompareTo(b.From));
-        env2.BlockedLinks.Sort((a, b) => a.From.CompareTo(b.From));
-        for (var i = 0; i < env.BlockedLinks.Count; i++) {
+        assert.equal(env.BlockedLinks.length, env2.BlockedLinks.length);
+        env.BlockedLinks.sort((a, b) => a.From < b.From ? -1 : 1);
+        env2.BlockedLinks.sort((a, b) => a.From < b.From ? -1 : 1);
+        for (var i = 0; i < env.BlockedLinks.length; i++) {
             assert.equal(env.BlockedLinks[i].From, env2.BlockedLinks[i].From);
             assert.equal(env.BlockedLinks[i].To, env2.BlockedLinks[i].To);
         }
-        assert.equal(env.CommandCosts.Count, env2.CommandCosts.Count);
-        env.CommandCosts.Sort((a, b) => a.To.CompareTo(b.To));
-        env2.CommandCosts.Sort((a, b) => a.To.CompareTo(b.To));
-        for (var i = 0; i < env.CommandCosts.Count; i++) {
+        assert.equal(env.CommandCosts.length, env2.CommandCosts.length);
+        env.CommandCosts.sort((a, b) => a.To < b.To ? -1 : 1);
+        env2.CommandCosts.sort((a, b) => a.To < b.To ? -1 : 1);
+        for (var i = 0; i < env.CommandCosts.length; i++) {
             assert.equal(env.CommandCosts[i].Command, env2.CommandCosts[i].Command);
             assert.equal(env.CommandCosts[i].To, env2.CommandCosts[i].To);
             assert.equal(env.CommandCosts[i].Cost, env2.CommandCosts[i].Cost);
@@ -1399,21 +1447,21 @@ describe("ModelTest", () => {
         assert.isEmpty(result.Steps);
         assert.isEmpty(result.Unvisited);
         assert.isFalse(result.IsSuccess());
-        Assert.Null(result.SuccessOrNull());
+        assert.isNull(result.SuccessOrNull());
         result.To = "to1";
         assert.isFalse(result.IsSuccess());
-        Assert.Null(result.SuccessOrNull());
+        assert.isNull(result.SuccessOrNull());
         result.To = "";
         result.From = "from1";
         assert.isFalse(result.IsSuccess());
-        Assert.Null(result.SuccessOrNull());
+        assert.isNull(result.SuccessOrNull());
         result.To = "to1";
         result.From = "from1";
         assert.isTrue(result.IsSuccess());
-        Assert.NotNull(result.SuccessOrNull());
+        assert.isNotNull(result.SuccessOrNull());
         var result2 = QueryReuslt.Fail;
         assert.isFalse(result2.IsSuccess());
-        Assert.Null(result2.SuccessOrNull());
+        assert.isNull(result2.SuccessOrNull());
 
         assert.equal("", Step.JoinCommands(";", new List<Step>()));
         assert.equal("cmd1;cmd2", Step.JoinCommands(";", new List<Step>([new Step("cmd1", "to1", 5), new Step("cmd2", "to2", 10)])));
@@ -1431,22 +1479,20 @@ describe("ModelTest", () => {
         assert.isFalse(ctx.HasTag("tag2", 3));
         assert.isFalse(ctx.HasTag("tag3", 1));
         assert.isTrue(ctx.HasTag("tag3", 0));
-        assert.isTrue(ctx.ValidteConditions([new ("tag1", 1, false), new ("tag2", 2, false)]));
-        assert.isTrue(ctx.ValidteConditions([new ("tag1", 1, false), new ("tag3", 1, true)]));
-        assert.isFalse(ctx.ValidteConditions([new ("tag1", 1, false), new ("tag3", 1, false)]));
-        assert.isTrue(ctx.ValidteConditions([new ("tag3", 0, false)]));
+        assert.isTrue(ctx.ValidteConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag2", 2, false)]));
+        assert.isTrue(ctx.ValidteConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag3", 1, true)]));
+        assert.isFalse(ctx.ValidteConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag3", 1, false)]));
+        assert.isTrue(ctx.ValidteConditions([new ValueCondition("tag3", 0, false)]));
     })
 
     it("TestSnapshotFilter", () => {
 
         var snapshot = new Snapshot()
-        {
-            Key = "key1",
-                Type = "type1",
-                Value = "value1",
-                Group = "group1",
-                Timestamp = 1234567890
-        };
+        snapshot.Key = "key1"
+        snapshot.Type = "type1"
+        snapshot.Value = "value1"
+        snapshot.Group = "group1"
+        snapshot.Timestamp = 1234567890
         var sf = new SnapshotFilter("key1", "type1", "group1");
         assert.equal("key1", sf.Key);
         assert.equal("type1", sf.Type);
@@ -1466,17 +1512,14 @@ describe("ModelTest", () => {
 
     it("TestSnapshotSearch", () => {
         var snapshot = new Snapshot()
-        {
-
-            Key = "key1",
-                Type = "type1",
-                Value = "value1\nvalue2",
-                Group = "group1",
-                Timestamp = 1234567890
-        };
+        snapshot.Key = "key1"
+        snapshot.Type = "type1"
+        snapshot.Value = "value1\nvalue2"
+        snapshot.Group = "group1"
+        snapshot.Timestamp = 1234567890
         var ss = new SnapshotSearch();
-        Assert.Null(ss.Type);
-        Assert.Null(ss.Group);
+        assert.isNull(ss.Type);
+        assert.isNull(ss.Group);
         assert.isEmpty(ss.Keywords);
         assert.isTrue(ss.PartialMatch);
         assert.isFalse(ss.Any);
@@ -1511,34 +1554,30 @@ describe("ModelTest", () => {
         assert.equal("", sr.Key);
         assert.isEmpty(sr.Items);
         var snapshot = new Snapshot()
-        {
-            Key = "key1",
-                Type = "type1",
-                Value = "value1\nvalue2",
-                Group = "group1",
-                Timestamp = 1234567890,
-                Count = 15
-        };
+        snapshot.Key = "key1"
+        snapshot.Type = "type1"
+        snapshot.Value = "value1\nvalue2"
+        snapshot.Group = "group1"
+        snapshot.Timestamp = 1234567890
+        snapshot.Count = 15
         var snapshot2 = new Snapshot()
-        {
-            Key = "key1",
-                Type = "type1",
-                Value = "value1\nvalue2",
-                Group = "group1",
-                Timestamp = 1234567890,
-                Count = 30
-        };
+        snapshot2.Key = "key1"
+        snapshot2.Type = "type1"
+        snapshot2.Value = "value1\nvalue2"
+        snapshot2.Group = "group1"
+        snapshot2.Timestamp = 1234567890
+        snapshot2.Count = 30
         sr.Add(snapshot, true);
         assert.equal(15, sr.Count);
         assert.equal(15, sr.Sum);
         assert.equal("", sr.Key);
-        Assert.Single(sr.Items);
+        assert.equal(1, sr.Items.length);
         assert.equal(snapshot, sr.Items[0]);
         sr.Add(snapshot2, false);
         assert.equal(15, sr.Count);
         assert.equal(45, sr.Sum);
         assert.equal("", sr.Key);
-        Assert.Single(sr.Items);
+        assert.equal(1, sr.Items.length);
         assert.equal(snapshot, sr.Items[0]);
         assert.equal(snapshot, sr.Items[0]);
     })

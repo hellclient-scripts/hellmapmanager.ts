@@ -33,5 +33,8 @@ import { MapFile } from "./models/mapfile";
 export { MapFile }
 import { Records } from "./models/records";
 export { Records }
+
+import { Context, Path, Link, CommandCost, Environment } from "./models/context";
+export { Context, Path, Link, CommandCost, Environment }
 import { UniqueKeyUtil } from "./utils/uniquekeyutil";
 export { UniqueKeyUtil }
