@@ -27,5 +27,11 @@ export { Snapshot, SnapshotKey }
 import { ControlCode, Command } from "./utils/controlcode/controlcode";
 export { ControlCode, Command }
 
+import { Map, MapInfo, MapEncoding, MapSettings } from "./models/map";
+export { Map, MapInfo, MapEncoding, MapSettings }
+import { MapFile } from "./models/mapfile";
+export { MapFile }
+import { Records } from "./models/records";
+export { Records }
 import { UniqueKeyUtil } from "./utils/uniquekeyutil";
 export { UniqueKeyUtil }
