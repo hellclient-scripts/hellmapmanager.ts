@@ -218,30 +218,6 @@ export class Room {
         this.Tags.sort((x, y) => (x.Key < y.Key ? -1 : 1))
         this.Exits.forEach(e => e.Arrange());
     }
-    public Filter(val: string): boolean {
-        if (this.Key.includes(val) ||
-            this.Name.includes(val) ||
-            this.Desc.includes(val) ||
-            this.Group.includes(val)) {
-            return true;
-        }
-        for (let tag of this.Tags) {
-            if (tag.Key.includes(val)) {
-                return true;
-            }
-        }
-        for (let data of this.Data) {
-            if (data.Key.includes(val) || data.Value.includes(val)) {
-                return true;
-            }
-        }
-        for (let exit of this.Exits) {
-            if (exit.Command.includes(val) || exit.To.includes(val)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public Equal(model: Room): boolean {
         if (

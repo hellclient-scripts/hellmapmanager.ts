@@ -49,20 +49,6 @@ export class Route {
     public static Sort(list: Route[]) {
         list.sort((x, y) => x.Group != y.Group ? (x.Group < y.Group ? -1 : 1) : (x.Key < y.Key ? -1 : 1));
     }
-    public Filter(val: string): boolean {
-        if (this.Key.includes(val) ||
-            this.Desc.includes(val) ||
-            this.Group.includes(val) ||
-            this.Message.includes(val)) {
-            return true;
-        }
-        for (let room of this.Rooms) {
-            if (room.includes(val)) {
-                return true;
-            }
-        }
-        return false;
-    }
     public Equal(model: Route): boolean {
         if (this.Key !== model.Key || this.Desc !== model.Desc || this.Group !== model.Group || this.Message !== model.Message) {
             return false;
