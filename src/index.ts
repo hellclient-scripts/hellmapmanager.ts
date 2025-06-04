@@ -12,3 +12,5 @@ import { Room } from "./models/room";
 export { Room }
 import { Route } from "./models/route";
 export { Route }
+import { ControlCode, Command } from "./utils/controlcode/controlcode";
+export { ControlCode, Command }

@@ -39,6 +39,9 @@ export class ControlCode {
     public static EncodedEscape: string = "\x04\x04";
     public static EncodedStart: string = "\x04\x05";
     public static EncodedEnd: string = "\x04\x06";
+    static New(): ControlCode {
+        return new ControlCode();
+    }
     static PreEscape(val: string): string {
         return val.replaceAll(ControlCode.CodeEscape, ControlCode.EncodedEscape).replaceAll(ControlCode.CodeEnd, ControlCode.EncodedEnd).replaceAll(ControlCode.CodeStart, ControlCode.EncodedStart);
     }
