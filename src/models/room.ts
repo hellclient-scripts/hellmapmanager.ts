@@ -244,10 +244,10 @@ export class Room {
                 return false;
             }
         }
-        if (Data.length !== model.Data.length) {
+        if (this.Data.length !== model.Data.length) {
             return false;
         }
-        for (let i = 0; i < Data.length; i++) {
+        for (let i = 0; i < this.Data.length; i++) {
             if (!this.Data[i].Equal(model.Data[i])) {
                 return false;
             }

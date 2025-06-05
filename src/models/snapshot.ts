@@ -1,7 +1,7 @@
 import { UniqueKeyUtil } from "../utils/uniquekeyutil"
 import { ItemKey } from "./base";
 import { HMMFormatter } from "./formatter";
-
+import { Timestamp } from "../utils/timestamp";
 export class SnapshotKey {
     constructor(key: string, type: string, value: string) {
         this.Key = key;
@@ -33,7 +33,7 @@ export class Snapshot {
         result.Key = key
         result.Type = type
         result.Value = value
-        result.Timestamp = Date.now() / 1000
+        result.Timestamp = Timestamp.Now();
         result.Group = group
         return result;
     }

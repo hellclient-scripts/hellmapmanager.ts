@@ -1,4 +1,5 @@
 import { HMMFormatter } from "./formatter";
+import { Timestamp } from "../utils/timestamp";
 
 export class MapSettings {
     Name: string = "";
@@ -19,7 +20,7 @@ export class MapInfo {
     static Create(name: string, desc: string): MapInfo {
         let result = new MapInfo()
 
-        result.UpdatedTime = Date.now() / 1000;
+        result.UpdatedTime = Timestamp.Now();
         result.Name = name
         result.Desc = desc
         return result;

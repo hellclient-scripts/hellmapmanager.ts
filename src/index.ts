@@ -44,3 +44,5 @@ import { SnapshotFilter, SnapshotSearchResult, SnapshotSearch } from "./models/s
 export { SnapshotFilter, SnapshotSearchResult, SnapshotSearch }
 import { MapperOptions } from "./models/mapperoption"
 export { MapperOptions }
+import { HMMEncoder, MapHeadData, DefaultHmmEncoderHooks } from "./helpers/hmmencoder";
+export { HMMEncoder, MapHeadData, DefaultHmmEncoderHooks }

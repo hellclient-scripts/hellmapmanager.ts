@@ -9,7 +9,7 @@ import { Landmark, LandmarkKey } from './landmark';
 import { Shortcut } from './shortcut';
 import { Variable } from './variable';
 import { Snapshot, SnapshotKey } from './snapshot';
-
+import { Timestamp } from '../utils/timestamp';
 export class MapFile {
     constructor() {
         this.Map = new Map();
@@ -27,7 +27,7 @@ export class MapFile {
         return result
     }
     MarkAsModified() {
-        this.Map.Info.UpdatedTime = Date.now() / 1000;
+        this.Map.Info.UpdatedTime = Timestamp.Now();
         this.Modified = true;
     }
 
