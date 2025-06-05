@@ -20,6 +20,7 @@ export class Region {
         result.Group = this.Group
         result.Desc = this.Desc
         result.Items = this.Items.map(d => d.Clone())
+        result.Message = this.Message
         return result;
     }
     static EncodeKey: string = "Region";

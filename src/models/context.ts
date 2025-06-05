@@ -179,7 +179,7 @@ export class Context {
         env.RoomConditions = this.RoomConditions;
         env.Rooms = Object.values(this.Rooms);
         env.Whitelist = Object.keys(this.Whitelist);
-        env.Blacklist = Object.keys(this.Blacklist.Keys);
+        env.Blacklist = Object.keys(this.Blacklist);
         env.Shortcuts = this.Shortcuts;
         for (let pathitem in this.Paths) {
             for (let item of this.Paths[pathitem]) {

@@ -1,6 +1,6 @@
 import { assert } from "chai";
-import { Data, Condition, TypedConditions, ValueTag, ValueCondition, KeyValue, ToggleKeyValue, Exit, Room, RoomFilter, Marker, Route, Trace, Region, RegionItem, RegionItemType, Landmark, Shortcut, Variable, Snapshot, SnapshotKey, MapEncoding, Map, MapInfo, MapSettings, MapFile } from "../src/index.ts";
-import { LandmarkKey, ItemKey, Context, RoomConditionExit, Path, Link, Environment, CommandCost } from "../src/index.ts";
+import { Data, Condition, TypedConditions, ValueTag, ValueCondition, KeyValue, ToggleKeyValue, Exit, Room, RoomFilter, Marker, Route, Trace, Region, RegionItem, RegionItemType, Landmark, Shortcut, Variable, Snapshot, SnapshotKey, MapEncoding, Map, MapInfo, MapSettings, MapFile } from "../src/index";
+import { LandmarkKey, ItemKey, Context, RoomConditionExit, Path, Link, Environment, CommandCost, Step, QueryReuslt, SnapshotFilter, SnapshotSearchResult, SnapshotSearch, MapperOptions } from "../src/index";
 
 describe("ModelTest", () => {
     it("TestBase", () => {
@@ -601,12 +601,12 @@ describe("ModelTest", () => {
         lm2.Key = "";
         assert.isFalse(lm.Equal(lm2));
         assert.isFalse(lm2.Validated());
-        assert.notEqual(lm.UniqueKey, lm2.UniqueKey);
+        assert.notEqual(lm.UniqueKey(), lm2.UniqueKey());
         lm2 = lm.Clone();
         lm2.Type = "";
         assert.isFalse(lm.Equal(lm2));
         assert.isTrue(lm2.Validated());
-        assert.notEqual(lm.UniqueKey, lm2.UniqueKey);
+        assert.notEqual(lm.UniqueKey(), lm2.UniqueKey());
         lm2 = lm.Clone();
         lm2.Value = "";
         assert.isFalse(lm.Equal(lm2));
@@ -877,7 +877,7 @@ describe("ModelTest", () => {
         mf.InsertMarker(marker3);
         assert.equal(2, Object.keys(mf.Records.Markers).length);
         assert.equal(marker2, mf.Records.Markers[marker2.Key]);
-        assert.equal(marker3, mf.Records.Markers[1]);
+        assert.equal(marker3, mf.Records.Markers[marker3.Key]);
         mf.RemoveMarker("key1");
         assert.equal(1, Object.keys(mf.Records.Markers).length);
         assert.equal(marker3, mf.Records.Markers[marker3.Key]);
@@ -889,7 +889,7 @@ describe("ModelTest", () => {
         mf.InsertRoute(route);
         assert.equal(1, Object.keys(mf.Records.Routes).length);
 
-        assert.equal(route, mf.Records.Routes[0]);
+        assert.equal(route, mf.Records.Routes[route.Key]);
         var route2 = new Route()
         route2.Key = "key1"
 
@@ -965,21 +965,21 @@ describe("ModelTest", () => {
         landmark.Key = "key1"
         mf.InsertLandmark(landmark);
         assert.equal(1, Object.keys(mf.Records.Landmarks).length);
-        assert.equal(landmark, mf.Records.Landmarks[landmark.Key]);
+        assert.equal(landmark, mf.Records.Landmarks[landmark.UniqueKey().ToString()]);
         var landmark2 = new Landmark()
         landmark2.Key = "key1"
         mf.InsertLandmark(landmark2);
         assert.equal(1, Object.keys(mf.Records.Landmarks).length);
-        assert.equal(landmark2, mf.Records.Landmarks[landmark2.Key]);
+        assert.equal(landmark2, mf.Records.Landmarks[landmark2.UniqueKey().ToString()]);
         var landmark3 = new Landmark()
         landmark3.Key = "key2"
         mf.InsertLandmark(landmark3);
         assert.equal(2, Object.keys(mf.Records.Landmarks).length);
-        assert.equal(landmark2, mf.Records.Landmarks[landmark2.Key]);
-        assert.equal(landmark3, mf.Records.Landmarks[landmark3.Key]);
+        assert.equal(landmark2, mf.Records.Landmarks[landmark2.UniqueKey().ToString()]);
+        assert.equal(landmark3, mf.Records.Landmarks[landmark3.UniqueKey().ToString()]);
         mf.RemoveLandmark(new LandmarkKey("key1", ""));
         assert.equal(1, Object.keys(mf.Records.Landmarks).length);
-        assert.equal(landmark3, mf.Records.Landmarks[landmark3.Key]);
+        assert.equal(landmark3, mf.Records.Landmarks[landmark3.UniqueKey().ToString()]);
 
         mf.RemoveShortcut("notfound");
         assert.isEmpty(mf.Records.Shortcuts);
@@ -1021,9 +1021,9 @@ describe("ModelTest", () => {
         mf.InsertVariable(variable3);
         assert.equal(2, Object.keys(mf.Records.Variables).length);
         assert.equal(variable2, mf.Records.Variables[variable2.Key]);
-        assert.equal(variable3, mf.Records.Variables[variable2.Key]);
+        assert.equal(variable3, mf.Records.Variables[variable3.Key]);
         mf.RemoveVariable("key1");
-        assert.equal(variable2, mf.Records.Variables[variable2.Key]);
+        assert.equal(1, Object.keys(mf.Records.Variables).length);
         assert.equal(variable3, mf.Records.Variables[variable3.Key]);
         mf.RemoveSnapshot(new SnapshotKey("notfound", "", ""));
         assert.isEmpty(mf.Records.Snapshots);
@@ -1160,7 +1160,7 @@ describe("ModelTest", () => {
         var ctx = new Context();
         assert.isEmpty(ctx.Tags);
         assert.equal(ctx, ctx.WithTags([new ValueTag("tag1", 1), new ValueTag("tag2", 2)]));
-        assert.equal(2, ctx.Tags.Count);
+        assert.equal(2, Object.keys(ctx.Tags).length);
         assert.equal(1, ctx.Tags["tag1"]);
         assert.equal(2, ctx.Tags["tag2"]);
         assert.isEmpty(ctx.RoomConditions);
@@ -1320,7 +1320,7 @@ describe("ModelTest", () => {
         env.CommandCosts = [new CommandCost("cmd1", "to1", 1), new CommandCost("cmd2", "to1", 2), new CommandCost("cmd1", "to3", 3)]
 
         var ctx = Context.FromEnvironment(env);
-        assert.equal(2, ctx.Tags.Count);
+        assert.equal(2, Object.keys(ctx.Tags).length);
         assert.equal(1, ctx.Tags["tag1"]);
         assert.equal(2, ctx.Tags["tag2"]);
         assert.equal(2, ctx.RoomConditions.length);
@@ -1463,8 +1463,8 @@ describe("ModelTest", () => {
         assert.isFalse(result2.IsSuccess());
         assert.isNull(result2.SuccessOrNull());
 
-        assert.equal("", Step.JoinCommands(";", new List<Step>()));
-        assert.equal("cmd1;cmd2", Step.JoinCommands(";", new List<Step>([new Step("cmd1", "to1", 5), new Step("cmd2", "to2", 10)])));
+        assert.equal("", Step.JoinCommands(";", []));
+        assert.equal("cmd1;cmd2", Step.JoinCommands(";", [new Step("cmd1", "to1", 5), new Step("cmd2", "to2", 10)]));
     })
 
     it("TestContextTags", () => {

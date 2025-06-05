@@ -228,7 +228,7 @@ export class Room {
         ) {
             return false;
         }
-        if (this.Exits.length != this.Exits.length) {
+        if (this.Exits.length !== model.Exits.length) {
             return false;
         }
         for (let i = 0; i < this.Exits.length; i++) {
@@ -236,7 +236,7 @@ export class Room {
                 return false;
             }
         }
-        if (this.Tags.length != model.Tags.length) {
+        if (this.Tags.length !== model.Tags.length) {
             return false;
         }
         for (let i = 0; i < this.Tags.length; i++) {
@@ -244,7 +244,7 @@ export class Room {
                 return false;
             }
         }
-        if (Data.length != model.Data.length) {
+        if (Data.length !== model.Data.length) {
             return false;
         }
         for (let i = 0; i < Data.length; i++) {

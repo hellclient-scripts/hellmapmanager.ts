@@ -94,7 +94,7 @@ export class MapFile {
         this.Records.Arrange();
     }
     RemoveSnapshot(key: SnapshotKey) {
-        this.Records.Snapshots.filter(r => !r.UniqueKey().Equal(key));
+        this.Records.Snapshots = this.Records.Snapshots.filter(r => !r.UniqueKey().Equal(key));
     }
 
     TakeSnapshot(key: string, type: string, value: string, group: string) {

@@ -175,6 +175,6 @@ export class RegionItem {
 }
 export class ItemKey {
     public static Validate(key: string): boolean {
-        return key != "" && key.indexOf('\n') !== -1;
+        return key !== "" && !key.includes('\n');
     }
 }
