@@ -60,7 +60,7 @@ export class APIListOption {
         if (Object.keys(this.AllKeys).length > 0 && this.AllKeys[key] !== true) {
             return false;
         }
-        if (Object.keys(this.AllGroups).length > 0 && this.AllGroups[key] !== true) {
+        if (Object.keys(this.AllGroups).length > 0 && this.AllGroups[group] !== true) {
             return false;
         }
         return true;
@@ -370,6 +370,7 @@ export class MapDatabase {
                     list.push(model);
                 }
             });
+            Trace.Sort(list);
             return list;
         }
         return [];
@@ -395,6 +396,7 @@ export class MapDatabase {
                     list.push(model);
                 }
             });
+            Variable.Sort(list);
             return list;
         }
         return [];
@@ -580,7 +582,7 @@ export class MapDatabase {
                 let room = this.Current.Records.Rooms[key];
                 if (room != null) {
                     let prev = room.Clone();
-                    room.Tags.filter((t) => t.Key !== tag);
+                    room.Tags=room.Tags.filter((t) => t.Key !== tag);
                     if (value != 0) {
                         room.Tags.push(new ValueTag(tag, value));
                     }
@@ -598,7 +600,7 @@ export class MapDatabase {
             let room = this.Current.Records.Rooms[roomkey];
             if (room != null) {
                 let prev = room.Clone();
-                room.Data.filter((d) => d.Key !== datakey);
+                room.Data=room.Data.filter((d) => d.Key !== datakey);
                 room.Data.push(new Data(datakey, datavalue));
                 room.Arrange();
                 if (!room.Equal(prev)) {

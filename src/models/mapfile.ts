@@ -32,6 +32,7 @@ export class MapFile {
     }
 
     InsertRoom(room: Room) {
+        room.Arrange();
         this.Records.Rooms[room.Key] = room;
     }
     RemoveRoom(key: string) {
@@ -40,6 +41,7 @@ export class MapFile {
     }
 
     InsertMarker(marker: Marker) {
+        marker.Arrange();
         this.Records.Markers[marker.Key] = marker;
     }
     RemoveMarker(key: string) {
@@ -47,6 +49,7 @@ export class MapFile {
         delete this.Records.Markers[key];
     }
     InsertRoute(route: Route) {
+        route.Arrange();
         this.Records.Routes[route.Key] = route;
     }
     RemoveRoute(key: string) {
@@ -54,6 +57,7 @@ export class MapFile {
     }
 
     InsertTrace(trace: Trace) {
+        trace.Arrange();
         this.Records.Traces[trace.Key] = trace;
     }
     RemoveTrace(key: string) {
@@ -61,6 +65,7 @@ export class MapFile {
         delete this.Records.Traces[key];
     }
     InsertRegion(region: Region) {
+        region.Arrange();
         this.Records.Regions[region.Key] = region;
     }
     RemoveRegion(key: string) {
@@ -68,6 +73,7 @@ export class MapFile {
     }
 
     InsertLandmark(landmark: Landmark) {
+        landmark.Arrange();
         this.Records.Landmarks[landmark.UniqueKey().ToString()] = landmark;
     }
     RemoveLandmark(key: LandmarkKey) {
@@ -76,12 +82,14 @@ export class MapFile {
     }
 
     InsertShortcut(model: Shortcut) {
+        model.Arrange();
         this.Records.Shortcuts[model.Key] = model;
     }
     RemoveShortcut(key: string) {
         delete this.Records.Shortcuts[key]
     }
     InsertVariable(model: Variable) {
+        model.Arrange();
         this.Records.Variables[model.Key] = model;
     }
     RemoveVariable(key: string) {
@@ -89,6 +97,7 @@ export class MapFile {
         delete this.Records.Variables[key];
     }
     InsertSnapshot(model: Snapshot) {
+        model.Arrange();
         this.RemoveSnapshot(model.UniqueKey());
         this.Records.Snapshots.push(model);
         this.Records.Arrange();

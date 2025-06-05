@@ -197,7 +197,7 @@ export class Room {
         return false;
     }
     private DoAddData(rd: Data) {
-        this.Data.filter((d) => d.Key !== rd.Key);
+        this.Data = this.Data.filter((d) => d.Key !== rd.Key);
         if (rd.Value != "") {
             this.Data.push(rd);
         }
