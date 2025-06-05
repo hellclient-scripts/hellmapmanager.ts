@@ -18,6 +18,7 @@ import { QueryReuslt } from "../models/step";
 import { SnapshotFilter, SnapshotSearchResult, SnapshotSearch } from "../models/snapshotsearchresult";
 import { RoomFilter } from "../models/room";
 import { SnapshotHelper } from "../helpers/snapshothelper";
+import { HMMEncoder } from "../helpers/hmmencoder";
 export class APIListOption {
     private AllKeys: { [key: string]: boolean } = {};
     private AllGroups: { [key: string]: boolean } = {};
@@ -68,27 +69,24 @@ export class APIListOption {
 
 export class MapDatabase {
     Current: MapFile | null = null;
-    // LoadFile(string file) {
-    //     let mf = HMMFile.Open(file);
-    //     if (mf != null) {
-    //         Current = mf;
-    //         Current.Modified = false;
-    //         Current.Path = file;
-    //         AddRecent(Current.ToRecentFile());
-    //         RaiseMapFileUpdatedEvent(this);
-    //     }
-    // }
-    // SaveFile(string file) {
-    //     if (Current != null) {
-    //         Current.Map.Arrange();
-    //         HMMFile.Save(file, Current);
-    //         Current.Modified = false;
-    //         Current.Path = file;
-    //         AddRecent(Current.ToRecentFile());
-    //         RaiseMapFileUpdatedEvent(this);
-    //     }
-    // }
-
+    Import(body: string, path: string) {
+        let mf = HMMEncoder.Decode(body)
+        if (mf != null) {
+            mf.Path = path;
+            this.SetCurrent(mf);
+            mf.Modified = false;
+            mf.MarkAsModified();
+        }
+    }
+    Export(path: string): string {
+        if (this.Current != null) {
+            this.Current.Records.Arrange();
+            this.Current.Modified = false;
+            this.Current.Path = path
+            return HMMEncoder.Encode(this.Current);
+        }
+        return "";
+    }
     NewMap() {
         let mapfile = MapFile.Create("", "");
         this.SetCurrent(mapfile);
