@@ -50,3 +50,5 @@ import { Mapper, Walking, WalkingStep } from "./helpers/mapper";
 export { Mapper, Walking, WalkingStep }
 import { MapDatabase } from "./cores/mapdatabase";
 export { MapDatabase }
+import { SnapshotHelper } from "./helpers/snapshothelper";
+export { SnapshotHelper }
