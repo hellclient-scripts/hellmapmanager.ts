@@ -53,7 +53,7 @@ export class Trace {
     }
     RemoveLocations(loctions: string[]) {
         for (let l of loctions) {
-            this.Locations.filter(d => d !== l);
+            this.Locations=this.Locations.filter(d => d !== l);
         }
     }
     AddLocations(loctions: string[]) {
