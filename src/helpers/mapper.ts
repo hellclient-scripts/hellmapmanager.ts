@@ -41,7 +41,7 @@ export class Walking {
     private static BuildResult(last: WalkingStep, targets: string[]): QueryReuslt {
         let result = new QueryReuslt();
         let current: WalkingStep = last;
-        while (current.Prev !== null) {
+        while (current.Prev != null) {
             result.Steps.push(current.ToStep());
             current = current.Prev;
         }
@@ -71,7 +71,7 @@ export class Walking {
             targets[t] = true;
         }
         for (let f of from) {
-            if (targets[f] !== null) {
+            if (targets[f] != null) {
                 let result = new QueryReuslt();
                 result.From = f;
                 result.To = f;
@@ -93,9 +93,9 @@ export class Walking {
             current = pending;
             pending = [];
             for (let step of current) {
-                if (this.Walked[step.To] === null) {
+                if (this.Walked[step.To] == null) {
                     if (step.Remain <= 1) {
-                        if (targets[step.To] !== null) {
+                        if (targets[step.To] != null) {
                             return Walking.BuildResult(step, target);
                         }
                         this.Walked[step.To] = step;
