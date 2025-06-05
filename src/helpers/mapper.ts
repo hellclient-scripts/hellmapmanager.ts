@@ -206,7 +206,7 @@ export class Mapper {
     GetRoom(key: string): Room | null {
         let room = this.Context.Rooms[key];
         if (room == null) {
-            return this.MapFile.Records.Rooms[key];
+            return this.MapFile.Records.Rooms[key]||null;
         }
         return room;
     }
