@@ -22,6 +22,9 @@ import { HMMEncoder } from "../helpers/hmmencoder";
 export class APIListOption {
     private AllKeys: { [key: string]: boolean } = {};
     private AllGroups: { [key: string]: boolean } = {};
+    static New(): APIListOption {
+        return new APIListOption();
+    }
     Clear(): APIListOption {
         this.AllKeys = {};
         this.AllGroups = {};
@@ -69,6 +72,9 @@ export class APIListOption {
 
 export class MapDatabase {
     Current: MapFile | null = null;
+    static New(): MapDatabase {
+        return new MapDatabase();
+    }
     Import(body: string, path: string) {
         let mf = HMMEncoder.Decode(body)
         if (mf != null) {
