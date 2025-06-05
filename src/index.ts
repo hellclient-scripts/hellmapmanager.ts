@@ -46,3 +46,5 @@ import { MapperOptions } from "./models/mapperoption"
 export { MapperOptions }
 import { HMMEncoder, MapHeadData, DefaultHmmEncoderHooks } from "./helpers/hmmencoder";
 export { HMMEncoder, MapHeadData, DefaultHmmEncoderHooks }
+import { Mapper, Walking, WalkingStep } from "./helpers/mapper";
+export { Mapper, Walking, WalkingStep }
