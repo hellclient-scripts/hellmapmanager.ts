@@ -119,11 +119,9 @@ describe("HMMTest", () => {
         mf.InsertShortcut(shortcut);
         mf.InsertShortcut(shortcut2);
         var rawdata = HMMEncoder.Encode(mf);
-        console.log(rawdata);
         HMMEncoder.EncodeRoomHook = TestEncodeRoomHook;
         HMMEncoder.EncodeShortcutHook = TestEncodeShortcutHook;
         var data = HMMEncoder.Encode(mf);
-        console.log(data);
         var mf2 = HMMEncoder.Decode(data);
         assert.isNotNull(mf2);
         assert.equal(1, Object.keys(mf2.Records.Rooms).length);
