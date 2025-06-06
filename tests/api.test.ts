@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { RegionItem, RegionItemType, RoomFilter, SnapshotFilter, SnapshotSearch, Data, Snapshot, Landmark, Variable, Trace, Route, Marker, APIListOption, MapDatabase, Context, MapperOptions, Room, Exit, Shortcut, ValueTag, ValueCondition, Region } from '../src/index';
+import { Path, RegionItem, RegionItemType, RoomFilter, SnapshotFilter, SnapshotSearch, Data, Snapshot, Landmark, Variable, Trace, Route, Marker, APIListOption, MapDatabase, Context, MapperOptions, Room, Exit, Shortcut, ValueTag, ValueCondition, Region } from '../src/index';
 
 
 describe("APITest", () => {
@@ -1598,7 +1598,6 @@ describe("APITest", () => {
         assert.equal("key1;key2;key3", result.map(r => r.Key).join(";"));
     })
     it("TestAPIQueryRegionRooms", () => {
-
         var mapDatabase = new MapDatabase();
         var result = mapDatabase.APIQueryRegionRooms("key");
         assert.isEmpty(result);
@@ -1691,6 +1690,87 @@ describe("APITest", () => {
         assert.equal("key2", result.join(";"));
         result = mapDatabase.APIQueryRegionRooms("key5");
         assert.equal("key3", result.join(";"));
+    })
+    it("TestAPIGetRoomExits", () => {
+        var mapDatabase = new MapDatabase();
+        var ctx = new Context();
+        var opt = new MapperOptions();
+        var result = mapDatabase.APIGetRoomExits("key", ctx, opt);
+        assert.isEmpty(result);
+        mapDatabase.NewMap();
+        var exit1 = ((): Exit => {
+            let model = new Exit();
+            model.Command = "cmd1"
+            model.To = "key2"
+            return model;
+        })()
+        var exit2 = ((): Exit => {
+            let model = new Exit();
+            model.Command = "cmd2"
+            model.To = "key2"
+            return model;
+        })()
+        mapDatabase.APIInsertRooms([
+            ((): Room => {
+                let model = new Room();
+                model.Key = "key1"
+                model.Exits = [exit1, exit2]
+                return model
+            })(),
+            ((): Room => {
+                let model = new Room();
+                model.Key = "key2"
+                return model
+            })(),
+        ]);
+        result = mapDatabase.APIGetRoomExits("notfound", ctx, opt);
+        assert.isEmpty(result);
+        result = mapDatabase.APIGetRoomExits("key1", ctx, opt);
+        assert.equal(2, result.length);
+        assert.equal(exit1, result[0]);
+        assert.equal(exit2, result[1]);
+        var shortcut1 = ((): Shortcut => {
+            let model = new Shortcut();
+            model.Key = "shortcut1"
+            model.To = "key2"
+            model.Command = "sc1"
+            return model
+        })()
+        mapDatabase.APIInsertShortcuts([shortcut1]);
+        result = mapDatabase.APIGetRoomExits("key1", ctx, opt);
+        assert.equal(3, result.length);
+        assert.equal(exit1, result[0]);
+        assert.equal(exit2, result[1]);
+        assert.equal(shortcut1, result[2]);
+        var path1 = ((): Path => {
+            let model = new Path();
+            model.From = "key1"
+            model.Command = "cmdp1"
+            model.To = "key2"
+            return model
+        })()
 
+        var shortcut2 = ((): Shortcut => {
+            let model = new Shortcut();
+            model.Key = "shortcut2"
+            model.To = "key2"
+            model.Command = "sc2"
+            return model
+        })()
+        ctx.WithPaths([path1]);
+        ctx.WithShortcuts([shortcut2]);
+        result = mapDatabase.APIGetRoomExits("key1", ctx, opt);
+        assert.equal(5, result.length);
+        assert.equal(exit1, result[0]);
+        assert.equal(exit2, result[1]);
+        assert.equal(path1, result[2]);
+        assert.equal(shortcut1, result[3]);
+        assert.equal(shortcut2, result[4]);
+        opt.WithDisableShortcuts(true);
+        result = mapDatabase.APIGetRoomExits("key1", ctx, opt);
+        assert.equal(3, result.length);
+        assert.equal(exit1, result[0]);
+        assert.equal(exit2, result[1]);
+        assert.equal(path1, result[2]);
     })
 })

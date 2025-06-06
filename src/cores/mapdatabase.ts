@@ -8,6 +8,7 @@ import { Trace } from "../models/trace";
 import { Region } from "../models/region";
 import { RegionItemType, ValueTag, Data } from "../models/base"
 import { Room } from "../models/room";
+import { Exit } from "../models/exit";
 import { Shortcut } from "../models/shortcut";
 import { Snapshot, SnapshotKey } from "../models/snapshot";
 import { Variable } from "../models/variable";
@@ -582,7 +583,7 @@ export class MapDatabase {
                 let room = this.Current.Records.Rooms[key];
                 if (room != null) {
                     let prev = room.Clone();
-                    room.Tags=room.Tags.filter((t) => t.Key !== tag);
+                    room.Tags = room.Tags.filter((t) => t.Key !== tag);
                     if (value != 0) {
                         room.Tags.push(new ValueTag(tag, value));
                     }
@@ -600,7 +601,7 @@ export class MapDatabase {
             let room = this.Current.Records.Rooms[roomkey];
             if (room != null) {
                 let prev = room.Clone();
-                room.Data=room.Data.filter((d) => d.Key !== datakey);
+                room.Data = room.Data.filter((d) => d.Key !== datakey);
                 room.Data.push(new Data(datakey, datavalue));
                 room.Arrange();
                 if (!room.Equal(prev)) {
@@ -622,4 +623,15 @@ export class MapDatabase {
             }
         }
     }
+    APIGetRoomExits(key: string, context: Context, options: MapperOptions): Exit[] {
+        if (this.Current != null) {
+            var mapper = new Mapper(this.Current, context, options);
+            var room = mapper.GetRoom(key);
+            if (room != null) {
+                return mapper.GetRoomExits(room);
+            }
+        }
+        return [];
+    }
+
 }
