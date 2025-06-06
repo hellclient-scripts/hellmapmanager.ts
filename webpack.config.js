@@ -14,13 +14,19 @@ module.exports = {
         libraryTarget: "umd"
     },
     resolve: {
+        alias:{
+            "@include/*": path.resolve(__dirname, 'include/*'),
+        },
         extensions: [".ts", ".tsx", ".js"],
     },
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: "ts-loader"
+                loader: "ts-loader",
+                options: {
+                    configFile: "tsconfig.json"
+                }
             }
         ]
     }

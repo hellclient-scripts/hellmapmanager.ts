@@ -8,9 +8,9 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "build-lua":"tstl",
+    "build-lua": "tstl -p tsconfig.lua.json",
     "test": "./node_modules/mocha/bin/mocha.js -r ts-node/register tests/**/*.test.ts --reporter spec",
-    "test-lua":"lua luatests/test.lua -o TAP"
+    "test-lua": "lua luatests/test.lua -o TAP"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "@types/sinon": "^17.0.4",
     "@types/typescript": "^2.0.0",
     "chai": "^5.2.0",
+    "lua-types": "^2.13.1",
     "mocha": "^11.4.0",
     "sinon": "^20.0.0",
     "ts-loader": "^9.5.2",

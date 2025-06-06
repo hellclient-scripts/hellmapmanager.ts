@@ -1,7 +1,7 @@
 import { UniqueKeyUtil } from "../utils/uniquekeyutil"
 import { ItemKey } from "./base";
 import { HMMFormatter } from "./formatter";
-import { Timestamp } from "../utils/timestamp";
+import { Timestamp } from "@include/timestamp";
 export class SnapshotKey {
     constructor(key: string, type: string, value: string) {
         this.Key = key;

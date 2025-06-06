@@ -1,5 +1,5 @@
 import { HMMFormatter } from "./formatter";
-import { Timestamp } from "../utils/timestamp";
+import { Timestamp } from "@include/timestamp";
 
 export class MapSettings {
     Name: string = "";

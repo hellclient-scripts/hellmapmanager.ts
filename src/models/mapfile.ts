@@ -9,7 +9,7 @@ import { Landmark, LandmarkKey } from './landmark';
 import { Shortcut } from './shortcut';
 import { Variable } from './variable';
 import { Snapshot, SnapshotKey } from './snapshot';
-import { Timestamp } from '../utils/timestamp';
+import { Timestamp } from '@include/timestamp';
 export class MapFile {
     constructor() {
         this.Map = new Map();

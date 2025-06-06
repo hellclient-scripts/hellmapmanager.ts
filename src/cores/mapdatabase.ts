@@ -625,8 +625,8 @@ export class MapDatabase {
     }
     APIGetRoomExits(key: string, context: Context, options: MapperOptions): Exit[] {
         if (this.Current != null) {
-            var mapper = new Mapper(this.Current, context, options);
-            var room = mapper.GetRoom(key);
+            let mapper = new Mapper(this.Current, context, options);
+            let room = mapper.GetRoom(key);
             if (room != null) {
                 return mapper.GetRoomExits(room);
             }
