@@ -7,6 +7,9 @@ export class Route {
     Group: string = "";
     Message: string = "";
     Rooms: string[] = [];
+    static New(): Route {
+        return new Route();
+    }
     Validated(): boolean {
         return ItemKey.Validate(this.Key);
     }

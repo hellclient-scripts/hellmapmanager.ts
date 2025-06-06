@@ -7,6 +7,9 @@ export class Marker {
     Desc: string = "";
     Group: string = "";
     Message: string = "";
+    static New(): Marker {
+        return new Marker();
+    }
     Validated(): boolean {
         return ItemKey.Validate(this.Key) && this.Value != "";
     }
