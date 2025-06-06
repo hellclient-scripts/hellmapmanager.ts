@@ -37,7 +37,7 @@ export class ValueTag {
         return new ValueTag(this.Key, this.Value);
     }
     ToString(): string {
-        return this.Value === 0 ? this.Key : `${this.Key}:${this.Value}`;
+        return this.Value === 1 ? this.Key : `${this.Key}:${this.Value}`;
     }
     Match(key: string, value: number): boolean {
         return this.Key === key && this.Value >= value;

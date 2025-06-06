@@ -54,7 +54,7 @@ describe("ModelTest", () => {
         assert.isFalse(tc.Equal(tc2));
         assert.isTrue(tc2.Validated());
 
-        var vt = new ValueTag("key", 0);
+        var vt = new ValueTag("key", 1);
         let vt2: ValueTag;
         vt2 = vt.Clone();
         assert.isTrue(vt.Equal(vt2));
@@ -71,14 +71,14 @@ describe("ModelTest", () => {
         assert.isTrue(vt2.Validated());
         assert.equal("key:-1", vt2.ToString());
         vt2 = vt.Clone();
-        vt2.Value = 1;
+        vt2.Value = 2;
         vt2.Key = "key2";
         assert.isFalse(vt.Equal(vt2));
-        assert.equal("key2:1", vt2.ToString());
+        assert.equal("key2:2", vt2.ToString());
 
         assert.isTrue(vt.Match("key", 0));
         assert.isTrue(vt.Match("key", -1));
-        assert.isFalse(vt.Match("key", 1));
+        assert.isFalse(vt.Match("key", 2));
         assert.isFalse(vt.Match("key2", 0));
 
         var vc = new ValueCondition("key", 0, true);
@@ -260,7 +260,7 @@ describe("ModelTest", () => {
             room.Name = "name"
         room.Group = "group"
         room.Desc = "desc"
-        room.Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)]
+        room.Tags = [new ValueTag("tag1", 1), new ValueTag("tag2", 1)]
         room.Data = [new Data("dkey1", "dval1"), new Data("dkey2", "dval2")]
         let e1 = new Exit()
         e1.Command = "command1"

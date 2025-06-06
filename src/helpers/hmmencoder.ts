@@ -64,37 +64,55 @@ export class HMMEncoder {
             head.Encode(),
             mf.Map.Info.Encode(),
         ]
-        for (let key in mf.Records.Rooms) {
-            let room = this.EncodeRoomHook(mf.Records.Rooms[key])
+        let rooms = Object.values(mf.Records.Rooms);
+        Room.Sort(rooms);
+        for (let model of rooms) {
+            let room = this.EncodeRoomHook(model)
             if (room != null)
                 results.push(room.Encode());
         }
-        for (let key in mf.Records.Markers) {
-            results.push(mf.Records.Markers[key].Encode());
+        let markers = Object.values(mf.Records.Markers);
+        Marker.Sort(markers);
+        for (let model of markers) {
+            results.push(model.Encode());
         }
-        for (let key in mf.Records.Landmarks) {
-            results.push(mf.Records.Landmarks[key].Encode());
+        let landmarks = Object.values(mf.Records.Landmarks);
+        Landmark.Sort(landmarks);
+        for (let model of landmarks) {
+            results.push(model.Encode());
         }
-        for (let key in mf.Records.Variables) {
-            results.push(mf.Records.Variables[key].Encode());
+        let variables = Object.values(mf.Records.Variables);
+        Variable.Sort(variables);
+        for (let model of variables) {
+            results.push(model.Encode());
         }
-        for (let key in mf.Records.Routes) {
-            results.push(mf.Records.Routes[key].Encode());
+        let routes = Object.values(mf.Records.Routes);
+        Route.Sort(routes);
+        for (let model of routes) {
+            results.push(model.Encode());
         }
-        for (let key in mf.Records.Regions) {
-            results.push(mf.Records.Regions[key].Encode());
+        let regions = Object.values(mf.Records.Regions);
+        Region.Sort(regions);
+        for (let model of regions) {
+            results.push(model.Encode());
         }
-        for (let key in mf.Records.Traces) {
-            results.push(mf.Records.Traces[key].Encode());
+        let traces = Object.values(mf.Records.Traces);
+        Trace.Sort(traces);
+        for (let model of traces) {
+            results.push(model.Encode());
         }
-        for (let key in mf.Records.Shortcuts) {
-            let model = this.EncodeShortcutHook(mf.Records.Shortcuts[key])
-            if (model != null)
-                results.push(model.Encode());
+        let shortcuts = Object.values(mf.Records.Shortcuts);
+        Shortcut.Sort(shortcuts);
+        for (let model of shortcuts) {
+            let shotcut = this.EncodeShortcutHook(model)
+            if (shotcut != null)
+                results.push(shotcut.Encode());
         }
 
-        for (let snapshot of mf.Records.Snapshots) {
-            results.push(snapshot.Encode());
+        let snapshots = mf.Records.Snapshots;
+        Snapshot.Sort(snapshots);
+        for (let model of snapshots) {
+            results.push(model.Encode());
         }
         return HMMFormatter.Escaper.Pack(results.join("\n"));
     }
