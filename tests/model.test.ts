@@ -81,7 +81,7 @@ describe("ModelTest", () => {
         assert.isFalse(vt.Match("key", 2));
         assert.isFalse(vt.Match("key2", 0));
 
-        var vc = new ValueCondition("key", 0, true);
+        var vc = new ValueCondition("key", 1, true);
         let vc2: ValueCondition;
         vc2 = vc.Clone();
         assert.isTrue(vc.Equal(vc2));
@@ -103,7 +103,7 @@ describe("ModelTest", () => {
         vc2.Key = "key2";
         assert.isFalse(vc.Equal(vc2));
         assert.isTrue(vc2.Validated());
-        assert.equal("key2:1", vc2.ToString());
+        assert.equal("key2", vc2.ToString());
 
         let tags: ValueTag[] = [
             new ValueTag("key1", 1),

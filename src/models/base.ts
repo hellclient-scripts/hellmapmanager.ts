@@ -84,7 +84,7 @@ export class ValueCondition {
     }
     ToString(): string {
         let label = this.Not ? `!${this.Key}` : this.Key;
-        return this.Value == 0 ? label : `${label}:${this.Value}`;
+        return this.Value == 1 ? label : `${label}:${this.Value}`;
     }
 }
 
