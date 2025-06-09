@@ -1,6 +1,6 @@
 
 import { Exit } from "../models/exit"
-import { Step, QueryReuslt } from "../models/step"
+import { Step, QueryResult } from "../models/step"
 import { Context } from "../models/context"
 import { MapperOptions } from "../models/mapperoption"
 import { MapFile } from "../models/mapfile"
@@ -38,8 +38,8 @@ export class Walking {
     private Walked: { [key: string]: WalkingStep } = {};
 
     Mapper: Mapper;
-    private static BuildResult(last: WalkingStep, targets: string[]): QueryReuslt {
-        let result = new QueryReuslt();
+    private static BuildResult(last: WalkingStep, targets: string[]): QueryResult {
+        let result = new QueryResult();
         let current: WalkingStep = last;
         while (current.Prev != null) {
             result.Steps.push(current.ToStep());
@@ -57,11 +57,11 @@ export class Walking {
         result.Cost = last.TotalCost;
         return result;
     }
-    QueryPathAny(from: string[], target: string[], initTotalCost: number): QueryReuslt {
+    QueryPathAny(from: string[], target: string[], initTotalCost: number): QueryResult {
         from = from.filter(x => x !== "");
         target = target.filter(x => x !== "");
         if (from.length == 0 || target.length == 0) {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
         this.Walked = {};
         let targets: { [key: string]: boolean } = {};
@@ -72,7 +72,7 @@ export class Walking {
         }
         for (let f of from) {
             if (targets[f] != null) {
-                let result = new QueryReuslt();
+                let result = new QueryResult();
                 result.From = f;
                 result.To = f;
                 result.Cost = initTotalCost;
@@ -108,7 +108,7 @@ export class Walking {
                 }
             }
         }
-        return QueryReuslt.Fail;
+        return QueryResult.Fail;
     }
     Dilate(src: string[], iterations: number): string[] {
         this.Walked = {};
@@ -137,12 +137,12 @@ export class Walking {
         }
         return Object.keys(this.Walked);
     }
-    QueryPathAll(start: string, target: string[]): QueryReuslt {
+    QueryPathAll(start: string, target: string[]): QueryResult {
         target = target.filter(x => x !== "");
         if (target.length == 0 || start == "") {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
-        let result = new QueryReuslt()
+        let result = new QueryResult()
         result.From = start;
         result.To = start;
         let pending = target;
@@ -161,16 +161,16 @@ export class Walking {
 
         }
         if (result.Steps.length == 0) {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
         return result;
     }
-    QueryPathOrdered(start: string, target: string[]): QueryReuslt {
+    QueryPathOrdered(start: string, target: string[]): QueryResult {
         target = target.filter(x => x !== "");
         if (target.length == 0 || start == "") {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
-        let result = new QueryReuslt()
+        let result = new QueryResult()
         result.From = start;
         result.To = start;
         for (let i = 0; i < target.length; i++) {
@@ -185,7 +185,7 @@ export class Walking {
             }
         }
         if (result.Steps.length == 0) {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
         return result;
     }

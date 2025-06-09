@@ -15,21 +15,21 @@ export class Step {
     }
 }
 
-export class QueryReuslt {
+export class QueryResult {
     From: string = "";
     To: string = "";
     Cost: number = 0;
     Steps: Step[] = [];
     Unvisited: string[] = [];
-    static New(): QueryReuslt {
-        return new QueryReuslt();
+    static New(): QueryResult {
+        return new QueryResult();
     }
     IsSuccess(): boolean {
         return this.From !== "" && this.To !== "";
     }
-    static Fail: QueryReuslt = new QueryReuslt();
+    static Fail: QueryResult = new QueryResult();
 
-    SuccessOrNull(): QueryReuslt | null {
+    SuccessOrNull(): QueryResult | null {
         if (this.IsSuccess()) {
             return this;
         }

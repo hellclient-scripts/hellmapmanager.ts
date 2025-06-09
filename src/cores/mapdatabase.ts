@@ -15,7 +15,7 @@ import { Variable } from "../models/variable";
 import { Context } from "../models/context";
 import { Mapper, Walking } from "../helpers/mapper";
 import { MapperOptions } from "../models/mapperoption";
-import { QueryReuslt } from "../models/step";
+import { QueryResult } from "../models/step";
 import { SnapshotFilter, SnapshotSearchResult, SnapshotSearch } from "../models/snapshotsearchresult";
 import { RoomFilter } from "../models/room";
 import { SnapshotHelper } from "../helpers/snapshothelper";
@@ -410,20 +410,20 @@ export class MapDatabase {
             this.Current.MarkAsModified();
         }
     }
-    APIQueryPathAny(from: string[], target: string[], context: Context, options: MapperOptions): QueryReuslt | null {
+    APIQueryPathAny(from: string[], target: string[], context: Context, options: MapperOptions): QueryResult | null {
         if (this.Current != null) {
             return new Walking(new Mapper(this.Current, context, options)).QueryPathAny(from, target, 0).SuccessOrNull();
         }
         return null;
     }
 
-    APIQueryPathAll(start: string, target: string[], context: Context, options: MapperOptions): QueryReuslt | null {
+    APIQueryPathAll(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null {
         if (this.Current != null) {
             return new Walking(new Mapper(this.Current, context, options)).QueryPathAll(start, target).SuccessOrNull();
         }
         return null;
     }
-    APIQueryPathOrdered(start: string, target: string[], context: Context, options: MapperOptions): QueryReuslt | null {
+    APIQueryPathOrdered(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null {
         if (this.Current != null) {
             return new Walking(new Mapper(this.Current, context, options)).QueryPathOrdered(start, target).SuccessOrNull();
         }

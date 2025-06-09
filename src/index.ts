@@ -38,8 +38,8 @@ import { Context, Path, Link, CommandCost, Environment } from "./models/context"
 export { Context, Path, Link, CommandCost, Environment }
 import { UniqueKeyUtil } from "./utils/uniquekeyutil";
 export { UniqueKeyUtil }
-import { Step, QueryReuslt } from "./models/step";
-export { Step, QueryReuslt }
+import { Step, QueryResult } from "./models/step";
+export { Step, QueryResult }
 import { SnapshotFilter, SnapshotSearchResult, SnapshotSearch } from "./models/snapshotsearchresult";
 export { SnapshotFilter, SnapshotSearchResult, SnapshotSearch }
 import { MapperOptions } from "./models/mapperoption"

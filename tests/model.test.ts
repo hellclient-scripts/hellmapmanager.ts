@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { Data, Condition, TypedConditions, ValueTag, ValueCondition, KeyValue, ToggleKeyValue, Exit, Room, RoomFilter, Marker, Route, Trace, Region, RegionItem, RegionItemType, Landmark, Shortcut, Variable, Snapshot, SnapshotKey, MapEncoding, Map, MapInfo, MapSettings, MapFile } from "../src/index";
-import { LandmarkKey, ItemKey, Context, RoomConditionExit, Path, Link, Environment, CommandCost, Step, QueryReuslt, SnapshotFilter, SnapshotSearchResult, SnapshotSearch, MapperOptions } from "../src/index";
+import { LandmarkKey, ItemKey, Context, RoomConditionExit, Path, Link, Environment, CommandCost, Step, QueryResult, SnapshotFilter, SnapshotSearchResult, SnapshotSearch, MapperOptions } from "../src/index";
 
 describe("ModelTest", () => {
     it("TestBase", () => {
@@ -1440,7 +1440,7 @@ describe("ModelTest", () => {
         assert.equal("cmd1", step.Command);
         assert.equal("to1", step.Target);
         assert.equal(5, step.Cost);
-        var result = new QueryReuslt();
+        var result = new QueryResult();
         assert.equal(0, result.Cost);
         assert.equal("", result.From);
         assert.equal("", result.To);
@@ -1459,7 +1459,7 @@ describe("ModelTest", () => {
         result.From = "from1";
         assert.isTrue(result.IsSuccess());
         assert.isNotNull(result.SuccessOrNull());
-        var result2 = QueryReuslt.Fail;
+        var result2 = QueryResult.Fail;
         assert.isFalse(result2.IsSuccess());
         assert.isNull(result2.SuccessOrNull());
 
