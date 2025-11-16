@@ -5,10 +5,13 @@ export class RoomFilter {
     RoomConditions: ValueCondition[] = [];
     HasAnyExitTo: string[] = [];
     HasAnyData: Data[] = [];
+    HasAnyName: string[] = [];
     ContainsAnyData: Data[] = [];
     ContainsAnyName: string[] = [];
     ContainsAnyKey: string[] = [];
-
+    static New(): RoomFilter {
+        return new RoomFilter();
+    }
     private ValidateHasAnyData(room: Room): boolean {
         if (this.HasAnyData.length > 0) {
             for (let data of this.HasAnyData) {
@@ -20,7 +23,17 @@ export class RoomFilter {
         }
         return true;
     }
-
+    private ValidateHasAnyName(room: Room): boolean {
+        if (this.HasAnyData.length > 0) {
+            for (let data of this.HasAnyName) {
+                if (room.Name === data) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
     private ValidateContainsAnyData(room: Room): boolean {
         if (this.ContainsAnyData.length > 0) {
             for (let data of this.ContainsAnyData) {
@@ -76,6 +89,9 @@ export class RoomFilter {
             }
         }
         if (!this.ValidateHasAnyExitTo(room)) {
+            return false;
+        }
+        if (!this.ValidateHasAnyName(room)) {
             return false;
         }
         if (!this.ValidateContainsAnyData(room)) {

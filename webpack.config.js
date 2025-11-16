@@ -4,6 +4,7 @@ const path = require('path');
 module.exports = {
     mode: "development",
     devtool: false,
+    target:["es6"],
     entry: {
         main: "./src/index.ts",
     },
@@ -11,6 +12,7 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         filename: "hmm.umd.js",// <--- Will be compiled to this single file
         // library:"HellMapManager",
+        chunkFormat: 'commonjs',
         libraryTarget: "umd"
     },
     resolve: {

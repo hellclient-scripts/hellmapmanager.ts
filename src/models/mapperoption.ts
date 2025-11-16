@@ -2,6 +2,9 @@ export class MapperOptions {
     MaxExitCost: number = 0;
     MaxTotalCost: number = 0;
     DisableShortcuts: boolean = false;
+    static New(): MapperOptions {
+        return new MapperOptions();
+    }
     WithMaxExitCost(cost: number): MapperOptions {
         this.MaxExitCost = cost;
         return this;
