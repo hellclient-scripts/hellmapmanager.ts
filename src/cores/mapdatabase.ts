@@ -73,6 +73,7 @@ export class APIListOption {
 
 export class MapDatabase {
     Current: MapFile | null = null;
+    static Version = 1000;
     static New(): MapDatabase {
         return new MapDatabase();
     }
@@ -111,6 +112,9 @@ export class MapDatabase {
             this.Current.Map.Info.Desc = s.Desc;
             this.Current.MarkAsModified();
         }
+    }
+    APIVersion(): Number{
+        return MapDatabase.Version;
     }
     APIListLandmarks(option: APIListOption): Landmark[] {
         if (this.Current != null) {

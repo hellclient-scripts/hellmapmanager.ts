@@ -24,7 +24,7 @@ export class RoomFilter {
         return true;
     }
     private ValidateHasAnyName(room: Room): boolean {
-        if (this.HasAnyData.length > 0) {
+        if (this.HasAnyName.length > 0) {
             for (let data of this.HasAnyName) {
                 if (room.Name === data) {
                     return true;

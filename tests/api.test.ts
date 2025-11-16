@@ -3,6 +3,10 @@ import { Path, RegionItem, RegionItemType, RoomFilter, SnapshotFilter, SnapshotS
 
 
 describe("APITest", () => {
+    it("TestAPIVersion", () => {
+        var mapDatabase = new MapDatabase();
+        assert.equal(mapDatabase.APIVersion(),MapDatabase.Version);
+    })
     it("TestAPIListOption", () => {
         var opt = new APIListOption();
         var keys = opt.Keys();

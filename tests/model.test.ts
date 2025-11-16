@@ -383,13 +383,12 @@ describe("ModelTest", () => {
         rf.ContainsAnyName = ["na", "name2"];
         assert.isTrue(rf.Validate(room));
         rf.ContainsAnyName = [];
-        
+        assert.isTrue(rf.Validate(room));
         rf.HasAnyName = ["nam", "name2"];
         assert.isFalse(rf.Validate(room));
         rf.HasAnyName = ["name", "name2"];
         assert.isTrue(rf.Validate(room));
         rf.HasAnyName = [];
-
         assert.isTrue(rf.Validate(room));
         rf.HasAnyExitTo = ["to3", "to4"];
         assert.isFalse(rf.Validate(room));;
