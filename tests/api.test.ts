@@ -5,8 +5,25 @@ import { Path, RegionItem, RegionItemType, RoomFilter, SnapshotFilter, SnapshotS
 describe("APITest", () => {
     it("TestAPIVersion", () => {
         var mapDatabase = new MapDatabase();
-        assert.equal(mapDatabase.APIVersion(),MapDatabase.Version);
+        assert.equal(mapDatabase.APIVersion(), MapDatabase.Version);
     })
+    it("TestAPIInfo", () => {
+        var mapDatabase = new MapDatabase();
+        var info = mapDatabase.APIInfo();
+        assert.isNull(info);
+        mapDatabase.NewMap();
+        info = mapDatabase.APIInfo();
+        assert.isNotNull(info);
+        assert.equal("", info.Name);
+        assert.equal("", info.Desc);
+        mapDatabase.Current!.Map.Info.Name = "testname";
+        mapDatabase.Current!.Map.Info.Desc = "testdesc";
+        info = mapDatabase.APIInfo();
+        assert.isNotNull(info);
+        assert.equal("testname", info.Name);
+        assert.equal("testdesc", info.Desc);
+    })
+
     it("TestAPIListOption", () => {
         var opt = new APIListOption();
         var keys = opt.Keys();

@@ -20,6 +20,7 @@ import { SnapshotFilter, SnapshotSearchResult, SnapshotSearch } from "../models/
 import { RoomFilter } from "../models/room";
 import { SnapshotHelper } from "../helpers/snapshothelper";
 import { HMMEncoder } from "../helpers/hmmencoder";
+import {MapInfo} from "../models/map";
 export class APIListOption {
     private AllKeys: { [key: string]: boolean } = {};
     private AllGroups: { [key: string]: boolean } = {};
@@ -113,8 +114,16 @@ export class MapDatabase {
             this.Current.MarkAsModified();
         }
     }
-    APIVersion(): Number{
+    APIVersion(): Number {
         return MapDatabase.Version;
+    }
+    APIInfo(): MapInfo|null {
+        if (this.Current != null) {
+
+            return this.Current.Map.Info;
+        }
+
+        return null;
     }
     APIListLandmarks(option: APIListOption): Landmark[] {
         if (this.Current != null) {
