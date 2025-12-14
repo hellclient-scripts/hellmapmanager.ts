@@ -20,7 +20,7 @@ import { SnapshotFilter, SnapshotSearchResult, SnapshotSearch } from "../models/
 import { RoomFilter } from "../models/room";
 import { SnapshotHelper } from "../helpers/snapshothelper";
 import { HMMEncoder } from "../helpers/hmmencoder";
-import {MapInfo} from "../models/map";
+import { MapInfo } from "../models/map";
 export class APIListOption {
     private AllKeys: { [key: string]: boolean } = {};
     private AllGroups: { [key: string]: boolean } = {};
@@ -74,7 +74,7 @@ export class APIListOption {
 
 export class MapDatabase {
     Current: MapFile | null = null;
-    static Version = 1000;
+    static Version = 1001;
     static New(): MapDatabase {
         return new MapDatabase();
     }
@@ -117,7 +117,7 @@ export class MapDatabase {
     APIVersion(): Number {
         return MapDatabase.Version;
     }
-    APIInfo(): MapInfo|null {
+    APIInfo(): MapInfo | null {
         if (this.Current != null) {
 
             return this.Current.Map.Info;
@@ -517,7 +517,7 @@ export class MapDatabase {
         }
         return null;
     }
-    APIClearSnapshot(filter: SnapshotFilter) {
+    APIClearSnapshots(filter: SnapshotFilter) {
         if (this.Current != null) {
             this.Current.Records.Snapshots = this.Current.Records.Snapshots.filter(s => !filter.Validate(s));
             this.Current.MarkAsModified();

@@ -1545,7 +1545,7 @@ describe("APITest", () => {
 
     it("TestAPISnapshotALL", () => {
         var mapDatabase = new MapDatabase();
-        mapDatabase.APIClearSnapshot(new SnapshotFilter(null, null, null));
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null));
 
         mapDatabase.APITakeSnapshot("key1", "value1", "type1", "group1");
 
@@ -1564,7 +1564,7 @@ describe("APITest", () => {
         assert.equal(1, snapshots.length);
         assert.equal("key1", snapshots[0].Key);
         assert.equal(2, snapshots[0].Sum);
-        mapDatabase.APIClearSnapshot(new SnapshotFilter(null, null, null));
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null));
 
 
         snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());

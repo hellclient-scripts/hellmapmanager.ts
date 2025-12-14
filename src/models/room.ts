@@ -6,6 +6,7 @@ export class RoomFilter {
     HasAnyExitTo: string[] = [];
     HasAnyData: Data[] = [];
     HasAnyName: string[] = [];
+    HasAnyGroup: string[] = [];
     ContainsAnyData: Data[] = [];
     ContainsAnyName: string[] = [];
     ContainsAnyKey: string[] = [];
@@ -34,6 +35,18 @@ export class RoomFilter {
         }
         return true;
     }
+    private ValidateHasAnyGroup(room: Room): boolean {
+        if (this.HasAnyGroup.length > 0) {
+            for (let data of this.HasAnyGroup) {
+                if (room.Group === data) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
     private ValidateContainsAnyData(room: Room): boolean {
         if (this.ContainsAnyData.length > 0) {
             for (let data of this.ContainsAnyData) {
@@ -92,6 +105,9 @@ export class RoomFilter {
             return false;
         }
         if (!this.ValidateHasAnyName(room)) {
+            return false;
+        }
+        if (!this.ValidateHasAnyGroup(room)) {
             return false;
         }
         if (!this.ValidateContainsAnyData(room)) {
