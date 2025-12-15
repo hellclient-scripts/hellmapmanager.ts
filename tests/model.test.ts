@@ -410,6 +410,11 @@ describe("ModelTest", () => {
         rf.RoomConditions = [new ValueCondition("tag1", 2, true), new ValueCondition("tag2", 1, false)];
         assert.isTrue(rf.Validate(room));
         rf.ContainsAnyData = [];
+        rf.HasAnyGroup = ["group1", "group2"];
+        assert.isFalse(rf.Validate(room));
+        rf.HasAnyGroup = ["group", "group2"];
+        assert.isTrue(rf.Validate(room));
+        rf.HasAnyGroup = [];
     })
     it("TestMarker", () => {
         var marker = new Marker()
