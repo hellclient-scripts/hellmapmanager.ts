@@ -617,3 +617,123 @@ var key1=hmm.SnapshotKey.New("key1","type1","value1")
 var key2=hmm.SnapshotKey.New("key1","type2","value2")
 database.APIRemoveSnapshots([key1,key2])
 ```
+
+## 计算查询接口
+
+通过环境和选项，动态的对地图进行计算和查询操作
+
+### 点对点规划接口
+
+规划不定数量个起点到不定数量个终点之间的最近路线。
+
+一般常见的是一个起点到一个终点，或者一个起点到多个终点的规划
+
+```javascript
+MapDatabase.APIQueryPathAny(from: string[], target: string[], context: Context, options: MapperOptions): QueryResult | null
+```
+
+**参数**
+
+* from 出发地点列表
+* target 目的地列表
+* context 环境上下文
+* options 地图选项
+
+**返回值**
+
+查询成功返回QueryResult
+
+查询失败返回null
+
+### 点对点规划接口
+
+规划不定数量个起点到不定数量个终点之间的最近路线。
+
+一般常见的是一个起点到一个终点，或者一个起点到多个终点的规划
+
+```javascript
+MapDatabase.APIQueryPathAny(from: string[], target: string[], context: Context, options: MapperOptions): QueryResult | null
+```
+
+**参数**
+
+* from 出发地点列表
+* target 目的地列表
+* context 环境上下文
+* options 地图选项
+
+**返回值**
+
+查询成功返回QueryResult
+
+查询失败返回null
+
+**代码范例**
+
+```javascript
+var ctx=hmm.Context.New()
+var opt=hmm.MapperOption.New()
+var queryresult=database.APIQueryPathAny(["0"],["799","1946"],ctx,opt)
+```
+
+### 范围遍历规划接口
+
+规划一个起点到最终经过所有目标的路线
+
+无法经过的目标会记录在查询结果的Unvisited里
+
+```javascript
+MapDatabase.APIQueryPathAll(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null 
+```
+
+**参数**
+
+* start 起点
+* target 目的地列表
+* context 环境上下文
+* options 地图选项
+
+**返回值**
+
+查询成功返回QueryResult
+
+查询失败返回null
+
+**代码范例**
+
+```javascript
+var ctx=hmm.Context.New()
+var opt=hmm.MapperOption.New()
+var queryresult=database.APIQueryPathAll(["0"],["0","1"，"2"，"3"],ctx,opt)
+```
+
+### 顺序遍历规划接口
+
+规划一个起点，按顺序经过所有目标的路线
+
+无法经过的目标会记录在查询结果的Unvisited里
+
+```Javascript
+MapDatabase.APIQueryPathOrdered(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null
+```
+
+**参数**
+
+* start 起点
+* target 目的地列表
+* context 环境上下文
+* options 地图选项
+
+**返回值**
+
+查询成功返回QueryResult
+
+查询失败返回null
+
+**代码范例**
+
+```javascript
+var ctx=hmm.Context.New()
+var opt=hmm.MapperOption.New()
+var queryresult=database.APIQueryPathAll(["0"],["0","1"，"2"，"3"],ctx,opt)
+```
