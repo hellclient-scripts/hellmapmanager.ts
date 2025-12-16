@@ -737,3 +737,282 @@ var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
 var queryresult=database.APIQueryPathAll(["0"],["0","1"，"2"，"3"],ctx,opt)
 ```
+### 膨胀计算接口 
+
+计算从初始房间列表膨胀指定次数后的新的房间列表。
+
+一般用于获取地图上给点的房间，扩展几个房间后的区域。
+
+```javascript
+Mapdatabase.APIDilate(src: string[], iterations: number, context: Context, options: MapperOptions): string[] 
+```
+**参数**
+
+* src 初始房间列表
+* iterations 膨胀次数
+* context 环境上下文
+* options 地图选项
+
+**返回值**
+
+膨胀后的房间列表
+
+**代码范例**
+
+```javascript
+var ctx=hmm.Context.New()
+var opt=hmm.MapperOption.New()
+var rooms=database.APIDilate(["0","1","2"],3,ctx,opt)
+```
+
+### 跟踪出口 
+
+追踪从制定的起点，通过Command指令能到的房间。
+
+成功返回房间Key
+
+失败返回空字符串
+
+```javascript
+MapDatabase.APITrackExit(start: string, command: string, context: Context, options: MapperOptions): string 
+```
+
+**参数**
+
+* start 起点房间
+* command 移动指令
+* context 环境上下文
+* options 地图选项
+
+**返回值**
+
+移动后的房间Key,移动失败的话返回空字符串
+
+**代码范例**
+
+```javascript
+var ctx=hmm.Context.New()
+var opt=hmm.MapperOption.New()
+var roomkey=database.APITrackExit("0","north",ctx,opt)
+```
+
+### 获取房间 
+
+获取指定Key的房间。
+
+包含环境中的临时房间。
+
+成功返回房间对象，失败返回空。
+
+```javascript
+APIGetRoom(key: string, context: Context, options: MapperOptions): Room | null
+```
+**参数**
+
+* key 房间Key
+* context 环境上下文
+* options 地图选项
+
+**返回值**
+
+对应的Room对象，无对应房间则返回null
+
+**代码范例**
+
+```javascript
+var ctx=hmm.Context.New()
+var opt=hmm.MapperOption.New()
+var room=database.APIGetRoom("0",ctx,opt)
+```
+### 获取房间
+
+获取指定Key的房间的出口。
+
+包含环境中的临时房间，捷径和临时路径。
+
+可以通过Options的DisableShortcuts排除捷径
+
+成功返回出口列表，失败返回空列表。
+
+```javascript
+MapDatabase.APIGetRoomExits(key: string, context: Context, options: MapperOptions): Exit[]
+```
+
+**参数**
+
+* key 房间主键
+* context 环境上下文
+* options 地图选项
+
+**返回值**
+
+对应房间的出口对象列表，找不到房间则返回空数组，
+
+**代码范例**
+
+```javascript
+var ctx=hmm.Context.New()
+var opt=hmm.MapperOption.New()
+var exits=database.APIGetRoomExits("0",ctx,opt)
+```
+
+
+## 标记接口
+
+对房间进行各种细节维护的接口。
+
+###  设置房间标签接口
+
+设置制定房间的分组
+
+```javascript
+MapDatabase.APITagRoom(key: string, tag: string, value: number)
+```
+
+**参数**
+
+* key 房间主键
+* tag 标记名
+* value 标记值
+
+**返回值**
+
+无
+
+**代码范例**
+
+```javascript
+database.APITagROom("roomkey","tagname",1)
+```
+
+### 设置房间数据接口
+
+设置制定房间的数据。
+
+可以用来记录一些不会变化的数据，比如带色彩的房间名之类。
+
+理论上，房间的非核心数据更适合使用快照的方式处理。
+
+```javascript
+MapDatabase.APISetRoomData(roomkey: string, datakey: string, datavalue: string)
+```
+
+**参数**
+
+* roomkey 房间主键
+* datakey 数据主键
+* datavalue 数据值
+
+**返回结果**
+
+无
+
+**代码范例**
+
+```javascript
+database.APISetRoomData("roomkey","datakey","datavalue")
+```
+### 设置追踪
+
+将房间加入足迹中。
+
+一般用于在特定对象出现后对足迹进行维护。
+
+```javascript
+MapDatabase.APITraceLocation(key: string, location: string)
+```
+
+**参数**
+
+* key 足迹的主键
+* location 房间主键。重复添加不会有效果。
+
+**返回值**
+
+无
+
+**代码范例**
+
+```javascript
+database.APITraceLocation("npc","15")
+```
+
+## 快照接口
+
+快照相关的操作接口。
+
+### 抓快照接口
+
+抓快照接口用于把当前的房间制定内容的快照加入系统中。
+
+快照如果重复，不会创建新快照，会把快照的Count加1,然后更新快照时间。
+
+```javascript
+MapDatabase.APITakeSnapshot(key: string, type: string, value: string, group: string)
+```
+
+**参数**
+
+* key 快照主键(房间主键)
+* type 快照类型
+* value 快照值
+* group 快照分组
+
+**返回值**
+
+无
+
+**代码范例**
+
+```javascript
+database.APITakeSnapshot("roomkey","snapshottype","snapshotvalue","groupa")
+```
+
+### 搜索快照 
+
+根据给到的限制搜索快照
+
+```javascript
+MapDatabase.APISearchSnapshots(search: SnapshotSearch): SnapshotSearchResult[]
+```
+
+**参数**
+
+SnapshotSearch对象
+
+**返回值**
+
+SnapshotSearchResult列表
+
+**代码范例**
+
+```javascript
+var search=hmm.SnapshotSearch.New()
+search.Keywords=["这里","好像"]
+search.Type="roomdesc"
+var results=MapDatabase.APISearchSnapshots(search)
+```
+
+### 清除快照 
+
+批量清除快照
+
+```javascript
+MapDatabase.APIClearSnapshots(filter: SnapshotFilter)
+```
+
+**参数**
+
+SnapshotFilter快照过滤器对象
+
+**返回值**
+
+无
+
+**代码范例**
+
+```javascript
+var filter=hmm.SnapshotFilter.New()
+filter.Type="roomdesc"
+database.APIClearSnapshots(filter)
+```
