@@ -20,7 +20,7 @@ local hmm=require("hmm")
 
 ### 初始化
 
-使用hmm的第一步是建立一Database实例
+使用hmm的第一步是建立一个Database实例
 
 ```js
 var database=hmm.MapDatabase.New();
