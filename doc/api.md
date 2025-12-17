@@ -1153,5 +1153,5 @@ MapDatabase.APIQueryRegionRooms(key: string): string[]
 
 **范例代码**
 ```javascript
-var roomkeys=database.APIQueryRegionRooms("quserregiona")
+var roomkeys=database.APIQueryRegionRooms("qusetregiona")
 ```
