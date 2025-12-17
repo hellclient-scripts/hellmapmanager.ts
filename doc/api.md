@@ -873,7 +873,7 @@ MapDatabase.APITagRoom(key: string, tag: string, value: number)
 
 * key 房间主键
 * tag 标记名
-* value 标记值
+* value 标记值,为0会清楚标签。
 
 **返回值**
 
@@ -901,7 +901,7 @@ MapDatabase.APISetRoomData(roomkey: string, datakey: string, datavalue: string)
 
 * roomkey 房间主键
 * datakey 数据主键
-* datavalue 数据值
+* datavalue 数据值,为空会删除数据
 
 **返回结果**
 

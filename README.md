@@ -10,3 +10,5 @@
 ## 文档
 
 * [快速开始](doc/quickstart.md)
+* [API文档](doc/api.md)
+* [参考文档](doc/reference.md)

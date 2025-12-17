@@ -73,19 +73,7 @@ export class Map {
     static CurrentVersion: string = "1.0";
 
     Info: MapInfo = new MapInfo();
-
-    // void Arrange()
-    // {
-    //     Room.Sort(Rooms);
-    //     Marker.Sort(Markers);
-    //     Route.Sort(Routes);
-    //     Trace.Sort(Traces);
-    //     Region.Sort(Regions);
-    //     Landmark.Sort(Landmarks);
-    //     Shortcut.Sort(Shortcuts);
-    //     Variable.Sort(Variables);
-    //     Snapshot.Sort(Snapshots);
-    // }
+    
     static Create(name: string, desc: string): Map {
         let result = new Map();
         result.Info = MapInfo.Create(name, desc)
