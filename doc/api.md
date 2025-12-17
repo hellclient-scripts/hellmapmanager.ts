@@ -1016,3 +1016,142 @@ var filter=hmm.SnapshotFilter.New()
 filter.Type="roomdesc"
 database.APIClearSnapshots(filter)
 ```
+
+## 房间搜索接口
+
+根据条件或者预设搜索房间信息的接口。
+
+### 搜索房间接口 
+
+根据给到的过滤器搜索符合条件的房间。
+
+```javascript
+MapDatabase.APISearchRooms(filter: RoomFilter): Room[] 
+```
+
+**参数**
+
+房间过滤器对象
+
+**返回值**
+
+房间对象列表
+
+**范例代码**
+
+```javascript
+var filter=hmm.RoomFilter.New()
+var rc=hmm.ValueCondition.New()
+rc.Key="室外"
+rc.Not=false
+rc.value=1
+filter.RoomConditions=[rc]
+filter.HasAnyExitTo=["0"]
+var data=hmm.Data.New()
+data.Key="datakey"
+data.Value="datavalue"
+filter.HasAnyData= [data];
+filter.HasAnyName = ["目标房间名"];
+filter.HasAnyGroup=["扬州"];
+var data2=hmm.Data.New()
+data2.Key="datakey"
+data2.Value="datavalue"
+filter.ContainsAnyData=[data2];
+filter.ContainsAnyName=["广场"];
+filter.ContainsAnyKey=["gc"]
+var rooms=database.APISearchRooms(filter)
+```
+
+## 过滤房间接口 
+
+根据给到的过滤器搜索，过滤给到的的房间
+
+一般用来对搜索结果或者Trace/Region的房间进行再过滤
+
+```javascript
+APIFilterRooms(src: string[], filter: RoomFilter): Room[]
+```
+
+**参数**
+
+* src 待过滤房间key列表
+* filter 过滤器对象
+
+**返回值**
+
+房间对象列表
+
+**范例代码**
+
+```javascript
+var filter=hmm.RoomFilter.New()
+var rc=hmm.ValueCondition.New()
+rc.Key="室外"
+rc.Not=false
+rc.value=1
+filter.RoomConditions=[rc]
+filter.HasAnyExitTo=["0"]
+var data=hmm.Data.New()
+data.Key="datakey"
+data.Value="datavalue"
+filter.HasAnyData= [data];
+filter.HasAnyName = ["目标房间名"];
+filter.HasAnyGroup=["扬州"];
+var data2=hmm.Data.New()
+data2.Key="datakey"
+data2.Value="datavalue"
+filter.ContainsAnyData=[data2];
+filter.ContainsAnyName=["广场"];
+filter.ContainsAnyKey=["gc"]
+var rooms=database.APIFilterRooms(["0","1","2","3"],filter)
+```
+
+## 其他接口
+
+### 获取地图变量
+
+获取地图指定变量
+
+一般用于获取和地图相关的信息
+
+```javascript
+MapDatabase.APIGetVariable(key: string): string
+```
+
+**参数**
+
+* key 变量主键
+
+**返回值**
+
+变量值,未设置变量返回空字符串
+
+**代码范例**
+
+```javascript
+var value=database.APIGetVariable("myvar")
+```
+
+### 获取地区对应房间
+
+获取地区对应的房间信息。
+
+因为要进行依次计算，一般应该对获取的数据进行缓存。
+
+```javascript
+MapDatabase.APIQueryRegionRooms(key: string): string[]
+```
+
+**参数**
+
+* key 地区主键
+
+**返回值**
+
+房间主键列表
+
+
+**范例代码**
+```javascript
+var roomkeys=database.APIQueryRegionRooms("quserregiona")
+```
