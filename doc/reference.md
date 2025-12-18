@@ -357,11 +357,11 @@ local vc=hmm.ValueCondition:New("tagkey",1,false)
 
 ### 方法
 
-| 方法名    | 参数     | 返回值         | 说明                               |
-| --------- | -------- | -------------- | ---------------------------------- |
-| Validated | 无       | bool           | 判断ValueCondition是否有效         |
-| Clone     | 无       | ValueCondition | 克隆一个ValueCondition             |
-| Equal     | ValueTag | bool           | 判断是否和另一个ValueCondition相等 |
+| 方法名    | 参数           | 返回值         | 说明                               |
+| --------- | -------------- | -------------- | ---------------------------------- |
+| Validated | 无             | bool           | 判断ValueCondition是否有效         |
+| Clone     | 无             | ValueCondition | 克隆一个ValueCondition             |
+| Equal     | ValueCondition | bool           | 判断是否和另一个ValueCondition相等 |
 
 #### Validated 方法
 
@@ -403,4 +403,175 @@ var same=vc.Equal(hmm.ValueCondition.New("key",1,false))
 Lua:
 ```lua
 local same=vc:Equal(hmm.ValueCondition:New("key",1,false))
+```
+
+## 房间数据 Data
+
+Data对象是房间附属的房间数据的结构
+
+### 创建方式
+
+将数据的键和值一次传入New函数
+
+Javascript:
+```javascript
+var data=hmm.Data.New("datakey","datavalue")
+```
+
+Lua:
+```lua
+local data=hmm.Data:New("datakey","datavalue")
+```
+
+### 属性
+
+| 属性名 | 类型   | 说明     |
+| ------ | ------ | -------- |
+| Key    | string | 数据主键 |
+| Value  | string | 数据值   |
+
+
+### 方法
+
+| 方法名    | 参数 | 返回值 | 说明                     |
+| --------- | ---- | ------ | ------------------------ |
+| Validated | 无   | bool   | 判断Data是否有效         |
+| Clone     | 无   | Data   | 克隆一个Data             |
+| Equal     | Data | bool   | 判断是否和另一个data相等 |
+
+#### Validated 方法
+
+判断Data是否有效。Data的Key和Value不可为空。
+
+Javascript:
+```javascript
+var validated=data.Validated()
+```
+
+Lua:
+```lua
+local validted=data:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Data
+
+Javascript:
+```javascript
+var newdata=data.Clone()
+```
+
+Lua:
+```lua
+local newdata=data:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Data相等
+
+Javacript:
+```javascript
+var same=vc.Equal(hmm.Data.New("key",1,false))
+```
+
+Lua:
+```lua
+local same=vc:Equal(hmm.Data:New("key",1,false))
+```
+
+## Exit 出口对象
+
+Exit代表通向一个房间的出口信息。
+
+### 创建方式
+
+Javascript:
+```javascript
+var exit=hmm.Exit.New()
+```
+
+Lua:
+```lua
+local exit=hmm.Exit:New()
+```
+
+### 属性
+
+| 属性名     | 类型            | 说明         |
+| ---------- | --------------- | ------------ |
+| Command    | string          | 出口的指令   |
+| To         | string          | 出口目标     |
+| Conditions | []ValuCondition | 出口的值条件 |
+| Cost       | number          | 出口的消耗   |
+
+#### Commnad 属性
+
+出口的实际指令，不可为空
+
+#### To 属性
+
+出口对应的房间。建议带处理的可以用 * 或 ？占位
+
+#### Conditions 属性
+
+值条件列表
+
+必须在Context里满足所有Condition,才能使用出口
+
+#### Cost 属性
+
+出口的消耗，默认1.
+
+计算路径时的出口消耗。小于1的值属于Undefined Behave
+
+### 方法
+
+| 方法名    | 参数 | 返回值 | 说明                     |
+| --------- | ---- | ------ | ------------------------ |
+| Validated | 无   | bool   | 判断Exit是否有效         |
+| Clone     | 无   | Exit   | 克隆一个Exit             |
+| Equal     | Exit | bool   | 判断是否和另一个Exit相等 |
+
+#### Validated 方法
+
+判断Exit是否有效。Exit的Command不可为空。
+
+Javascript:
+```javascript
+var validated=exit.Validated()
+```
+
+Lua:
+```lua
+local validted=exit:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Exit
+
+Javascript:
+```javascript
+var newexit=exit.Clone()
+```
+
+Lua:
+```lua
+local newexit=exit:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Exit相等
+
+Javacript:
+```javascript
+var same=vc.Equal(hmm.Exit.New("key",1,false))
+```
+
+Lua:
+```lua
+local same=vc:Equal(hmm.Exit:New("key",1,false))
 ```
