@@ -473,12 +473,12 @@ local newdata=data:Clone()
 
 Javacript:
 ```javascript
-var same=vc.Equal(hmm.Data.New("key",1,false))
+var same=data.Equal(hmm.Data.New("key",1,false))
 ```
 
 Lua:
 ```lua
-local same=vc:Equal(hmm.Data:New("key",1,false))
+local same=data:Equal(hmm.Data:New("key",1,false))
 ```
 
 ## Exit 出口对象
@@ -578,12 +578,12 @@ local newexit=exit:Clone()
 
 Javacript:
 ```javascript
-var same=vc.Equal(hmm.Exit.New("key",1,false))
+var same=exit.Equal(hmm.Exit.New("key",1,false))
 ```
 
 Lua:
 ```lua
-local same=vc:Equal(hmm.Exit:New("key",1,false))
+local same=exit:Equal(hmm.Exit:New("key",1,false))
 ```
 
 ## Room 房间对象
@@ -688,7 +688,7 @@ room:SetData(hmm.Data:New("datekey","datavalue"))
 
 #### Validated 方法
 
-判断Room是否有效。Room的Command不可为空。
+判断Room是否有效。
 
 主键不可为空，需要符合ItemKey验证
 
@@ -723,12 +723,12 @@ local newroom=room:Clone()
 
 Javacript:
 ```javascript
-var same=vc.Equal(hmm.Room.New())
+var same=room.Equal(hmm.Room.New())
 ```
 
 Lua:
 ```lua
-local same=vc:Equal(hmm.Room:New())
+local same=room:Equal(hmm.Room:New())
 ```
 
 #### HasTag 方法
@@ -911,3 +911,223 @@ rf.ContainsAnyKey={"yz"}
 #### ContainsAnyName 属性
 
 不为空时，Room必须包含定的房间名据才能匹配，判断时对Name属性进行部分整匹配判断，只要包含条件即可。
+
+## Marker 标记
+
+标记是hmm中的一种重要属性，是处于业务对房间Key的一种别名或者映射。
+
+### 创建方式
+
+Javascript:
+```javascript
+var marker=hmm.Marker.New()
+marker.Key="mykey"
+marker.Value="gc"
+marker.Desc="描述"
+marker.Group="npc"
+marker.Message="小混混(xiao hunhun)"
+```
+
+Lua:
+```lua
+local marker=hmm.Marker:New()
+marker.Key="mykey"
+marker.Value="gc"
+marker.Desc="描述"
+marker.Group="npc"
+marker.Message="小混混(xiao hunhun)"
+```
+
+
+### 属性
+
+| 属性名  | 类型   | 说明         |
+| ------- | ------ | ------------ |
+| Key     | string | 别名主键     |
+| Value   | string | 别名目标房间 |
+| Desc    | string | 描述         |
+| Group   | string | 分组         |
+| Message | string | 消息         |
+
+#### Key 属性
+
+标记主键
+
+#### Value 属性
+
+标记对应的房间ID
+
+#### Desc 属性
+
+描述，做备注，无实际作用
+
+#### Group
+
+分组，可以用于筛选以及判断怎么处理Message
+
+#### Message
+
+消息，传递给脚本的数据，可以附带标记对应的npc/道具/人物等
+
+### 方法
+
+| 方法名    | 参数   | 返回值 | 说明                     |
+| --------- | ------ | ------ | ------------------------ |
+| Validated | 无     | bool   | 判断Marker是否有效       |
+| Clone     | 无     | Marker | 克隆一个Room             |
+| Equal     | Marker | bool   | 判断是否和另一个Room相等 |
+
+#### Validated 方法
+
+判断Marker是否有效。
+
+主键不可为空，需要符合ItemKey验证。
+
+Value不可为空。
+
+Javascript:
+```javascript
+var validated=marker.Validated()
+```
+
+Lua:
+```lua
+local validted=marker:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Marker
+
+Javascript:
+```javascript
+var newmarker=marker.Clone()
+```
+
+Lua:
+```lua
+local newmarker=marker:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Marker相等
+
+Javacript:
+```javascript
+var same=marker.Equal(hmm.Marker.New())
+```
+
+Lua:
+```lua
+local same=marker:Equal(hmm.Marker:New())
+```
+
+## Route 路线
+
+有顺序的房间列表
+
+### 创建方式
+
+Javascript:
+```javascript
+var route=hmm.Route.New()
+route.Key="myroute"
+route.Group="quest"
+route.Desc="描述"
+route.Message="zone:yz"
+route.Rooms=["0","1","2","3"]
+```
+
+Lua:
+```lua
+local route=hmm.Route:New()
+route.Key="myroute"
+route.Group="quest"
+route.Desc="描述"
+route.Message="zone:yz"
+route.Rooms={"0","1","2","3"}
+```
+
+### 属性
+
+| 属性名  | 类型     | 说明     |
+| ------- | -------- | -------- |
+| Key     | string   | 主键     |
+| Desc    | string   | 描述     |
+| Group   | string   | 分组     |
+| Message | string   | 消息     |
+| Rooms   | []string | 房间列表 |
+
+#### Key 属性
+
+路线主键
+
+#### Desc 属性
+
+描述，做备注，无实际作用
+
+#### Group
+
+分组，可以用于筛选以及判断怎么处理Message
+
+#### Message
+
+消息，传递给脚本的数据，可以附带路线对应的npc/道具/人物等
+
+#### Rooms
+
+房间列表
+
+### 方法
+
+| 方法名    | 参数  | 返回值 | 说明                     |
+| --------- | ----- | ------ | ------------------------ |
+| Validated | 无    | bool   | 判断Route是否有效        |
+| Clone     | 无    | Route  | 克隆一个Room             |
+| Equal     | Route | bool   | 判断是否和另一个Room相等 |
+
+#### Validated 方法
+
+判断Route是否有效。
+
+主键不可为空，需要符合ItemKey验证
+
+
+Javascript:
+```javascript
+var validated=route.Validated()
+```
+
+Lua:
+```lua
+local validted=toute:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Route
+
+Javascript:
+```javascript
+var newroute=route.Clone()
+```
+
+Lua:
+```lua
+local newroute=route:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Route相等
+
+Javacript:
+```javascript
+var same=route.Equal(hmm.Route.New())
+```
+
+Lua:
+```lua
+local same=route:Equal(hmm.Route:New())
+```
