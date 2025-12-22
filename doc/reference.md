@@ -829,3 +829,85 @@ Lua:
 ```lua
 room:SetDatas({hmm.Data:New("datakey","datavalue"),hmm.Data:New("datakey2","datavalue2")})
 ```
+
+## RoomFilter 房间过滤器
+
+由于搜索和过滤房间的个过滤器
+
+### 创建方式
+
+Javascript:
+```javascript
+var rf=hmm.RoomFilter.New()
+rf.RoomConditions=[hmm.ValueCondition.New("outdoor",1,false)]
+rf.HasAnyExitTo=["gc"]
+rf.HasAnyData=[hmm.Data.New("datakey","datavalue")]
+rf.HasAnyName=["中心广场"]
+rf.HasAnyGroup=["扬州"]
+rf.ContainsAnyData=[hmm.Data.New("datakey2","value2")]
+rf.ContainsAnyName=["广场"]
+rf.ContainsAnyKey=["yz"]
+```
+
+Lua:
+```lua
+var rf=hmm.RoomFilter:New()
+rf.RoomConditions={hmm.ValueCondition:New("outdoor",1,false)}
+rf.HasAnyExitTo={"gc"}
+rf.HasAnyData={hmm.Data:New("datakey","datavalue")}
+rf.HasAnyName={"中心广场"}
+rf.HasAnyGroup={"扬州"}
+rf.ContainsAnyData={hmm.Data.New("datakey2","value2")}
+rf.ContainsAnyName={"广场"}
+rf.ContainsAnyKey={"yz"}
+```
+
+### 属性
+
+| 属性名          | 类型             | 说明               |
+| --------------- | ---------------- | ------------------ |
+| RoomConditions  | []ValueCondition | 匹配的房间条件     |
+| HasAnyExitTo    | []string         | 匹配的出口房间Key  |
+| HasAnyData      | []Data           | 完全匹配的房间数据 |
+| HasAnyName      | []string         | 完全匹配的房间名   |
+| HasAnyGroup     | []string         | 完全匹配的分组     |
+| ContainsAnyData | []Data           | 部分匹配的房间数据 |
+| ContainsAnyName | []string         | 部分匹配的房间名   |
+| ContainsAnyKey  | []string         | 部分匹配的主键     |
+
+不同的属性都是列表，代表不同的筛选条件。
+
+空列表代表不做限制。
+
+同一组的筛选条件，互相之间是 or 判定，任何一个符合既符合。
+
+不同组的筛选条件，互相之间是 and 判定，必须全部符合才能符合。
+
+#### RoomConditions 属性
+
+不为空时，Room必须有和 RoomCondition 对应的Tag才能匹配
+
+#### HasAnyExitTo 属性
+
+不为空时，Room必须要有出口到给定的目标房间才能匹配。只判断原始房间信息，不包含Context。
+
+
+#### HasAnyData 属性
+
+不为空时，Room必须有给定的房间数据才能匹配，判断时对Data.Value进行完整匹配判断。
+
+#### HasAnyName 属性
+
+不为空时，Room只有有给定的房间名才能匹配，匹配时对Name属性进行完整匹配。
+
+#### HasAnyGroup 属性
+
+不为空时，Room只有有给定的分组才能匹配，匹配时对Group属性进行完整匹配。
+
+#### ContainsAnyData 属性
+
+不为空时，Room必须包含给定的房间数据才能匹配，判断时对Data.Value进行部分整匹配判断，只要包含条件即可。
+
+#### ContainsAnyName 属性
+
+不为空时，Room必须包含定的房间名据才能匹配，判断时对Name属性进行部分整匹配判断，只要包含条件即可。
