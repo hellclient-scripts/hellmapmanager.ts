@@ -485,26 +485,36 @@ local same=vc:Equal(hmm.Data:New("key",1,false))
 
 Exit代表通向一个房间的出口信息。
 
+Exit作为HMM最重要的基础结构，会被很多类继承。
+
 ### 创建方式
 
 Javascript:
 ```javascript
 var exit=hmm.Exit.New()
+exit.Command="north"
+exit.To="0"
+exit.Conditions=[hnn.ValueCondition.New("gb",1,false)]
+exit.Cost=1
 ```
 
 Lua:
 ```lua
 local exit=hmm.Exit:New()
+exit.Command="north"
+exit.To="0"
+exit.Conditions={hnn.ValueCondition:New("gb",1,false)}
+exit.Cost=1
 ```
 
 ### 属性
 
-| 属性名     | 类型            | 说明         |
-| ---------- | --------------- | ------------ |
-| Command    | string          | 出口的指令   |
-| To         | string          | 出口目标     |
-| Conditions | []ValuCondition | 出口的值条件 |
-| Cost       | number          | 出口的消耗   |
+| 属性名     | 类型             | 说明         |
+| ---------- | ---------------- | ------------ |
+| Command    | string           | 出口的指令   |
+| To         | string           | 出口目标     |
+| Conditions | []ValueCondition | 出口的值条件 |
+| Cost       | number           | 出口的消耗   |
 
 #### Commnad 属性
 
@@ -574,4 +584,248 @@ var same=vc.Equal(hmm.Exit.New("key",1,false))
 Lua:
 ```lua
 local same=vc:Equal(hmm.Exit:New("key",1,false))
+```
+
+## Room 房间对象
+
+Room是hmmts里最基础的地图对象，代表了Mud里的一个一个抽象的位置以及对应的出口关系。
+
+### 创建方式
+
+Javascript:
+```javascript
+var room=hmm.Room.New()
+room.Key="myroom"
+room.Name="我的房间"
+room.Desc="abcdefg"
+room.Tags=[hmm.Tag.New("indoor",1)]
+var exit=hmm.Exit.New()
+exit.Command="out"
+exit.To="chatroom"
+exit.Conditions=[hmm.Condition.New("isWiz",1,false)]
+exit.Cost=1
+room.Exits=[exit]
+room.SetData(hmm.Data.New("datekey","datavalue"))
+```
+
+Lua:
+```lua
+var room=hmm.Room:New()
+room.Key="myroom"
+room.Name="我的房间"
+room.Desc="abcdefg"
+room.Tags={hmm.Tag:New("indoor",1)}
+var exit=hmm.Exit:New()
+exit.Command="out"
+exit.To="chatroom"
+exit.Conditions={hmm.Condition:New("isWiz",1,false)}
+exit.Cost=1
+room.Exits=[exit]
+room:SetData(hmm.Data:New("datekey","datavalue"))
+```
+
+
+### 属性
+
+| 属性名 | 类型       | 说明     |
+| ------ | ---------- | -------- |
+| Key    | string     | 房间主键 |
+| Name   | string     | 房间名   |
+| Desc   | string     | 房间描述 |
+| Group  | string     | 房间分组 |
+| Tags   | []ValueTag | 房间标签 |
+| Exits  | []Exit     | 房间出口 |
+| Data   | []Data     | 房间数据 |
+
+#### Key 属性
+
+房间的主键，hmm中最核心的概念。
+
+#### Name 属性
+
+房间名，人类可阅读的房间名称。
+
+除了阅读作用外，还会用于搜索/过滤房间，以及在hmm的关系地图中显示
+
+#### Desc 属性
+
+描述属性，备注用，无实际用途。
+
+#### Group 属性
+
+分组属性。在Room中一般可以记录城市所属的城市。
+
+可以在List接口中使用
+
+#### Tags 属性
+
+房间本身的标签，一般用于匹配Context中的RoomConditions。
+
+常见的可以用来设置是否为室外，是否为安全区等
+
+#### Exits 属性
+
+房间的出口列表，描述房间与房间之间的关联。
+
+#### Data 属性
+
+房间数据属性。可以用来存放需要的房间数据。比如特殊的NPC/任务道具等。
+
+可以在搜索/过滤房间中使用
+
+### 方法
+
+| 方法名    | 参数                       | 返回值  | 说明                          |
+| --------- | -------------------------- | ------- | ----------------------------- |
+| Validated | 无                         | bool    | 判断Room是否有效              |
+| Clone     | 无                         | Room    | 克隆一个Room                  |
+| Equal     | Room                       | bool    | 判断是否和另一个Room相等      |
+| HasTag    | key: string, value: number | bool    | 判断是否含有某个Tag           |
+| GetData   | string                     | string  | 返回指定Key的房间数据         |
+| HasExitTo | string                     | boolean | 返回知否有到制定Key房间的出口 |
+| SetData   | Data                       | 无      | 为房间设置房间数据            |
+| SetDatas  | []Data                     | 无      | 为房间批量设置房间数据        |
+
+#### Validated 方法
+
+判断Room是否有效。Room的Command不可为空。
+
+主键不可为空，需要符合ItemKey验证
+
+
+Javascript:
+```javascript
+var validated=room.Validated()
+```
+
+Lua:
+```lua
+local validted=room:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Room
+
+Javascript:
+```javascript
+var newroom=room.Clone()
+```
+
+Lua:
+```lua
+local newroom=room:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Room相等
+
+Javacript:
+```javascript
+var same=vc.Equal(hmm.Room.New())
+```
+
+Lua:
+```lua
+local same=vc:Equal(hmm.Room:New())
+```
+
+#### HasTag 方法
+
+判断 是否给到的Tag主键是否符合具体的Value值
+
+**参数**
+
+* key 标签主键
+* value 标签值
+
+**返回值**
+
+是否符合
+
+**代码范例**
+
+Javascript:
+```javascript
+var match=room.HasTag("outdoor",1)
+```
+
+Lua:
+```lua
+local match=room:Hastag("outdoor,1")
+```
+
+#### GetData 方法
+
+返回房间给定数据主键的数据值。
+
+
+**参数**
+
+* key 数据主键
+  
+**返回值**
+
+房间对应数据主键的数据值。如果无对应值，返回空字符串
+
+
+**代码范例**
+
+Javascript:
+```javascript
+var datavalue=room.GetData("datakey")
+```
+
+Lua:
+```lua
+local datavalue=room:GetData("datakey")
+```
+
+#### SetData 方法
+
+为房间设置具体的数据值,设置结束后房间数据会按照主键排序。
+
+**参数**
+
+* rd 房间数据，如果有同名会进行更新，如果Value为空字符串则会只删除
+
+**返回值**
+
+无
+
+**代码范例**
+
+Javascript:
+```javascript
+room.SetData(hmm.Data.New("datakey","datavalue"))
+```
+
+Lua:
+```lua
+room:SetData(hmm.Data:New("datakey","datavalue"))
+```
+
+#### SetDatas 方法
+
+批量为房间设置具体的数据值,设置结束后房间数据会按照主键排序。
+
+**参数**
+
+* list 房间数据列表，会依次设置。如果有同名会进行更新，如果Value为空字符串则会只删除
+
+**返回值**
+
+无
+
+**代码范例**
+
+Javascript:
+```javascript
+room.SetDatas([hmm.Data.New("datakey","datavalue"),hmm.Data.New("datakey2","datavalue2")])
+```
+
+Lua:
+```lua
+room:SetDatas({hmm.Data:New("datakey","datavalue"),hmm.Data:New("datakey2","datavalue2")})
 ```
