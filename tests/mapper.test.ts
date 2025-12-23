@@ -48,7 +48,9 @@ describe("MapperTest", () => {
         var ctx = new Context();
         ctx.WithCommandCosts([
             new CommandCost("cmd2", "to1", 20),
-            new CommandCost("cmd2", "to2", 20)
+            new CommandCost("cmd2", "to2", 20),
+            new CommandCost("cmd3", "to4", 20),
+            new CommandCost("cmd3", "", 30)
         ]);
         var mapper = new Mapper(md.Current!, ctx, new MapperOptions());
         var exit = ((): Exit => {
@@ -72,11 +74,27 @@ describe("MapperTest", () => {
             model.Cost = 10
             return model
         })()
+        var exit4 = ((): Exit => {
+            let model = new Exit();
+            model.To = "to4"
+            model.Command = "cmd3"
+            model.Cost = 10
+            return model
+        })()
+        var exit5 = ((): Exit => {
+            let model = new Exit();
+            model.To = "to5"
+            model.Command = "cmd3"
+            model.Cost = 10
+            return model
+        })()
 
 
         assert.equal(10, mapper.GetExitCost(exit));
         assert.equal(20, mapper.GetExitCost(exit2));
         assert.equal(10, mapper.GetExitCost(exit3));
+        assert.equal(20, mapper.GetExitCost(exit4));
+        assert.equal(30, mapper.GetExitCost(exit5));
     })
 
     it("TestValidateRoom", () => {

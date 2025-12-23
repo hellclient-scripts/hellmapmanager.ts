@@ -217,7 +217,10 @@ export class Mapper {
             if (cost != null) {
                 return cost;
             }
-
+            let cost2= costs[""]
+            if (cost2 != null) {
+                return cost2;
+            }
         }
         return exit.Cost;
     }

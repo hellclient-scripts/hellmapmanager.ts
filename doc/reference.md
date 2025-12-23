@@ -2563,3 +2563,42 @@ path.Cost=1
 计算路径时的出口消耗。小于1的值属于Undefined Behave
 
 继承自Exit
+
+## Context 上下文
+
+上下文是计算和查询路径时的临时环境
+
+### 创建方式
+
+Javascript:
+```javascript
+var ctx=hmm.Context.New()
+```
+
+Lua:
+```lua
+local ctx=hmm.Context:New()
+```
+
+### 方法
+
+| 方法名              | 参数                         | 返回值  | 说明                       |
+| ------------------- | ---------------------------- | ------- | -------------------------- |
+| ClearTags           | 无                           | Context | 链式调用，清除所有标签     |
+| WithTags            | tags: []ValueTag             | Context | 链式调用，插入标签         |
+| ClearRoomConditions | 无                           | Context | 链式调用，清除所有房间条件 |
+| WithRoomConditions  | conditions: []ValueCondition | Context | 链式调用，插入房间条件     |
+| ClearRooms          | 无                           | Context | 链式调用，清除所有临时房间 |
+| WithRooms           | rooms: []Room                | Context | 链式调用，插入临时房间     |
+| ClearWhitelist      | 无                           | Context | 链式调用，清除所有白名单   |
+| WithWhitelist       | list: []string               | Context | 链式调用，插入白名单       |
+| ClearBlacklist      | 无                           | Context | 链式调用，清除所有黑名单   |
+| WithBlacklist       | list: []string               | Context | 链式调用，插入黑名单       |
+| ClearShortcuts      | 无                           | Context | 链式调用，清除所有捷径     |
+| WithShortcuts       | list: []RoomConditionExit    | Context | 链式调用，插入捷径         |
+| ClearPaths          | 无                           | Context | 链式调用，清除所有临时路径 |
+| WithPaths           | list: []Path                 | Context | 链式调用，插入临时路径     |
+| ClearBlockedLinks   | 无                           | Context | 链式调用，清除所有拦截连接 |
+| WithBlockedLinks    | list: []Link                 | Context | 链式调用，插入拦截连接     |
+| ClearCommandCosts   | 无                           | Context | 链式调用，清除所有指令消耗 |
+| WithCommandCosts    | list: []CommandCost          | Context | 链式调用，插入指令消耗     |
