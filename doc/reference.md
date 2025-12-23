@@ -494,7 +494,7 @@ Javascript:
 var exit=hmm.Exit.New()
 exit.Command="north"
 exit.To="0"
-exit.Conditions=[hnn.ValueCondition.New("gb",1,false)]
+exit.Conditions=[hmm.ValueCondition.New("gb",1,false)]
 exit.Cost=1
 ```
 
@@ -503,18 +503,18 @@ Lua:
 local exit=hmm.Exit:New()
 exit.Command="north"
 exit.To="0"
-exit.Conditions={hnn.ValueCondition:New("gb",1,false)}
+exit.Conditions={hmm.ValueCondition:New("gb",1,false)}
 exit.Cost=1
 ```
 
 ### 属性
 
-| 属性名     | 类型             | 说明         |
-| ---------- | ---------------- | ------------ |
-| Command    | string           | 出口的指令   |
-| To         | string           | 出口目标     |
-| Conditions | []ValueCondition | 出口的值条件 |
-| Cost       | number           | 出口的消耗   |
+| 属性名     | 类型                | 说明         |
+| ---------- | ------------------- | ------------ |
+| Command    | string              | 出口的指令   |
+| To         | string              | 出口目标     |
+| Conditions | []ValueCondition=[] | 出口的值条件 |
+| Cost       | number=1            | 出口的消耗   |
 
 #### Commnad 属性
 
@@ -624,6 +624,37 @@ Lua:
 ```lua
 local validated=hmm.ItemKey:Validate("key")
 ```
+## APIListOption 接口列出选项
+
+标准维护接口的列出过滤选项
+
+### 创建方式
+
+Javascript:
+```javascript
+var lo=hmm.APIListOption.New()
+lo.WithKeys(["gc","gd"]).WithGroups(["扬州","北京"])
+```
+
+Lua:
+```lua
+var lo=hmm.APIListOption:New()
+lo:WithKeys({"gc","gd"}):WithGroups({"扬州","北京"})
+```
+
+### 方法
+| 方法名     | 参数             | 返回值        | 说明                   |
+| ---------- | ---------------- | ------------- | ---------------------- |
+| Clear      | 无               | APIListOption | 链式调用，清除过滤条件 |
+| WithKeys   | keys: string[]   | APIListOption | 链式调用，添加主键过滤 |
+| WithGroups | groups: string[] | APIListOption | 链式调用，添加分组过滤 |
+| Keys       | 无               | []string      | 返回当前的主键过滤列表 |
+| Groups     | 无               | []string      | 返回当前的分组过滤列表 |
+| IsEmpty    | 无               | bool          | 当前的过滤选项是否为空 |
+
+Clear,WithKeys,WithGroups会返回APIListOption本身方便调用。
+
+当Keys或者Groups任何一个为空时，调用接口时不限制对应的属性
 
 ## Room 房间对象
 
@@ -1756,12 +1787,73 @@ Lua:
 ```lua
 local lk=landmark:UniqueKey()
 ```
+## RoomConditionExit 房间条件出口
+
+带房间条件的出口，一般用于飞行类不定起点出口
+
+### 创建方式
+
+Javascript:
+```javascript
+var rce=hmm.RoomConditionExit.New()
+rce.Command="rideto gc"
+rce.To="yzzxgc"
+rce.RoomConditions=[hmm.ValueCondition.New("outside",1,false)]
+rce.Conditions=[hmm.ValueCondition.New("ride",1,false)]
+rce.Cost=2
+```
+
+Lua:
+```lua
+local rce=hmm.RoomConditionExit:New()
+rce.Command="rideto gc"
+rce.To="yzzxgc"
+rce.RoomConditions={hmm.ValueCondition:New("outside",1,false)}
+rce.Conditions={hmm.ValueCondition:New("ride",1,false)}
+rce.Cost=2
+```
+### 属性
+
+| 属性名         | 类型                | 说明                 |
+| -------------- | ------------------- | -------------------- |
+| Command        | string              | 指令(继承自Exit)     |
+| To             | string              | 目标(继承自Exit)     |
+| RoomConditions | []ValueCondition=[] | 房间条件列表         |
+| Conditions     | []ValueCondition=[] | 条件列表(继承自Exit) |
+| Cost           | number=1            | 消耗 (继承自Exit)    |
+
+#### Commnad 属性
+
+出口的实际指令，不可为空，继承自Exit
+
+#### To 属性
+
+出口对应的房间。建议待处理的可以用 * 或 ？占位，继承自Exit
+
+#### RoomConditions 属性
+
+房间条件列表，房间Tag必须符合所有Condition，才能使用出口
+
+#### Conditions 属性
+
+值条件列表
+
+必须在Context里满足所有Condition,才能使用出口，继承自Exit
+
+#### Cost 属性
+
+出口的消耗，默认1.
+
+计算路径时的出口消耗。小于1的值属于Undefined Behave
+
+继承自Exit
+
 
 ## Shortcut 捷径
 
 捷径指能从任意符合条件的位置进入的出口。
 
-继承自Exit
+继承自RoomConditionExit
 
 ### 创建方式
 
@@ -1773,6 +1865,7 @@ shortcut.Group="ride"
 shortcut.Desc="描述"
 shortcut.Command="rideto gc"
 shortcut.To="yzzxgc"
+shortcut.RoomConditions=[hmm.ValueCondition.New("outside",1,false)]
 shortcut.Conditions=[hmm.ValueCondition.New("ride",1,false)]
 shortcout.Cost=2
 ```
@@ -1785,21 +1878,23 @@ shortcut.Group="ride"
 shortcut.Desc="描述"
 shortcut.Command="rideto gc"
 shortcut.To="yzzxgc"
+shortcut.RoomConditions={hmm.ValueCondition:New("outside",1,false)}
 shortcut.Conditions={hmm.ValueCondition:New("ride",1,false)}
 shortcout.Cost=2
 ```
 
 ### 属性
 
-| 属性名     | 类型             | 说明                 |
-| ---------- | ---------------- | -------------------- |
-| Key        | string           | 主键                 |
-| Group      | string           | 分组                 |
-| Desc       | string           | 描述                 |
-| Command    | string           | 指令(继承自Exit)     |
-| To         | string           | 目标(继承自Exit)     |
-| Conditions | []ValueCondition | 条件列表(继承自Exit) |
-| Cost       | number           | 消耗 (继承自Exit)    |
+| 属性名         | 类型                | 说明                                  |
+| -------------- | ------------------- | ------------------------------------- |
+| Key            | string              | 主键                                  |
+| Group          | string              | 分组                                  |
+| Desc           | string              | 描述                                  |
+| Command        | string              | 指令(继承自Exit)                      |
+| To             | string              | 目标(继承自Exit)                      |
+| RoomConditions | []ValueCondition=[] | 房间条件列表(继承自RoomConditionExit) |
+| Conditions     | []ValueCondition=[] | 条件列表(继承自Exit)                  |
+| Cost           | number=1            | 消耗 (继承自Exit)                     |
 
 #### Key 属性
 
@@ -1820,6 +1915,10 @@ shortcout.Cost=2
 #### To 属性
 
 出口对应的房间。建议待处理的可以用 * 或 ？占位，继承自Exit
+
+#### RoomConditions 属性
+
+房间条件列表，房间Tag必须符合所有Condition，才能使用出口，继承自RoomConditionExit
 
 #### Conditions 属性
 
@@ -2079,7 +2178,7 @@ local same=sk:Equal(hmm.LandmarkKey:New("key","type","value"))
 
 可以通过搜索快照的方式来快速定位快照
 
-#### 创建方式
+### 创建方式
 
 Javascript:
 ```Javascript
@@ -2239,3 +2338,228 @@ Lua:
 ```lua
 local same=snapshot:Equal(hmm.Snapshot:New())
 ```
+
+## SnapshotFilter 快照过滤器
+
+快照过滤器是用来批量删除快照的过滤器
+
+### 创建方式
+
+Javascript:
+```javascript
+var sf=hmm.SnapshotFilter.New()
+sf.Key="yzgc"
+sf.Type="regexp"
+sf.Group="mygroup"
+```
+
+Lua:
+```lua
+local sf=hmm.SnapshotFilter:New()
+sf.Key="yzgc"
+sf.Type="regexp"
+sf.Group="mygroup"
+```
+
+### 属性
+
+| 属性名 | 类型         | 说明       |
+| ------ | ------------ | ---------- |
+| Key    | string\|null | 过滤的主键 |
+| Type   | string\|null | 过滤的类型 |
+| Group  | string\|null | 过滤的分组 |
+
+属性如果不为空，那么只有具有相同属性的Snapshot才会通过过滤
+
+多个属性之间是 and 关系
+
+
+## SnapshotSearch 快走搜索类
+
+快照搜索类用于搜索具有特定指的快照
+
+### 创建方式
+
+Javascript:
+```javascript
+var ss=hmm.SnapshotSearch.New()
+ss.Type="regexp"
+ss.Group="mygroup"
+ss.Keyword=["扬州","广场"]
+ss.PartialMatch=true
+ss.Any=false
+```
+
+Lua:
+```lua
+local ss=hmm.SnapshotSearch:New()
+ss.Type="regexp"
+ss.Group="mygroup"
+ss.Keyword=["扬州","广场"]
+ss.PartialMatch=true
+ss.Any=false
+```
+
+### 属性
+
+| 属性名       | 类型                  | 说明       |
+| ------------ | --------------------- | ---------- |
+| Type         | string \| null = null | 搜索类型   |
+| Group        | string \| null = null | 搜索分组   |
+| Keywords     | []string=[]           | 关键字列表 |
+| PartialMatch | bool= true            | 部分匹配   |
+| Any          | bool=false            | 任意满足   |
+
+#### Type 属性
+
+限制快照类型，留空不限制
+
+#### Group 属性
+
+限制快照分组，留空不限制
+
+#### Keywords 关键字列表
+
+搜索关键字，关键字列表，具体效果和下面两个参数相关
+
+留空返回与Any相反的结果。
+
+#### PartialMatch 部分匹配
+
+部分匹配，默认表现为只要关键字出现在快照内容内就匹配。为false则必须完整匹配
+
+#### Any 任意满足
+
+任意满足一般用在完整匹配时，任何一个关键字匹配则快照匹配
+
+## SnapshotSearchResult
+
+快照搜索API返回的结果
+
+### 属性
+
+| 属性名 | 类型       | 说明                          |
+| ------ | ---------- | ----------------------------- |
+| Key    | string     | 结果对应的房间主键            |
+| Sum    | number     | 房间的快照总Count             |
+| Count  | number     | 房间匹配搜索条件的快照总Count |
+| Items  | []Snapshot | 具体匹配搜索条件的快照详情    |
+
+
+## Link
+
+代表从一个房间到另一个房间的链接，用于Context
+
+### 创建方式
+
+依次传入起点和终点
+
+Javascript:
+```javascript
+var link=hmm.Link.New("0","1")
+```
+
+Lua:
+```lua
+local link=hmm.Link:New("0","1")
+```
+
+### 属性
+
+| 属性名 | 类型   | 说明 |
+| ------ | ------ | ---- |
+| From   | string | 起点 |
+| To     | string | 终点 |
+
+## CommandCost 指令消耗
+
+代表通过某个指令到达某地的消耗，用于Context
+
+### 创建方式
+
+依次转入指令，目标和消耗
+
+Javascript:
+```javascript
+var cc=hmm.CommandCost.New("rideto gc","gc",5)
+```
+
+
+Lua:
+```lua
+local cc=hmm.CommandCost:New("rideto gc","gc",5)
+```
+
+### 属性
+
+| 属性名  | 类型   | 说明 |
+| ------- | ------ | ---- |
+| Commnad | string | 指令 |
+| To      | string | 终点 |
+| Cost    | number | 消耗 |
+
+## Path 临时路径
+
+带起点的临时路径，继承自Exit
+
+### 创建方式
+
+Javascript:
+```javascript
+var path=hmm.Path.New()
+path.From="gc"
+path.Command="north"
+path.To="0"
+path.Conditions=[hmm.ValueCondition.New("gb",1,false)]
+path.Cost=1
+```
+
+Lua:
+```lua
+local path=hmm.Path:New()
+path.From="gc"
+path.Command="north"
+path.To="0"
+path.Conditions={hmm.ValueCondition:New("gb",1,false)]
+path.Cost=1
+```
+
+### 属性
+
+| 属性名     | 类型                | 说明                 |
+| ---------- | ------------------- | -------------------- |
+| From       | string              | 起点                 |
+| Command    | string              | 指令(继承自Exit)     |
+| To         | string              | 目标(继承自Exit)     |
+| Conditions | []ValueCondition=[] | 条件列表(继承自Exit) |
+| Cost       | number=1            | 消耗 (继承自Exit)    |
+
+#### From 属性
+
+临时路径起点
+
+#### Commnad 属性
+
+出口的实际指令，不可为空，继承自Exit
+
+#### To 属性
+
+出口对应的房间。建议待处理的可以用 * 或 ？占位，继承自Exit
+
+#### RoomConditions 属性
+
+房间条件列表，房间Tag必须符合所有Condition，才能使用出口
+
+#### Conditions 属性
+
+值条件列表
+
+必须在Context里满足所有Condition,才能使用出口，继承自Exit
+
+#### Cost 属性
+
+出口的消耗，默认1.
+
+计算路径时的出口消耗。小于1的值属于Undefined Behave
+
+继承自Exit
