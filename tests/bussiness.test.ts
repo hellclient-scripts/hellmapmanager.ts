@@ -161,7 +161,7 @@ describe("ControlCode Test", () => {
         assert.equal("1", trace2.Locations[0]);
         trace2 = new Trace();
         trace2.Locations = ["2", "3"];
-        trace2.AddLocations(["1", "3", "4"]);
+        trace2.AddLocations(["","1", "3", "4"]);
         assert.equal(4, trace2.Locations.length);
         assert.equal("1", trace2.Locations[0]);
         assert.equal("2", trace2.Locations[1]);

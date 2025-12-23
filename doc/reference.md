@@ -522,7 +522,7 @@ exit.Cost=1
 
 #### To 属性
 
-出口对应的房间。建议带处理的可以用 * 或 ？占位
+出口对应的房间。建议待处理的可以用 * 或 ？占位
 
 #### Conditions 属性
 
@@ -605,7 +605,7 @@ exit.To="chatroom"
 exit.Conditions=[hmm.Condition.New("isWiz",1,false)]
 exit.Cost=1
 room.Exits=[exit]
-room.SetData(hmm.Data.New("datekey","datavalue"))
+room.Data=[hmm.Data.New("datekey","datavalue")]
 ```
 
 Lua:
@@ -621,7 +621,7 @@ exit.To="chatroom"
 exit.Conditions={hmm.Condition:New("isWiz",1,false)}
 exit.Cost=1
 room.Exits=[exit]
-room:SetData(hmm.Data:New("datekey","datavalue"))
+room.Data={hmm.Data:New("datekey","datavalue")}
 ```
 
 
@@ -961,11 +961,11 @@ marker.Message="小混混(xiao hunhun)"
 
 描述，做备注，无实际作用
 
-#### Group
+#### Group 属性
 
 分组，可以用于筛选以及判断怎么处理Message
 
-#### Message
+#### Message 属性
 
 消息，传递给脚本的数据，可以附带标记对应的npc/道具/人物等
 
@@ -1067,25 +1067,25 @@ route.Rooms={"0","1","2","3"}
 
 描述，做备注，无实际作用
 
-#### Group
+#### Group  属性
 
 分组，可以用于筛选以及判断怎么处理Message
 
-#### Message
+#### Message  属性
 
 消息，传递给脚本的数据，可以附带路线对应的npc/道具/人物等
 
-#### Rooms
+#### Rooms  属性
 
 房间列表
 
 ### 方法
 
-| 方法名    | 参数  | 返回值 | 说明                     |
-| --------- | ----- | ------ | ------------------------ |
-| Validated | 无    | bool   | 判断Route是否有效        |
-| Clone     | 无    | Route  | 克隆一个Room             |
-| Equal     | Route | bool   | 判断是否和另一个Room相等 |
+| 方法名    | 参数 | 返回值 | 说明                     |
+| --------- | ---- | ------ | ------------------------ |
+| Validated | 无   | bool   | 判断Route是否有效        |
+| Clone     | 无   | Route  | 克隆一个Room             |
+| Equal     | Room | bool   | 判断是否和另一个Room相等 |
 
 #### Validated 方法
 
@@ -1101,7 +1101,7 @@ var validated=route.Validated()
 
 Lua:
 ```lua
-local validted=toute:Validated()
+local validted=route:Validated()
 ```
 
 #### Clone 方法
@@ -1130,4 +1130,722 @@ var same=route.Equal(hmm.Route.New())
 Lua:
 ```lua
 local same=route:Equal(hmm.Route:New())
+```
+
+## Trace 足迹
+
+Npc或者人物对象出现的分布
+
+
+### 创建方式
+
+Javscript:
+```javascript
+var trace=hmm.Trace.New()
+trace.Key="questnpc"
+trace.Group="quest"
+trace.Desc="描述"
+trace.Message="托钵僧(tuobo seng)"
+trace.Locations=["1","2","3"]
+```
+
+Lua:
+```lua
+local trace=hmm.Trace:New()
+trace.Key="questnpc"
+trace.Group="quest"
+trace.Desc="描述"
+trace.Message="托钵僧(tuobo seng)"
+trace.Locations={"1","2","3"}
+```
+
+### 属性
+
+| 属性名    | 类型     | 说明     |
+| --------- | -------- | -------- |
+| Key       | string   | 主键     |
+| Desc      | string   | 描述     |
+| Group     | string   | 分组     |
+| Message   | string   | 消息     |
+| Locations | []string | 位置列表 |
+
+#### Key 属性
+
+足迹主键
+
+#### Desc 属性
+
+描述，做备注，无实际作用
+
+#### Group 属性
+
+分组，可以用于筛选以及判断怎么处理Message
+
+#### Message 属性
+
+消息，传递给脚本的数据，可以附带路线对应的npc/道具/人物等
+
+#### Locations 属性
+
+位置列表
+
+### 方法
+
+| 方法名          | 参数               | 返回值 | 说明                      |
+| --------------- | ------------------ | ------ | ------------------------- |
+| Validated       | 无                 | bool   | 判断Trace是否有效         |
+| Clone           | 无                 | Trace  | 克隆一个Trace             |
+| Equal           | Trace              | bool   | 判断是否和另一个Trace相等 |
+| RemoveLocations | loctions: string[] | 无     | 移除多个位置              |
+| AddLocations    | loctions: string[] | 无     | 添加多个位置              |
+
+#### Validated 方法
+
+判断Trace是否有效。
+
+主键不可为空，需要符合ItemKey验证
+
+
+Javascript:
+```javascript
+var validated=trace.Validated()
+```
+
+Lua:
+```lua
+local validted=trace:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Trace
+
+Javascript:
+```javascript
+var newtrace=trace.Clone()
+```
+
+Lua:
+```lua
+local newtrace=trace:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Trace相等
+
+Javacript:
+```javascript
+var same=trace.Equal(hmm.Trace.New())
+```
+
+Lua:
+```lua
+local same=trace:Equal(hmm.Trace:New())
+```
+
+#### RemoveLocations 方法
+
+移除多个位置
+
+**参数**
+
+* locations 需要移除的位置列表
+
+**返回值**
+
+无
+
+**范例代码**
+
+Javascript:
+```javascript
+trace.RemoveLocations(["1","2","3"])
+```
+
+Lua:
+```lua
+trace:RemoveLocations({"1","2","3"})
+```
+
+#### AddLocations 方法
+
+批量添加位置
+
+添加后位置会升序排序
+
+**参数**
+
+* locations 需要添加的位置列表
+
+
+**返回值**
+
+无
+
+**范例代码**
+
+Javascript:
+```javascript
+trace.AddLocations(["1","2","3"])
+```
+
+Lua:
+```lua
+trace:AddLocations({"1","2","3"})
+```
+
+## RegionItem 地区元素
+
+地区元素，指组成地区的基本元素。
+
+可以理解为地区的一个个零件，通过 加入某个地区/房间或者排除某个地区/房间，最后计算出地区的实际房间。
+
+### 创建方式
+
+Javascript:
+```javascript
+var regionitem=hmm.RegionItem.New(hmm.RegionItemType.Zone,"yz",false)
+```
+
+Lua:
+```lua
+local regionitem=hmm.RegionItem:New(hmm.RegionItemType.Zone,"yz",false)
+```
+### 属性
+
+| 属性名 | 类型           | 说明     |
+| ------ | -------------- | -------- |
+| Type   | RegionItemType | 元素类型 |
+| Value  | string         | 元素值   |
+| Not    | bool           | 取否     |
+
+#### Type 属性
+
+地区元素的类型。可使用的值为
+
+* RegionItemType.Room 单个房间类型
+* RegionItemType.Zone 房间组类型
+
+#### Value 属性
+
+元素值，对应不同的Type.意义不同
+
+* RegionItemType.Room 状态：单个房间的主键
+* RegionItemType.Zone 状态: 房间的group名
+
+#### Not 属性
+
+取否。为false的话，对应的房间会添加到地区内，否则会从地区内排除。
+
+### 方法
+
+| 方法名    | 参数       | 返回值     | 说明                           |
+| --------- | ---------- | ---------- | ------------------------------ |
+| Validated | 无         | bool       | 判断RegionItem是否有效         |
+| Clone     | 无         | RegionItem | 克隆一个RegionItem             |
+| Equal     | RegionItem | bool       | 判断是否和另一个RegionItem相等 |
+
+#### Validated 方法
+
+判断RegionItem是否有效。
+
+值不可为空
+
+
+Javascript:
+```javascript
+var validated=regionitem.Validated()
+```
+
+Lua:
+```lua
+local validted=regionitem:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的RegionItem
+
+Javascript:
+```javascript
+var newregionitem=regionitem.Clone()
+```
+
+Lua:
+```lua
+local newregionitem=regionitem:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个RegionItem相等
+
+Javacript:
+```javascript
+var same=regionitem.Equal(hmm.RegionItem.New(hmm.RegionItemType.Zone,"yz",false))
+```
+
+Lua:
+```lua
+local same=regionitem:Equal(hmm.RegionItem:New(hmm.RegionItemType.Zone,"yz",false))
+```
+
+
+
+## Region 地区
+
+地区是用户预先定义的一系列的地图元素。
+
+地图元素分为 Room类型和Zone类型，分别对应Room的Key和Group。
+
+地区的设计目的是让用户方便的维护一个抽象地区，在地图发生变化时能一定程度自适应。
+
+### 创建方式
+
+Javascript:
+```javascript
+var region=hmm.Region.New()
+region.Key="yz"
+region.Group="quest"
+region.Desc="描述"
+region.Message="questcmd:finish"
+region.Items=[hmm.RegionItem.New(hmm.RegionItemType.Zone,"yz",false)]
+```
+
+Lua:
+```lua
+local region=hmm.Region:New()
+region.Key="yz"
+region.Group="quest"
+region.Desc="描述"
+region.Message="questcmd:finish"
+region.Items={hmm.RegionItem:New(hmm.RegionItemType.Zone,"yz",false)}
+```
+
+### 属性
+
+| 属性名  | 类型     | 说明     |
+| ------- | -------- | -------- |
+| Key     | string   | 主键     |
+| Desc    | string   | 描述     |
+| Group   | string   | 分组     |
+| Message | string   | 消息     |
+| Items   | []string | 元素列表 |
+
+#### Key 属性
+
+地区主键
+
+#### Desc 属性
+
+描述，做备注，无实际作用
+
+#### Group 属性
+
+分组，可以用于筛选以及判断怎么处理Message
+
+#### Message 属性
+
+消息，传递给脚本的数据，可以附带地区对应的npc/道具/人物等
+
+#### Items 属性
+
+地区元素列表
+
+### 方法
+
+| 方法名    | 参数   | 返回值 | 说明                       |
+| --------- | ------ | ------ | -------------------------- |
+| Validated | 无     | bool   | 判断Region是否有效         |
+| Clone     | 无     | Region | 克隆一个Region             |
+| Equal     | Region | bool   | 判断是否和另一个Region相等 |
+
+#### Validated 方法
+
+判断Region是否有效。
+
+主键不可为空，需要符合ItemKey验证
+
+Javascript:
+```javascript
+var validated=region.Validated()
+```
+
+Lua:
+```lua
+local validted=region:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Region
+
+Javascript:
+```javascript
+var newregion=region.Clone()
+```
+
+Lua:
+```lua
+local newregion=region:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Region相等
+
+Javacript:
+```javascript
+var same=region.Equal(hmm.Region.New()
+```
+
+Lua:
+```lua
+local same=region:Equal(hmm.Region:New())
+```
+
+
+## LandmarkKey 地标主键
+
+地标和一把你的地图结构不一样，由于一个Room可以由多个地表定位，所以地表的唯一性是由Key和Type共同组成唯一主键的
+
+
+### 创建方式
+
+依次传入Key和Type
+
+Javascript:
+```javascript
+var lk=hmm.LandmarkKey.New("key","type")
+```
+
+Lua:
+```lua
+local lk=hmm.LandmarkKey:New("key","type")
+```
+
+### 属性
+
+| 属性名 | 类型   | 说明 |
+| ------ | ------ | ---- |
+| Key    | string | 主键 |
+| Type   | string | 类型 |
+
+#### Key 属性
+
+地标的主键，一般为对应的房间Key
+
+#### Type 属性
+
+地标类型
+
+### 方法
+
+| 方法名   | 参数             | 返回值  | 说明                            |
+| -------- | ---------------- | ------- | ------------------------------- |
+| ToString | 无               | string  | 转换为字符串                    |
+| Equal    | obj: LandmarkKey | boolean | 判断与另一个LandmarkKey是否相等 |
+
+#### ToString 方法
+
+将键和值转义后，以回车符号拼接。
+
+**参数**
+无
+
+**返回值**
+
+拼接后的字符串
+
+**代码范例**
+
+Javascript:
+```javascript
+var str=lk.ToString()
+```
+Lua:
+```lua
+local str=lk:ToString()
+```
+
+#### Equal 方法
+
+判断是否和另一个LandmarkKey相等
+
+Javacript:
+```javascript
+var same=lk.Equal(hmm.LandmarkKey.New("key","type")
+```
+
+Lua:
+```lua
+local same=lk:Equal(hmm.LandmarkKey:New("key,"type))
+```
+
+## Landmark 地标
+
+记录用于定位的数据。
+
+同一个Key支持通过多种不同的Type进行定位
+
+一般情况下，程序应该在加载时读取所有地标信息，生成所有的定位所需数据/代码
+
+### 创建方式
+
+Javascript:
+```javascript
+var landmark=hmm.Landmark.New()
+landmark.Key="gc"
+landmark.Type="regexp"
+landmark.Value="^  这里是扬州的中心广场"
+landmark.Group="常规定位"
+landmark.Desc="描述"
+```
+
+Lua:
+```lua
+local landmark=hmm.Landmark:New()
+landmark.Key="gc"
+landmark.Type="regexp"
+landmark.Value="^  这里是扬州的中心广场"
+landmark.Group="常规定位"
+landmark.Desc="描述"
+```
+### 属性
+
+| 属性名 | 类型   | 说明 |
+| ------ | ------ | ---- |
+| Key    | string | 主键 |
+| Type   | string | 类型 |
+| Value  | string | 值   |
+| Desc   | string | 描述 |
+| Group  | string | 分组 |
+
+#### Key 属性
+
+地标主键
+
+#### Value 属性
+
+具体用来定位的数据
+
+#### Desc 属性
+
+描述，做备注，无实际作用
+#### Type 属性
+
+类型 判断怎么处理Value
+
+#### Group 属性
+
+分组，可以用于筛选
+
+### 方法
+
+| 方法名    | 参数     | 返回值      | 说明                         |
+| --------- | -------- | ----------- | ---------------------------- |
+| Validated | 无       | bool        | 判断Landmark是否有效         |
+| Clone     | 无       | Landmark    | 克隆一个Landmark             |
+| Equal     | Landmark | bool        | 判断是否和另一个Landmark相等 |
+| UniqueKey | 无       | LandmarkKey | 返回地表对应的LandmarkKey    |
+
+#### Validated 方法
+
+判断Landmark是否有效。
+
+主键不可为空，需要符合ItemKey验证
+
+Javascript:
+```javascript
+var validated=landmark.Validated()
+```
+
+Lua:
+```lua
+local validted=landmark:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Landmark
+
+Javascript:
+```javascript
+var newlandmark=landmark.Clone()
+```
+
+Lua:
+```lua
+local newlandmark=landmark:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Landmark相等
+
+Javacript:
+```javascript
+var same=landmark.Equal(hmm.Landmark.New()
+```
+
+Lua:
+```lua
+local same=landmark:Equal(hmm.Landmark:New())
+```
+
+#### UniqueKey  方法
+
+获得Landmark对应的唯一标识LandmarkKey
+
+**参数**
+
+无
+
+**返回值**
+
+对应的LandmarkKey
+
+**代码范例**
+
+Javascript:
+```javascript
+var lk=landmark.UniqueKey()
+```
+
+Lua:
+```lua
+local lk=landmark:UniqueKey()
+```
+
+## Shortcut 捷径
+
+捷径指能从任意符合条件的位置进入的出口。
+
+继承自Exit
+
+### 创建方式
+
+Javascript
+```javascript
+var shortcut=hmm.Shortcut.New()
+shortcut.Key="rideyz"
+shortcut.Group="ride"
+shortcut.Desc="描述"
+shortcut.Command="rideto gc"
+shortcut.To="yzzxgc"
+shortcut.Conditions=[hmm.ValueCondition.New("ride",1,false)]
+shortcout.Cost=2
+```
+
+Lua
+```lua
+local shortcut=hmm.Shortcut:New()
+shortcut.Key="rideyz"
+shortcut.Group="ride"
+shortcut.Desc="描述"
+shortcut.Command="rideto gc"
+shortcut.To="yzzxgc"
+shortcut.Conditions={hmm.ValueCondition:New("ride",1,false)}
+shortcout.Cost=2
+```
+
+### 属性
+
+| 属性名     | 类型             | 说明                 |
+| ---------- | ---------------- | -------------------- |
+| Key        | string           | 主键                 |
+| Group      | string           | 分组                 |
+| Desc       | string           | 描述                 |
+| Command    | string           | 指令(继承自Exit)     |
+| To         | string           | 目标(继承自Exit)     |
+| Conditions | []ValueCondition | 条件列表(继承自Exit) |
+| Cost       | number           | 消耗 (继承自Exit)    |
+
+#### Key 属性
+
+捷径的主键
+
+#### Group 属性
+
+捷径的分组
+
+#### Desc 属性
+
+描述属性，备注用，无实际用途。
+
+#### Commnad 属性
+
+出口的实际指令，不可为空，继承自Exit
+
+#### To 属性
+
+出口对应的房间。建议待处理的可以用 * 或 ？占位，继承自Exit
+
+#### Conditions 属性
+
+值条件列表
+
+必须在Context里满足所有Condition,才能使用出口，继承自Exit
+
+#### Cost 属性
+
+出口的消耗，默认1.
+
+计算路径时的出口消耗。小于1的值属于Undefined Behave
+
+继承自Exit
+
+### 方法
+
+| 方法名    | 参数     | 返回值   | 说明                         |
+| --------- | -------- | -------- | ---------------------------- |
+| Validated | 无       | bool     | 判断Shortcut是否有效         |
+| Clone     | 无       | Shortcut | 克隆一个Shortcut             |
+| Equal     | Shortcut | bool     | 判断是否和另一个Shortcut相等 |
+
+#### Validated 方法
+
+判断Shortcut是否有效。
+
+主键不可为空，需要符合ItemKey验证
+
+Command不可为空(继承自Exit)
+
+Javascript:
+```javascript
+var validated=shortcut.Validated()
+```
+
+Lua:
+```lua
+local validted=shrotcut:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Shortcut
+
+Javascript:
+```javascript
+var newshortcut=shrotcut.Clone()
+```
+
+Lua:
+```lua
+local newshortcut=shortcut:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Shortcut相等
+
+Javacript:
+```javascript
+var same=shortcut.Equal(hmm.Shortcut.New()
+```
+
+Lua:
+```lua
+local same=shortcut:Equal(hmm.Shortcut:New())
 ```
