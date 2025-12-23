@@ -586,6 +586,45 @@ Lua:
 local same=exit:Equal(hmm.Exit:New("key",1,false))
 ```
 
+## ItemKey 地图元素主键验证类
+
+用于验证地图主键的类
+
+### 方法
+
+| 方法名   | 参数   | 返回值 | 说明                                       |
+| -------- | ------ | ------ | ------------------------------------------ |
+| Validate | string | bool   | 验证传入的字符串是否是有效的地图元素主键。 |
+
+#### Validate 方法
+
+验证传入的字符串是否是有效的地图元素主键。
+
+主键需要符合以下条件
+
+* 不为空字符串
+* 不含空格
+
+**参数**
+
+* string 待验证的主键
+
+**返回值**
+
+是否有效
+
+**代码范例**
+
+Javascript:
+```javascript
+var validated=hmm.ItemKey.Validate("key")
+```
+
+Lua:
+```lua
+local validated=hmm.ItemKey:Validate("key")
+```
+
 ## Room 房间对象
 
 Room是hmmts里最基础的地图对象，代表了Mud里的一个一个抽象的位置以及对应的出口关系。
