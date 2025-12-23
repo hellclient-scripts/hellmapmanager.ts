@@ -259,7 +259,7 @@ var validated=tag.Validated()
 
 Lua:
 ```lua
-local validted=tag:Validated()
+local validated=tag:Validated()
 ```
 
 #### Clone 方法
@@ -374,7 +374,7 @@ var validated=vc.Validated()
 
 Lua:
 ```lua
-local validted=vc:Validated()
+local validated=vc:Validated()
 ```
 
 #### Clone 方法
@@ -450,7 +450,7 @@ var validated=data.Validated()
 
 Lua:
 ```lua
-local validted=data:Validated()
+local validated=data:Validated()
 ```
 
 #### Clone 方法
@@ -555,7 +555,7 @@ var validated=exit.Validated()
 
 Lua:
 ```lua
-local validted=exit:Validated()
+local validated=exit:Validated()
 ```
 
 #### Clone 方法
@@ -700,7 +700,7 @@ var validated=room.Validated()
 
 Lua:
 ```lua
-local validted=room:Validated()
+local validated=room:Validated()
 ```
 
 #### Clone 方法
@@ -992,7 +992,7 @@ var validated=marker.Validated()
 
 Lua:
 ```lua
-local validted=marker:Validated()
+local validated=marker:Validated()
 ```
 
 #### Clone 方法
@@ -1101,7 +1101,7 @@ var validated=route.Validated()
 
 Lua:
 ```lua
-local validted=route:Validated()
+local validated=route:Validated()
 ```
 
 #### Clone 方法
@@ -1213,7 +1213,7 @@ var validated=trace.Validated()
 
 Lua:
 ```lua
-local validted=trace:Validated()
+local validated=trace:Validated()
 ```
 
 #### Clone 方法
@@ -1360,7 +1360,7 @@ var validated=regionitem.Validated()
 
 Lua:
 ```lua
-local validted=regionitem:Validated()
+local validated=regionitem:Validated()
 ```
 
 #### Clone 方法
@@ -1474,7 +1474,7 @@ var validated=region.Validated()
 
 Lua:
 ```lua
-local validted=region:Validated()
+local validated=region:Validated()
 ```
 
 #### Clone 方法
@@ -1508,7 +1508,7 @@ local same=region:Equal(hmm.Region:New())
 
 ## LandmarkKey 地标主键
 
-地标和一把你的地图结构不一样，由于一个Room可以由多个地表定位，所以地表的唯一性是由Key和Type共同组成唯一主键的
+地标和一般的地图结构不一样，由于一个Room可以由多个地表定位，所以地表的唯一性是由Key和Type共同组成唯一主键的
 
 
 ### 创建方式
@@ -1549,7 +1549,7 @@ local lk=hmm.LandmarkKey:New("key","type")
 
 #### ToString 方法
 
-将键和值转义后，以回车符号拼接。
+将键和类型转义后，以回车符号拼接。
 
 **参数**
 无
@@ -1580,7 +1580,7 @@ var same=lk.Equal(hmm.LandmarkKey.New("key","type")
 
 Lua:
 ```lua
-local same=lk:Equal(hmm.LandmarkKey:New("key,"type))
+local same=lk:Equal(hmm.LandmarkKey:New("key","type"))
 ```
 
 ## Landmark 地标
@@ -1663,7 +1663,7 @@ var validated=landmark.Validated()
 
 Lua:
 ```lua
-local validted=landmark:Validated()
+local validated=landmark:Validated()
 ```
 
 #### Clone 方法
@@ -1819,7 +1819,7 @@ var validated=shortcut.Validated()
 
 Lua:
 ```lua
-local validted=shrotcut:Validated()
+local validated=shrotcut:Validated()
 ```
 
 #### Clone 方法
@@ -1828,7 +1828,7 @@ local validted=shrotcut:Validated()
 
 Javascript:
 ```javascript
-var newshortcut=shrotcut.Clone()
+var newshortcut=shortcut.Clone()
 ```
 
 Lua:
@@ -1848,4 +1848,355 @@ var same=shortcut.Equal(hmm.Shortcut.New()
 Lua:
 ```lua
 local same=shortcut:Equal(hmm.Shortcut:New())
+```
+
+## Variable 变量
+
+变量指存在地图文件中，脚本可以通过Key获取的属性，用于向脚本传递一些额外信息。
+
+### 创建方式
+
+Javascript:
+```javascript
+var variable=hmm.Variable.New()
+variable.Key="myvar"
+variable.Value="12345"
+variable.Group="demovar"
+variable.Desc="描述"
+```
+
+Lua:
+```lua
+var variable=hmm.Variable:New()
+variable.Key="myvar"
+variable.Value="12345"
+variable.Group="demovar"
+variable.Desc="描述"
+```
+### 属性
+
+| 属性名 | 类型   | 说明   |
+| ------ | ------ | ------ |
+| Key    | string | 主键   |
+| Value  | string | 变量值 |
+| Group  | string | 分组   |
+| Desc   | string | 描述   |
+
+#### Key 属性
+
+变量的主键
+
+#### Value 属性
+
+传递给脚本的值
+
+#### Group 属性
+
+分组
+
+#### Desc 属性
+
+描述属性，备注用，无实际用途。
+
+### 方法
+
+| 方法名    | 参数     | 返回值   | 说明                         |
+| --------- | -------- | -------- | ---------------------------- |
+| Validated | 无       | bool     | 判断Variable是否有效         |
+| Clone     | 无       | Variable | 克隆一个Variable             |
+| Equal     | Variable | bool     | 判断是否和另一个Variable相等 |
+
+#### Validated 方法
+
+判断Variable是否有效。
+
+主键不可为空，需要符合ItemKey验证
+
+
+Javascript:
+```javascript
+var validated=variable.Validated()
+```
+
+Lua:
+```lua
+local validated=variable:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Variable
+
+Javascript:
+```javascript
+var newvariable=variable.Clone()
+```
+
+Lua:
+```lua
+local newvariable=variable:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Variable相等
+
+Javacript:
+```javascript
+var same=variable.Equal(hmm.Variable.New()
+```
+
+Lua:
+```lua
+local same=variable:Equal(hmm.Variable:New())
+```
+
+## SnapshotKey 快照主键
+
+
+ 快照和一般的地图结构不一样，由Key,Value,Type构成一组唯一主键
+
+
+### 创建方式
+
+依次传入Key，Type和Value
+
+Javascript:
+```javascript
+var sk=hmm.SnapshotKey.New("key","type","value")
+```
+
+Lua:
+```lua
+local sk=hmm.SnapshotKey:New("key","type","value")
+```
+
+### 属性
+
+| 属性名 | 类型   | 说明 |
+| ------ | ------ | ---- |
+| Key    | string | 主键 |
+| Type   | string | 类型 |
+| Value  | string | 值   |
+
+#### Key 属性
+
+快照的主键，一般为对应的房间Key
+
+#### Type 属性
+
+快照类型
+
+#### Value 属性
+
+具体的快照值
+
+### 方法
+
+| 方法名   | 参数             | 返回值  | 说明                            |
+| -------- | ---------------- | ------- | ------------------------------- |
+| ToString | 无               | string  | 转换为字符串                    |
+| Equal    | obj: SnapshotKey | boolean | 判断与另一个SnapshotKey是否相等 |
+
+#### ToString 方法
+
+将键,类型，值转义后，以回车符号拼接。
+
+**参数**
+无
+
+**返回值**
+
+拼接后的字符串
+
+**代码范例**
+
+Javascript:
+```javascript
+var str=sk.ToString()
+```
+Lua:
+```lua
+local str=sk:ToString()
+```
+
+#### Equal 方法
+
+判断是否和另一个SnapshotKey相等
+
+Javacript:
+```javascript
+var same=sk.Equal(hmm.LandmarkKey.New("key","type","value")
+```
+
+Lua:
+```lua
+local same=sk:Equal(hmm.LandmarkKey:New("key","type","value"))
+```
+
+## Snapshot 快照
+
+快照指对房间可能变化的环境变量进行的保存。
+
+可以通过搜索快照的方式来快速定位快照
+
+#### 创建方式
+
+Javascript:
+```Javascript
+//一般不会直接创建快照对象，通过APITakeSnapshot建立。
+var snapshot=hmm.Snapshot.New()
+snapshot.Key="yzgc"
+snapshot.Type="desc"
+snapshot.Value="这里是扬州广场"
+snapshot.Timestamp=1700000000
+snapshot.Group="mygroup"
+snapshot.Count=1
+```
+
+Lua:
+```lua
+--一般不会直接创建快照对象，通过APITakeSnapshot建立。
+local snapshot=hmm.Snapshot:New()
+snapshot.Key="yzgc"
+snapshot.Type="desc"
+snapshot.Value="这里是扬州广场"
+snapshot.Timestamp=1700000000
+snapshot.Group="mygroup"
+snapshot.Count=1
+```
+
+### 属性
+
+| 属性名    | 类型     | 说明       |
+| --------- | -------- | ---------- |
+| Key       | string   | 快照主键   |
+| Type      | string   | 快照类型   |
+| Value     | string   | 快照值     |
+| Timestamp | number   | Unix时间戳 |
+| Count     | number=1 | 重复次数   |
+
+#### Key 属性
+
+快照主键，一般是对应的房间Key
+
+#### Type 主键
+
+快照类型，一般决定了Value中存的是什么信息
+
+#### Value 主键
+
+具体的快照值
+
+#### Timestamp 时间戳
+
+快照的更新时间
+
+#### Count 重复次数
+
+同一组 Key,Type,Value的重复次数
+
+每次TakeSnapshot时会加1
+
+### 方法
+
+| 方法名    | 参数     | 返回值      | 说明                         |
+| --------- | -------- | ----------- | ---------------------------- |
+| Validated | 无       | bool        | 判断Snapshot是否有效         |
+| Clone     | 无       | Snapshot    | 克隆一个Snapshot             |
+| Equal     | Snapshot | bool        | 判断是否和另一个Snapshot相等 |
+| UniqueKey | 无       | SnapshotKey | 获取对应的SnapshotKey        |
+| Repeat    | 无       | 无          | Count自增1                   |
+
+#### UniqueKey 方法
+
+获取快照对应的 SnapshotKey属性
+
+**参数**
+
+无
+
+**返回值**
+
+SnapshotKey
+
+**代码范例**
+
+Javascipt:
+```javascript
+var sk=snapshot.UniqueKey()
+```
+
+Lua:
+```lua
+local sk=snapshot:UniqueKey()
+```
+
+#### Repeat 方法
+
+重复的快照， Count属性自增1
+
+**参数**
+
+无
+
+**返回值**
+
+无
+
+**代码范例**
+
+Javascaript:
+```javascript
+snapshot.Repeat()
+```
+
+Lua:
+```lua
+snapshot:Repeat()
+```
+
+#### Validated 方法
+
+判断Snapshot是否有效。
+
+主键不可为空，需要符合ItemKey验证
+
+
+Javascript:
+```javascript
+var validated=snapshot.Validated()
+```
+
+Lua:
+```lua
+local validated=snapshot:Validated()
+```
+
+#### Clone 方法
+
+复制一个独立的Snapshot
+
+Javascript:
+```javascript
+var newsnapshot=snapshot.Clone()
+```
+
+Lua:
+```lua
+local newsnapshot=snapshot:Clone()
+```
+
+#### Equal 方法
+
+判断是否和另一个Snapshot相等
+
+Javacript:
+```javascript
+var same=snapshot.Equal(hmm.Snapshot.New()
+```
+
+Lua:
+```lua
+local same=snapshot:Equal(hmm.Snapshot:New())
 ```
