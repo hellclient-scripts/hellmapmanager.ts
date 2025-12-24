@@ -22,7 +22,7 @@ Lua:
 ```lua
 --hmmts库
 hmm=require(hmm)
---hmmt的当前数据库
+--hmmts的当前数据库
 database=hmm.MapDatabase:New()
 ```
 
@@ -1208,7 +1208,7 @@ Npc或者人物对象出现的分布
 
 ### 创建方式
 
-Javscript:
+Javascript:
 ```javascript
 var trace=hmm.Trace.New()
 trace.Key="questnpc"
