@@ -690,7 +690,7 @@ var queryresult=database.APIQueryPathAll("0",["0","1","2","3"],ctx,opt)
 
 无法经过的目标会记录在查询结果的Unvisited里
 
-```Javascript
+```javascript
 MapDatabase.APIQueryPathOrdered(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null
 ```
 
