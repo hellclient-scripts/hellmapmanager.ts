@@ -712,7 +712,7 @@ MapDatabase.APIQueryPathOrdered(start: string, target: string[], context: Contex
 ```javascript
 var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
-var queryresult=database.APIQueryPathOrdered("0",["0","1"，"2"，"3"],ctx,opt)
+var queryresult=database.APIQueryPathOrdered("0",["0","1","2"，"3"],ctx,opt)
 ```
 ### 膨胀计算接口 
 
