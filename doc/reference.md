@@ -689,7 +689,7 @@ exit.Command="out"
 exit.To="chatroom"
 exit.Conditions={hmm.ValueCondition:New("isWiz",1,false)}
 exit.Cost=1
-room.Exits=[exit]
+room.Exits={exit}
 room.Data={hmm.Data:New("datakey","datavalue")}
 ```
 
@@ -920,7 +920,7 @@ rf.ContainsAnyKey=["yz"]
 
 Lua:
 ```lua
-var rf=hmm.RoomFilter:New()
+local rf=hmm.RoomFilter:New()
 rf.RoomConditions={hmm.ValueCondition:New("outdoor",1,false)}
 rf.HasAnyExitTo={"gc"}
 rf.HasAnyData={hmm.Data:New("datakey","datavalue")}
