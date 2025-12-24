@@ -377,7 +377,7 @@ MapDatabase.APIInsertLandmarks(models: Landmark[])
 var landmark=hmm.Landmark.New()
 landmark.Key="roomkey"
 landmark.Type="regexp"
-landamrk.Value="^这里是测试房间一"
+landmark.Value="^这里是测试房间一"
 database.APIInsertLandmarks([landmark])
 ```
 
@@ -420,7 +420,7 @@ MapDatabase.APIRemoveLandmarks(keys: LandmarkKey[])
 ```javascript
 var key1=hmm.LandmarkKey.New("key1","type1")
 var key2=hmm.LandmarkKey.New("key1","type2")
-database.APIRemoveRegions([key1,key2])
+database.APIRemoveLandmarks([key1,key2])
 ```
 
 ### 批量插入捷径接口
@@ -572,7 +572,7 @@ MapDatabase.APIInsertSnapshots(models: Snapshot[])
 var snapshot=hmm.Snapshot.New()
 snapshot.Key="roomkey"
 snapshot.Type="desc"
-variable.Value="roomDesc"
+snapshot.Value="roomDesc"
 database.APIInsertSnapshots([snapshot])
 ```
 
@@ -681,7 +681,7 @@ MapDatabase.APIQueryPathAll(start: string, target: string[], context: Context, o
 ```javascript
 var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
-var queryresult=database.APIQueryPathAll(["0"],["0","1","2"，"3"],ctx,opt)
+var queryresult=database.APIQueryPathAll(["0"],["0","1","2","3"],ctx,opt)
 ```
 
 ### 顺序遍历规划接口
@@ -712,7 +712,7 @@ MapDatabase.APIQueryPathOrdered(start: string, target: string[], context: Contex
 ```javascript
 var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
-var queryresult=database.APIQueryPathAll(["0"],["0","1"，"2"，"3"],ctx,opt)
+var queryresult=database.APIQueryPathOrdered("0",["0","1"，"2"，"3"],ctx,opt)
 ```
 ### 膨胀计算接口 
 
