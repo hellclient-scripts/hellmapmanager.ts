@@ -246,7 +246,7 @@ local tag=hmm.ValueTag:New("tagkey",1)
 | Validated          | 无                           | bool     | 判断ValueTag是否有效         |
 | Clone              | 无                           | ValueTag | 克隆一个ValueTag             |
 | Equal              | ValueTag                     | bool     | 判断是否和另一个ValueTag相等 |
-| ValidateConditions | ValueTag[], ValueCondition[] | boolean  | 批量匹配                     |
+| ValidateConditions | []ValueTag, []ValueCondition | boolean  | 批量匹配                     |
 
 #### Validated 方法
 
@@ -676,7 +676,7 @@ exit.To="chatroom"
 exit.Conditions=[hmm.ValueCondition.New("isWiz",1,false)]
 exit.Cost=1
 room.Exits=[exit]
-room.Data=[hmm.Data.New("datekey","datavalue")]
+room.Data=[hmm.Data.New("datakey","datavalue")]
 ```
 
 Lua:
@@ -692,7 +692,7 @@ exit.To="chatroom"
 exit.Conditions={hmm.ValueCondition:New("isWiz",1,false)}
 exit.Cost=1
 room.Exits=[exit]
-room.Data={hmm.Data:New("datekey","datavalue")}
+room.Data={hmm.Data:New("datakey","datavalue")}
 ```
 
 
@@ -1868,7 +1868,7 @@ shortcut.Command="rideto gc"
 shortcut.To="yzzxgc"
 shortcut.RoomConditions=[hmm.ValueCondition.New("outside",1,false)]
 shortcut.Conditions=[hmm.ValueCondition.New("ride",1,false)]
-shortcout.Cost=2
+shortcut.Cost=2
 ```
 
 Lua
@@ -1881,7 +1881,7 @@ shortcut.Command="rideto gc"
 shortcut.To="yzzxgc"
 shortcut.RoomConditions={hmm.ValueCondition:New("outside",1,false)}
 shortcut.Conditions={hmm.ValueCondition:New("ride",1,false)}
-shortcout.Cost=2
+shortcut.Cost=2
 ```
 
 ### 属性
@@ -2352,12 +2352,12 @@ local same=snapshot:Equal(hmm.Snapshot:New())
 
 Javascript:
 ```javascript
-var sf=hmm.SnapshotFilter.New("yzgc","regexp","mygroup").WtihMaxCount(1)
+var sf=hmm.SnapshotFilter.New("yzgc","regexp","mygroup").WithMaxCount(1)
 ```
 
 Lua:
 ```lua
-local sf=hmm.SnapshotFilter:New("yzgc","regexp","mygroup"):WtihMaxCount(1)
+local sf=hmm.SnapshotFilter:New("yzgc","regexp","mygroup"):WithMaxCount(1)
 ```
 
 ### 属性
