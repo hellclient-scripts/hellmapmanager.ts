@@ -229,7 +229,7 @@ local tag=hmm.ValueTag:New("tagkey",1)
 
 #### Key 属性
 
-主键值，不可谓空
+主键值，不可为空
 
 #### Value 属性
 
@@ -639,7 +639,7 @@ lo.WithKeys(["gc","gd"]).WithGroups(["扬州","北京"])
 
 Lua:
 ```lua
-var lo=hmm.APIListOption:New()
+local lo=hmm.APIListOption:New()
 lo:WithKeys({"gc","gd"}):WithGroups({"扬州","北京"})
 ```
 
@@ -673,7 +673,7 @@ room.Tags=[hmm.Tag.New("indoor",1)]
 var exit=hmm.Exit.New()
 exit.Command="out"
 exit.To="chatroom"
-exit.Conditions=[hmm.Condition.New("isWiz",1,false)]
+exit.Conditions=[hmm.ValueCondition.New("isWiz",1,false)]
 exit.Cost=1
 room.Exits=[exit]
 room.Data=[hmm.Data.New("datekey","datavalue")]
@@ -681,15 +681,15 @@ room.Data=[hmm.Data.New("datekey","datavalue")]
 
 Lua:
 ```lua
-var room=hmm.Room:New()
+local room=hmm.Room:New()
 room.Key="myroom"
 room.Name="我的房间"
 room.Desc="abcdefg"
 room.Tags={hmm.Tag:New("indoor",1)}
-var exit=hmm.Exit:New()
+local exit=hmm.Exit:New()
 exit.Command="out"
 exit.To="chatroom"
-exit.Conditions={hmm.Condition:New("isWiz",1,false)}
+exit.Conditions={hmm.ValueCondition:New("isWiz",1,false)}
 exit.Cost=1
 room.Exits=[exit]
 room.Data={hmm.Data:New("datekey","datavalue")}
@@ -824,7 +824,7 @@ var match=room.HasTag("outdoor",1)
 
 Lua:
 ```lua
-local match=room:Hastag("outdoor,1")
+local match=room:Hastag("outdoor",1)
 ```
 
 #### GetData 方法
@@ -2165,12 +2165,12 @@ local str=sk:ToString()
 
 Javascript:
 ```javascript
-var same=sk.Equal(hmm.LandmarkKey.New("key","type","value")
+var same=sk.Equal(hmm.SnapshotKey.New("key","type","value")
 ```
 
 Lua:
 ```lua
-local same=sk:Equal(hmm.LandmarkKey:New("key","type","value"))
+local same=sk:Equal(hmm.SnapshotKey:New("key","type","value"))
 ```
 
 ## Snapshot 快照
