@@ -2647,11 +2647,16 @@ opt.DisableShortcuts=false
 
 ### 属性
 
-| 属性名           | 类型         | 说明           |
-| ---------------- | ------------ | -------------- |
-| MaxExitCost      | number = 0   | 最大出口消耗   |
-| MaxTotalCost     | number = 0   | 最大路线总消耗 |
-| DisableShortcuts | bool = false | 禁止使用捷径   |
+| 属性名           | 类型                   | 说明           |
+| ---------------- | ---------------------- | -------------- |
+| MaxExitCost      | number = 0             | 最大出口消耗   |
+| MaxTotalCost     | number = 0             | 最大路线总消耗 |
+| DisableShortcuts | bool = false           | 禁止使用捷径   |
+| CommandWhitelist | [key: string]: boolean | 指令白名单     |
+
+**版本更新**
+
+* 1002 加入 CommandWhitelist 属性。
 
 #### MaxExitCost 属性
 
@@ -2665,13 +2670,24 @@ opt.DisableShortcuts=false
 
 计算路线时是否不使用捷径
 
+#### CommandWhitelist 指令白名单
+
+指令必须在白名单内，出口才有效，为空忽略。
+
 ### 方法
 
-| 方法名               | 参数          | 返回值        | 说明                           |
-| -------------------- | ------------- | ------------- | ------------------------------ |
-| WithMaxExitCost      | cost: number  | MapperOptions | 链式调用，设置MaxExitCost      |
-| WithMaxTotalCost     | cost: number  | MapperOptions | 链式调用，设置MaxTotalCost     |
-| WithDisableShortcuts | disable: bool | MapperOptions | 链式调用，设置DisableShortcuts |
+| 方法名                | 参数           | 返回值        | 说明                           |
+| --------------------- | -------------- | ------------- | ------------------------------ |
+| WithMaxExitCost       | cost: number   | MapperOptions | 链式调用，设置MaxExitCost      |
+| WithMaxTotalCost      | cost: number   | MapperOptions | 链式调用，设置MaxTotalCost     |
+| WithDisableShortcuts  | disable: bool  | MapperOptions | 链式调用，设置DisableShortcuts |
+| WithCommandWhitelist  | list: []string | MapperOptions | 链式调用，加入指令白名单       |
+| ClearCommandWhitelist | 无             | MapperOptions | 链式调用，清除白名单           |
+
+
+**版本更新**
+
+* 1002 加入 WithCommandWhitelist和ClearCommandWhitelist方法
 
 
 ## Step 移动步骤

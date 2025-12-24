@@ -2,6 +2,7 @@ export class MapperOptions {
     MaxExitCost: number = 0;
     MaxTotalCost: number = 0;
     DisableShortcuts: boolean = false;
+    CommandWhitelist:{ [key: string]: boolean } = {};
     static New(): MapperOptions {
         return new MapperOptions();
     }
@@ -16,5 +17,21 @@ export class MapperOptions {
     WithDisableShortcuts(disable: boolean): MapperOptions {
         this.DisableShortcuts = disable;
         return this;
+    }
+    WithCommandWhitelist(list: string[]): MapperOptions {
+        list.forEach(cmd => {
+            this.CommandWhitelist[cmd] = true;
+        });
+        return this;
+    }
+    ClearCommandWhitelist(): MapperOptions {
+        this.CommandWhitelist = {};
+        return this;
+    }
+    ValidateCommand(cmd: string): boolean {
+        if (Object.keys(this.CommandWhitelist).length === 0) {
+            return true;
+        }
+        return this.CommandWhitelist[cmd] === true;
     }
 }

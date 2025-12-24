@@ -194,6 +194,17 @@ describe("MapperTest", () => {
         assert.isTrue(mapper.ValidatePath("key1", exit));
         ctx.WithCommandCosts([new CommandCost("cmd1", "key2", 50)]);
         assert.isFalse(mapper.ValidatePath("key1", exit));
+        ctx.WithCommandCosts([new CommandCost("cmd1", "key2", 50)]);
+        assert.isFalse(mapper.ValidatePath("key1", exit));
+        opt.MaxExitCost = 0;
+        ctx.ClearCommandCosts();
+        opt.WithCommandWhitelist(["cmd1"]);
+        assert.isTrue(mapper.ValidateExit("key1", exit, 10));
+        opt.ClearCommandWhitelist();
+        opt.WithCommandWhitelist(["cmd2"]);
+        assert.isFalse(mapper.ValidateExit("key1", exit, 10));
+
+
     })
     it("TestWalkingStep", () => {
         var exit = ((): Exit => {

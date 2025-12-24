@@ -206,7 +206,7 @@ export class Mapper {
     GetRoom(key: string): Room | null {
         let room = this.Context.Rooms[key];
         if (room == null) {
-            return this.MapFile.Records.Rooms[key]||null;
+            return this.MapFile.Records.Rooms[key] || null;
         }
         return room;
     }
@@ -217,7 +217,7 @@ export class Mapper {
             if (cost != null) {
                 return cost;
             }
-            let cost2= costs[""]
+            let cost2 = costs[""]
             if (cost2 != null) {
                 return cost2;
             }
@@ -266,6 +266,10 @@ export class Mapper {
         if (!this.Context.ValidateConditions(exit.Conditions)) {
             return false;
         }
+        if (!this.Options.ValidateCommand(exit.Command)) {
+            return false;
+        }
+
         return true;
     }
     ValidateRoom(room: Room): boolean {
