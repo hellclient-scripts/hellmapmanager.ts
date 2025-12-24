@@ -744,7 +744,7 @@ var rooms=database.APIDilate(["0","1","2"],3,ctx,opt)
 
 ### 跟踪出口 
 
-追踪从制定的起点，通过Command指令能到的房间。
+追踪指定的起点，通过Command指令能到的房间。
 
 成功返回房间Key
 
@@ -840,7 +840,7 @@ var exits=database.APIGetRoomExits("0",ctx,opt)
 
 ###  设置房间标签接口
 
-设置制定房间的分组
+设置指定房间的分组
 
 ```javascript
 MapDatabase.APITagRoom(key: string, tag: string, value: number)
@@ -864,7 +864,7 @@ database.APITagRoom("roomkey","tagname",1)
 
 ### 设置房间数据接口
 
-设置制定房间的数据。
+设置指定房间的数据。
 
 可以用来记录一些不会变化的数据，比如带色彩的房间名之类。
 
@@ -920,7 +920,7 @@ database.APITraceLocation("npc","15")
 
 ### 抓快照接口
 
-抓快照接口用于把当前的房间制定内容的快照加入系统中。
+抓快照接口用于把当前的房间指定内容的快照加入系统中。
 
 快照如果重复，不会创建新快照，会把快照的Count加1,然后更新快照时间。
 
