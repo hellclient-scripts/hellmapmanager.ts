@@ -12,4 +12,4 @@
 * [快速开始](doc/quickstart.md)
 * [API文档](doc/api.md)
 * [参考文档](doc/reference.md)
-* [更新历史](doc/hisotry.md)
+* [更新历史](doc/history.md)

@@ -21,7 +21,7 @@ MapDatabase.APIVersion():Number
 **代码范例**
 
 ```javascript
-var version=database.APIVersion():
+var version=database.APIVersion();
 ```
 
 ### 地图信息
@@ -49,7 +49,7 @@ var info=database.APIInfo();
 ### 批量插入房间接口
 
 ```javascript
-MapDatabse.APIInsertRooms(models: Room[])
+MapDatabase.APIInsertRooms(models: Room[])
 ```
 
 **参数**
@@ -71,7 +71,7 @@ database.APIInsertRooms([room])
 ### 列出房间接口
 
 ```javascript
-MapDatabse.APIListRooms(option: APIListOption): Room[]
+MapDatabase.APIListRooms(option: APIListOption): Room[]
 ```
 **参数**
 
@@ -90,7 +90,7 @@ var rooms=database.APIListRooms(opt)
 
 ### 批量删除房间接口
 ```javascript
-MapDatabse.APIRemoveRooms(keys: string[]) 
+MapDatabase.APIRemoveRooms(keys: string[]) 
 ```
 
 **参数**
@@ -110,7 +110,7 @@ database.APIRemoveRooms(["room1","room2"])
 ### 批量插入标记接口
 
 ```javascript
-MapDatabse.APIInsertMarkers(models: Marker[])
+MapDatabase.APIInsertMarkers(models: Marker[])
 ```
 
 **参数**
@@ -132,7 +132,7 @@ database.APIInsertMarkers([marker])
 ### 列出标记接口
 
 ```javascript
-MapDatabse.APIListMarkers(option: APIListOption): Marker[]
+MapDatabase.APIListMarkers(option: APIListOption): Marker[]
 ```
 **参数**
 
@@ -150,7 +150,7 @@ var markers=database.APIListMarkers(opt)
 ```
 ### 批量删除标记接口
 ```javascript
-MapDatabse.APIRemoveMarkers(keys: string[])
+MapDatabase.APIRemoveMarkers(keys: string[])
 ```
 
 **参数**
@@ -170,7 +170,7 @@ database.APIRemoveMarkers(["marker1","marker2"])
 ### 批量插入路线接口
 
 ```javascript
-MapDatabse.APIInsertRoutes(models: Route[])
+MapDatabase.APIInsertRoutes(models: Route[])
 ```
 
 **参数**
@@ -193,7 +193,7 @@ database.APIInsertRoutes([route])
 ### 列出路线接口
 
 ```javascript
-MapDatabse.APIListRoutes(option: APIListOption): Route[]
+MapDatabase.APIListRoutes(option: APIListOption): Route[]
 ```
 **参数**
 
@@ -212,7 +212,7 @@ var routes=database.APIListRoutes(opt)
 
 ### 批量删除路线接口
 ```javascript
-MapDatabse.APIRemoveRoutes(keys: string[])
+MapDatabase.APIRemoveRoutes(keys: string[])
 ```
 
 **参数**
@@ -232,7 +232,7 @@ database.APIRemoveRoutes(["route1","route2"])
 ### 批量插入足迹接口
 
 ```javascript
-MapDatabse.APIInsertTraces(models: Trace[])
+MapDatabase.APIInsertTraces(models: Trace[])
 ```
 
 **参数**
@@ -254,7 +254,7 @@ database.APIInsertTraces([trace])
 ### 列出足迹接口
 
 ```javascript
-MapDatabse.APIListTraces(option: APIListOption): Trace[]
+MapDatabase.APIListTraces(option: APIListOption): Trace[]
 ```
 
 **参数**
@@ -274,7 +274,7 @@ var traces=database.APIListTraces(opt)
 
 ### 批量删除足迹接口
 ```javascript
-MapDatabse.APIRemoveTraces(keys: string[])
+MapDatabase.APIRemoveTraces(keys: string[])
 ```
 
 **参数**
@@ -294,7 +294,7 @@ database.APIRemoveTraces(["trace1","trace2"])
 ### 批量插入地区接口
 
 ```javascript
-MapDatabse.APIInsertRegions(models: Region[])
+MapDatabase.APIInsertRegions(models: Region[])
 ```
 
 **参数**
@@ -314,13 +314,13 @@ region.RegionItem=[
     hmm.RegionItem.New(hmm.RegionItemType.Room,"roomkey",false),
     hmm.RegionItem.New(hmm.RegionItemType.Zone,"zonekey",false),
 ]
-database.APIInsertTraces([region])
+database.APIInsertRegions([region])
 ```
 
 ### 列出地区接口
 
 ```javascript
-MapDatabse.APIListRegions(option: APIListOption): Region[]
+MapDatabase.APIListRegions(option: APIListOption): Region[]
 ```
 
 **参数**
@@ -340,7 +340,7 @@ var regions=database.APIListRegions(opt)
 
 ### 批量删除地区接口
 ```javascript
-MapDatabse.APIRemoveRegions(keys: string[])
+MapDatabase.APIRemoveRegions(keys: string[])
 ```
 
 **参数**
@@ -360,7 +360,7 @@ database.APIRemoveRegions(["region1","region2"])
 ### 批量插入定位接口
 
 ```javascript
-MapDatabse.APIInsertLandmarks(models: Landmark[])
+MapDatabase.APIInsertLandmarks(models: Landmark[])
 ```
 
 **参数**
@@ -377,14 +377,14 @@ MapDatabse.APIInsertLandmarks(models: Landmark[])
 var landmark=hmm.Landmark.New()
 landmark.Key="roomkey"
 landmark.Type="regexp"
-landamrk.Type="^这里是测试房间一"
+landamrk.Value="^这里是测试房间一"
 database.APIInsertLandmarks([landmark])
 ```
 
 ### 列出定位接口
 
 ```javascript
-MapDatabse.APIListLandmarks(option: APIListOption): Landmark[]
+MapDatabase.APIListLandmarks(option: APIListOption): Landmark[]
 ```
 
 **参数**
@@ -404,7 +404,7 @@ var landmarks=database.APIListLandmarks(opt)
 
 ### 批量删除定位接口
 ```javascript
-MapDatabse.APIRemoveLandmarks(keys: LandmarkKey[]) 
+MapDatabase.APIRemoveLandmarks(keys: LandmarkKey[]) 
 ```
 
 **参数**
@@ -426,7 +426,7 @@ database.APIRemoveRegions([key1,key2])
 ### 批量插入捷径接口
 
 ```javascript
-MapDatabse.APIInsertShortcuts(models: Shortcut[])
+MapDatabase.APIInsertShortcuts(models: Shortcut[])
 ```
 
 **参数**
@@ -441,17 +441,17 @@ MapDatabse.APIInsertShortcuts(models: Shortcut[])
 
 ```javascript
 var shortcut=hmm.Shortcut.New()
-Shortcut.Key="roomkey"
-Shortcut.Command="rideto gc"
-Shortcut.To="0"
-Shortcut.Delay=1
+shortcut.Key="roomkey"
+shortcut.Command="rideto gc"
+shortcut.To="0"
+shortcut.Delay=1
 database.APIInsertShortcuts([shortcut])
 ```
 
 ### 列出捷径接口
 
 ```javascript
-MapDatabse.APIListShortcuts(option: APIListOption): Shortcut[]
+MapDatabase.APIListShortcuts(option: APIListOption): Shortcut[]
 ```
 
 **参数**
@@ -471,7 +471,7 @@ var shortcuts=database.APIListShortcuts(opt)
 
 ### 批量删除捷径接口
 ```javascript
-MapDatabse.APIRemoveShortcuts(keys: string[])
+MapDatabase.APIRemoveShortcuts(keys: string[])
 ```
 
 **参数**
@@ -491,7 +491,7 @@ database.APIRemoveShortcuts(["shortcut1","shortcut2"])
 ### 批量插入变量接口
 
 ```javascript
-MapDatabse.APIInsertVariables(models: Variable[])
+MapDatabase.APIInsertVariables(models: Variable[])
 ```
 
 **参数**
@@ -514,7 +514,7 @@ database.APIInsertVariables([variable])
 ### 列出变量接口
 
 ```javascript
-MapDatabse.APIListVariables(option: APIListOption): Variable[]
+MapDatabase.APIListVariables(option: APIListOption): Variable[]
 ```
 
 **参数**
@@ -535,7 +535,7 @@ var variables=database.APIListVariables(opt)
 
 ### 批量删除变量接口
 ```javascript
-MapDatabse.APIRemoveVariables(keys: string[])
+MapDatabase.APIRemoveVariables(keys: string[])
 ```
 
 **参数**
@@ -555,7 +555,7 @@ database.APIRemoveVariables(["variable1","variable2"])
 ### 批量插入快照接口
 
 ```javascript
-MapDatabse.APIInsertSnapshots(models: Snapshot[])
+MapDatabase.APIInsertSnapshots(models: Snapshot[])
 ```
 
 **参数**
@@ -579,7 +579,7 @@ database.APIInsertSnapshots([snapshot])
 ### 列出快照接口
 
 ```javascript
-MapDatabse.APIListSnapshots(option: APIListOption): Snapshot[]
+MapDatabase.APIListSnapshots(option: APIListOption): Snapshot[]
 ```
 
 **参数**
@@ -599,7 +599,7 @@ var snapshots=database.APIListSnapshots(opt)
 
 ### 批量删除快照接口
 ```javascript
-MapDatabse.APIRemoveSnapshots(keys: SnapshotKey[])
+MapDatabase.APIRemoveSnapshots(keys: SnapshotKey[])
 ```
 
 **参数**
@@ -621,29 +621,6 @@ database.APIRemoveSnapshots([key1,key2])
 ## 计算查询接口
 
 通过环境和选项，动态的对地图进行计算和查询操作
-
-### 点对点规划接口
-
-规划不定数量个起点到不定数量个终点之间的最近路线。
-
-一般常见的是一个起点到一个终点，或者一个起点到多个终点的规划
-
-```javascript
-MapDatabase.APIQueryPathAny(from: string[], target: string[], context: Context, options: MapperOptions): QueryResult | null
-```
-
-**参数**
-
-* from 出发地点列表
-* target 目的地列表
-* context 环境上下文
-* options 地图选项
-
-**返回值**
-
-查询成功返回QueryResult
-
-查询失败返回null
 
 ### 点对点规划接口
 
@@ -704,7 +681,7 @@ MapDatabase.APIQueryPathAll(start: string, target: string[], context: Context, o
 ```javascript
 var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
-var queryresult=database.APIQueryPathAll(["0"],["0","1"，"2"，"3"],ctx,opt)
+var queryresult=database.APIQueryPathAll(["0"],["0","1","2"，"3"],ctx,opt)
 ```
 
 ### 顺序遍历规划接口
@@ -882,7 +859,7 @@ MapDatabase.APITagRoom(key: string, tag: string, value: number)
 **代码范例**
 
 ```javascript
-database.APITagROom("roomkey","tagname",1)
+database.APITagRoom("roomkey","tagname",1)
 ```
 
 ### 设置房间数据接口
