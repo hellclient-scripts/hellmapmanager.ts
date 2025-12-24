@@ -301,7 +301,7 @@ local same=tag:Equal(hmm.ValueTag:New("key",1))
 Javascript:
 ```javascript
 var matched=ValueTag.ValidateConditions(
-    [hmm.ValueTag.New("Key1",1)，hmm.ValueTag.New("Key2",2)],
+    [hmm.ValueTag.New("Key1",1),hmm.ValueTag.New("Key2",2)],
     [hmm.ValueCondition.New("Key1",1,false),hmm.ValueCondition.New("Key2",1,true)]
 )
 ```
@@ -309,7 +309,7 @@ var matched=ValueTag.ValidateConditions(
 Lua:
 ```lua
 local matched=ValueTag:ValidateConditions(
-    {hmm.ValueTag:New("Key1",1)，hmm.ValueTag:New("Key2",2)},
+    {hmm.ValueTag:New("Key1",1),hmm.ValueTag:New("Key2",2)},
     {hmm.ValueCondition.New("Key1",1,false),hmm.ValueCondition.New("Key2",1,true)}
 )
 ```
@@ -352,8 +352,6 @@ local vc=hmm.ValueCondition:New("tagkey",1,false)
 #### Not 值
 
 取否，对匹配的结果做逻辑否操作
-
-### 方法
 
 ### 方法
 
@@ -473,12 +471,12 @@ local newdata=data:Clone()
 
 Javascript:
 ```javascript
-var same=data.Equal(hmm.Data.New("key",1,false))
+var same=data.Equal(hmm.Data.New("key","value"))
 ```
 
 Lua:
 ```lua
-local same=data:Equal(hmm.Data:New("key",1,false))
+local same=data:Equal(hmm.Data:New("key","value"))
 ```
 
 ## Exit 出口对象
@@ -859,7 +857,7 @@ local datavalue=room:GetData("datakey")
 
 **参数**
 
-* rd 房间数据，如果有同名会进行更新，如果Value为空字符串则会只删除
+* rd 房间数据，如果有同名会进行更新，如果Value为''则删除该Key对应数据
 
 **返回值**
 
