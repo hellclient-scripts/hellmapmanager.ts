@@ -681,7 +681,7 @@ MapDatabase.APIQueryPathAll(start: string, target: string[], context: Context, o
 ```javascript
 var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
-var queryresult=database.APIQueryPathAll(["0"],["0","1","2","3"],ctx,opt)
+var queryresult=database.APIQueryPathAll("0",["0","1","2","3"],ctx,opt)
 ```
 
 ### 顺序遍历规划接口
@@ -712,7 +712,7 @@ MapDatabase.APIQueryPathOrdered(start: string, target: string[], context: Contex
 ```javascript
 var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
-var queryresult=database.APIQueryPathOrdered("0",["0","1","2"，"3"],ctx,opt)
+var queryresult=database.APIQueryPathOrdered("0",["0","1","2","3"],ctx,opt)
 ```
 ### 膨胀计算接口 
 
@@ -721,7 +721,7 @@ var queryresult=database.APIQueryPathOrdered("0",["0","1","2"，"3"],ctx,opt)
 一般用于获取地图上给点的房间，扩展几个房间后的区域。
 
 ```javascript
-Mapdatabase.APIDilate(src: string[], iterations: number, context: Context, options: MapperOptions): string[] 
+MapDatabase.APIDilate(src: string[], iterations: number, context: Context, options: MapperOptions): string[] 
 ```
 **参数**
 
@@ -850,7 +850,7 @@ MapDatabase.APITagRoom(key: string, tag: string, value: number)
 
 * key 房间主键
 * tag 标记名
-* value 标记值,为0会清楚标签。
+* value 标记值,为0会清除标签。
 
 **返回值**
 
