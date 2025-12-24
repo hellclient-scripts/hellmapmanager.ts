@@ -1579,7 +1579,7 @@ local same=region:Equal(hmm.Region:New())
 
 ## LandmarkKey 地标主键
 
-地标和一般的地图结构不一样，由于一个Room可以由多个地表定位，所以地表的唯一性是由Key和Type共同组成唯一主键的
+地标和一般的地图结构不一样，由于一个Room可以由多个地标定位，所以地标的唯一性是由Key和Type共同组成唯一主键的
 
 
 ### 创建方式
