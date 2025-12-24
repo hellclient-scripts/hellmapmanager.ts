@@ -8,8 +8,13 @@ export class SnapshotFilter {
     Key: string | null
     Type: string | null
     Group: string | null
+    MaxCount: number = 0
     static New(key: string | null, type: string | null, group: string | null): SnapshotFilter {
         return new SnapshotFilter(key, type, group)
+    }
+    WithMaxCount(count: number): SnapshotFilter {
+        this.MaxCount = count;
+        return this;
     }
     Validate(model: Snapshot): boolean {
         if (this.Key !== null && model.Key !== this.Key) {
@@ -19,6 +24,9 @@ export class SnapshotFilter {
             return false;
         }
         if (this.Group !== null && model.Group !== this.Group) {
+            return false;
+        }
+        if (this.MaxCount > 0 && model.Count > this.MaxCount) {
             return false;
         }
         return true;

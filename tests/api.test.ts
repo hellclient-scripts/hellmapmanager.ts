@@ -1564,9 +1564,16 @@ describe("APITest", () => {
         assert.equal(1, snapshots.length);
         assert.equal("key1", snapshots[0].Key);
         assert.equal(2, snapshots[0].Sum);
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null).WithMaxCount(1));
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        assert.equal(1, snapshots.length);
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null).WithMaxCount(2));
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        assert.isEmpty(snapshots);
+        mapDatabase.APITakeSnapshot("key1", "value1", "type1", "group1");
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        assert.equal(1, snapshots.length);
         mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null));
-
-
         snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
         assert.isEmpty(snapshots);
     })

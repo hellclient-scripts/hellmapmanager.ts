@@ -241,11 +241,11 @@ local tag=hmm.ValueTag:New("tagkey",1)
 
 ### 方法
 
-| 方法名            | 参数                         | 返回值   | 说明                         |
-| ----------------- | ---------------------------- | -------- | ---------------------------- |
-| Validated         | 无                           | bool     | 判断ValueTag是否有效         |
-| Clone             | 无                           | ValueTag | 克隆一个ValueTag             |
-| Equal             | ValueTag                     | bool     | 判断是否和另一个ValueTag相等 |
+| 方法名             | 参数                         | 返回值   | 说明                         |
+| ------------------ | ---------------------------- | -------- | ---------------------------- |
+| Validated          | 无                           | bool     | 判断ValueTag是否有效         |
+| Clone              | 无                           | ValueTag | 克隆一个ValueTag             |
+| Equal              | ValueTag                     | bool     | 判断是否和另一个ValueTag相等 |
 | ValidateConditions | ValueTag[], ValueCondition[] | boolean  | 批量匹配                     |
 
 #### Validated 方法
@@ -2346,35 +2346,47 @@ local same=snapshot:Equal(hmm.Snapshot:New())
 
 ### 创建方式
 
+依次传入 Key,Type,Group
+
+通过WithMaxCount 传入MaxCount
+
 Javascript:
 ```javascript
-var sf=hmm.SnapshotFilter.New()
-sf.Key="yzgc"
-sf.Type="regexp"
-sf.Group="mygroup"
+var sf=hmm.SnapshotFilter.New("yzgc","regexp","mygroup").WtihMaxCount(1)
 ```
 
 Lua:
 ```lua
-local sf=hmm.SnapshotFilter:New()
-sf.Key="yzgc"
-sf.Type="regexp"
-sf.Group="mygroup"
+local sf=hmm.SnapshotFilter:New("yzgc","regexp","mygroup"):WtihMaxCount(1)
 ```
 
 ### 属性
 
-| 属性名 | 类型         | 说明       |
-| ------ | ------------ | ---------- |
-| Key    | string\|null | 过滤的主键 |
-| Type   | string\|null | 过滤的类型 |
-| Group  | string\|null | 过滤的分组 |
+| 属性名   | 类型         | 说明                |
+| -------- | ------------ | ------------------- |
+| Key      | string\|null | 过滤的主键          |
+| Type     | string\|null | 过滤的类型          |
+| Group    | string\|null | 过滤的分组          |
+| MaxCount | number = 0   | 过滤的最大Count数字 |
 
 属性如果不为空，那么只有具有相同属性的Snapshot才会通过过滤
 
 多个属性之间是 and 关系
 
+**更新记录**
 
+* 版本1002 加入 MaxCount
+
+### 方法
+
+| 方法名       | 参数   | 返回值         | 说明                   |
+| ------------ | ------ | -------------- | ---------------------- |
+| WithMaxCount | number | SnapshotFilter | 链式调用，设置MaxCount |
+
+**更新记录**
+
+* 版本1002 加入 WithMaxCount
+* 
 ## SnapshotSearch 快照搜索类
 
 快照搜索类用于搜索具有特定指的快照

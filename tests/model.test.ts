@@ -1503,6 +1503,7 @@ describe("ModelTest", () => {
         snapshot.Type = "type1"
         snapshot.Value = "value1"
         snapshot.Group = "group1"
+        snapshot.Count = 10
         snapshot.Timestamp = 1234567890
         var sf = new SnapshotFilter("key1", "type1", "group1");
         assert.equal("key1", sf.Key);
@@ -1519,6 +1520,8 @@ describe("ModelTest", () => {
         assert.isFalse(new SnapshotFilter(null, "typenotfound", null).Validate(snapshot));
         assert.isFalse(new SnapshotFilter(null, null, "groupnotfound").Validate(snapshot));
         assert.isFalse(new SnapshotFilter("keynotfound", "typenotfound", "groupnotfound").Validate(snapshot));
+        assert.isTrue(new SnapshotFilter("key1", "type1", "group1").WithMaxCount(10).Validate(snapshot));
+        assert.isFalse(new SnapshotFilter("key1", "type1", "group1").WithMaxCount(9).Validate(snapshot));
     })
 
     it("TestSnapshotSearch", () => {
