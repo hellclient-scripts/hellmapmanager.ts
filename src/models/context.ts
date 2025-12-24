@@ -206,7 +206,7 @@ export class Context {
         }
         return value <= 0;
     }
-    ValidteConditions(conditions: ValueCondition[]): boolean {
+    ValidateConditions(conditions: ValueCondition[]): boolean {
         for (let rcondition of conditions) {
             if (this.HasTag(rcondition.Key, rcondition.Value) == rcondition.Not) {
                 return false;

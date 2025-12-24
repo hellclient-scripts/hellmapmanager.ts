@@ -50,7 +50,7 @@ export class ValueTag {
         }
         return value < 1;
     }
-    public static ValidteConditions(tags: ValueTag[], conditions: ValueCondition[]): boolean {
+    public static ValidateConditions(tags: ValueTag[], conditions: ValueCondition[]): boolean {
         for (let rcondition of conditions) {
             if (ValueTag.HasTag(tags, rcondition.Key, rcondition.Value) == rcondition.Not) {
                 return false;

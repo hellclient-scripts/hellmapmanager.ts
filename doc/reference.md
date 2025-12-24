@@ -246,7 +246,7 @@ local tag=hmm.ValueTag:New("tagkey",1)
 | Validated         | 无                           | bool     | 判断ValueTag是否有效         |
 | Clone             | 无                           | ValueTag | 克隆一个ValueTag             |
 | Equal             | ValueTag                     | bool     | 判断是否和另一个ValueTag相等 |
-| ValidteConditions | ValueTag[], ValueCondition[] | boolean  | 批量匹配                     |
+| ValidateConditions | ValueTag[], ValueCondition[] | boolean  | 批量匹配                     |
 
 #### Validated 方法
 
@@ -280,7 +280,7 @@ local newtag=tag:Clone()
 
 判断是否和另一个ValueTag相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=tag.Equal(hmm.ValueTag.New("key",1))
 ```
@@ -290,7 +290,7 @@ Lua:
 local same=tag:Equal(hmm.ValueTag:New("key",1))
 ```
 
-#### ValidteConditions 方法
+#### ValidateConditions 方法
 
 静态方法
 
@@ -300,7 +300,7 @@ local same=tag:Equal(hmm.ValueTag:New("key",1))
 
 Javascript:
 ```javascript
-var matched=ValueTag.ValidteConditions(
+var matched=ValueTag.ValidateConditions(
     [hmm.ValueTag.New("Key1",1)，hmm.ValueTag.New("Key2",2)],
     [hmm.ValueCondition.New("Key1",1,false),hmm.ValueCondition.New("Key2",1,true)]
 )
@@ -308,7 +308,7 @@ var matched=ValueTag.ValidteConditions(
 
 Lua:
 ```lua
-local matched=ValueTag:ValidteConditions(
+local matched=ValueTag:ValidateConditions(
     {hmm.ValueTag:New("Key1",1)，hmm.ValueTag:New("Key2",2)},
     {hmm.ValueCondition.New("Key1",1,false),hmm.ValueCondition.New("Key2",1,true)}
 )
@@ -395,7 +395,7 @@ local newvc=vc:Clone()
 
 判断是否和另一个ValueCondition相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=vc.Equal(hmm.ValueCondition.New("key",1,false))
 ```
@@ -471,7 +471,7 @@ local newdata=data:Clone()
 
 判断是否和另一个Data相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=data.Equal(hmm.Data.New("key",1,false))
 ```
@@ -516,7 +516,7 @@ exit.Cost=1
 | Conditions | []ValueCondition=[] | 出口的值条件 |
 | Cost       | number=1            | 出口的消耗   |
 
-#### Commnad 属性
+#### Command 属性
 
 出口的实际指令，不可为空
 
@@ -576,7 +576,7 @@ local newexit=exit:Clone()
 
 判断是否和另一个Exit相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=exit.Equal(hmm.Exit.New("key",1,false))
 ```
@@ -624,6 +624,7 @@ Lua:
 ```lua
 local validated=hmm.ItemKey:Validate("key")
 ```
+
 ## APIListOption 接口列出选项
 
 标准维护接口的列出过滤选项
@@ -791,7 +792,7 @@ local newroom=room:Clone()
 
 判断是否和另一个Room相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=room.Equal(hmm.Room.New())
 ```
@@ -1083,7 +1084,7 @@ local newmarker=marker:Clone()
 
 判断是否和另一个Marker相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=marker.Equal(hmm.Marker.New())
 ```
@@ -1192,7 +1193,7 @@ local newroute=route:Clone()
 
 判断是否和另一个Route相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=route.Equal(hmm.Route.New())
 ```
@@ -1304,7 +1305,7 @@ local newtrace=trace:Clone()
 
 判断是否和另一个Trace相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=trace.Equal(hmm.Trace.New())
 ```
@@ -1451,7 +1452,7 @@ local newregionitem=regionitem:Clone()
 
 判断是否和另一个RegionItem相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=regionitem.Equal(hmm.RegionItem.New(hmm.RegionItemType.Zone,"yz",false))
 ```
@@ -1565,7 +1566,7 @@ local newregion=region:Clone()
 
 判断是否和另一个Region相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=region.Equal(hmm.Region.New()
 ```
@@ -1643,7 +1644,7 @@ local str=lk:ToString()
 
 判断是否和另一个LandmarkKey相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=lk.Equal(hmm.LandmarkKey.New("key","type")
 ```
@@ -1754,7 +1755,7 @@ local newlandmark=landmark:Clone()
 
 判断是否和另一个Landmark相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=landmark.Equal(hmm.Landmark.New()
 ```
@@ -1822,7 +1823,7 @@ rce.Cost=2
 | Conditions     | []ValueCondition=[] | 条件列表(继承自Exit) |
 | Cost           | number=1            | 消耗 (继承自Exit)    |
 
-#### Commnad 属性
+#### Command 属性
 
 出口的实际指令，不可为空，继承自Exit
 
@@ -1908,7 +1909,7 @@ shortcout.Cost=2
 
 描述属性，备注用，无实际用途。
 
-#### Commnad 属性
+#### Command 属性
 
 出口的实际指令，不可为空，继承自Exit
 
@@ -1978,7 +1979,7 @@ local newshortcut=shortcut:Clone()
 
 判断是否和另一个Shortcut相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=shortcut.Equal(hmm.Shortcut.New()
 ```
@@ -2079,7 +2080,7 @@ local newvariable=variable:Clone()
 
 判断是否和另一个Variable相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=variable.Equal(hmm.Variable.New()
 ```
@@ -2162,7 +2163,7 @@ local str=sk:ToString()
 
 判断是否和另一个SnapshotKey相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=sk.Equal(hmm.LandmarkKey.New("key","type","value")
 ```
@@ -2284,7 +2285,7 @@ local sk=snapshot:UniqueKey()
 
 **代码范例**
 
-Javascaript:
+Javascript:
 ```javascript
 snapshot.Repeat()
 ```
@@ -2329,7 +2330,7 @@ local newsnapshot=snapshot:Clone()
 
 判断是否和另一个Snapshot相等
 
-Javacript:
+Javascript:
 ```javascript
 var same=snapshot.Equal(hmm.Snapshot.New()
 ```
@@ -2374,7 +2375,7 @@ sf.Group="mygroup"
 多个属性之间是 and 关系
 
 
-## SnapshotSearch 快走搜索类
+## SnapshotSearch 快照搜索类
 
 快照搜索类用于搜索具有特定指的快照
 
@@ -2494,7 +2495,7 @@ local cc=hmm.CommandCost:New("rideto gc","gc",5)
 
 | 属性名  | 类型   | 说明 |
 | ------- | ------ | ---- |
-| Commnad | string | 指令 |
+| Command | string | 指令 |
 | To      | string | 终点 |
 | Cost    | number | 消耗 |
 
@@ -2538,7 +2539,7 @@ path.Cost=1
 
 临时路径起点
 
-#### Commnad 属性
+#### Command 属性
 
 出口的实际指令，不可为空，继承自Exit
 

@@ -232,12 +232,12 @@ export class Mapper {
         }
         if (!this.Options.DisableShortcuts) {
             for (let key of Object.keys(this.MapFile.Records.Shortcuts)) {
-                if (ValueTag.ValidteConditions(room.Tags, this.MapFile.Records.Shortcuts[key].RoomConditions)) {
+                if (ValueTag.ValidateConditions(room.Tags, this.MapFile.Records.Shortcuts[key].RoomConditions)) {
                     result.push(this.MapFile.Records.Shortcuts[key]);
                 }
             }
             for (let shortcut of this.Context.Shortcuts) {
-                if (ValueTag.ValidteConditions(room.Tags, shortcut.RoomConditions)) {
+                if (ValueTag.ValidateConditions(room.Tags, shortcut.RoomConditions)) {
                     result.push(shortcut);
                 }
             }
@@ -263,7 +263,7 @@ export class Mapper {
         if (this.Options.MaxTotalCost > 0 && cost > this.Options.MaxTotalCost) {
             return false;
         }
-        if (!this.Context.ValidteConditions(exit.Conditions)) {
+        if (!this.Context.ValidateConditions(exit.Conditions)) {
             return false;
         }
         return true;
@@ -275,7 +275,7 @@ export class Mapper {
         if (Object.keys(this.Context.Whitelist).length > 0 && this.Context.Whitelist[room.Key] == null) {
             return false;
         }
-        if (!ValueTag.ValidteConditions(room.Tags, this.Context.RoomConditions)) {
+        if (!ValueTag.ValidateConditions(room.Tags, this.Context.RoomConditions)) {
             return false;
         }
         return true;

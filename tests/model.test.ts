@@ -115,18 +115,18 @@ describe("ModelTest", () => {
         assert.isFalse(ValueTag.HasTag(tags, "key2", 6));
         assert.isFalse(ValueTag.HasTag(tags, "key3", 1));
         assert.isTrue(ValueTag.HasTag(tags, "key3", 0));
-        assert.isTrue(ValueTag.ValidteConditions([], []));
-        assert.isFalse(ValueTag.ValidteConditions([], [new ValueCondition("key1", 1, false)]));
-        assert.isTrue(ValueTag.ValidteConditions(tags, []));
-        assert.isTrue(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, false)]));
-        assert.isFalse(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, true)]));
-        assert.isTrue(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key2", 0, false)]));
-        assert.isTrue(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key2", 10, true)]));
-        assert.isFalse(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key2", 10, false)]));
-        assert.isFalse(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key2", 4, true)]));
-        assert.isFalse(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, true), new ValueCondition("key2", 1, false)]));
-        assert.isTrue(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key3", 1, true)]));
-        assert.isFalse(ValueTag.ValidteConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key3", 1, false)]));
+        assert.isTrue(ValueTag.ValidateConditions([], []));
+        assert.isFalse(ValueTag.ValidateConditions([], [new ValueCondition("key1", 1, false)]));
+        assert.isTrue(ValueTag.ValidateConditions(tags, []));
+        assert.isTrue(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, false)]));
+        assert.isFalse(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, true)]));
+        assert.isTrue(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key2", 0, false)]));
+        assert.isTrue(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key2", 10, true)]));
+        assert.isFalse(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key2", 10, false)]));
+        assert.isFalse(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key2", 4, true)]));
+        assert.isFalse(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, true), new ValueCondition("key2", 1, false)]));
+        assert.isTrue(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key3", 1, true)]));
+        assert.isFalse(ValueTag.ValidateConditions(tags, [new ValueCondition("key1", 1, false), new ValueCondition("key3", 1, false)]));
     })
     it("TestValueTag", () => {
         var kv = new KeyValue("key", "value");
@@ -1490,10 +1490,10 @@ describe("ModelTest", () => {
         assert.isFalse(ctx.HasTag("tag2", 3));
         assert.isFalse(ctx.HasTag("tag3", 1));
         assert.isTrue(ctx.HasTag("tag3", 0));
-        assert.isTrue(ctx.ValidteConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag2", 2, false)]));
-        assert.isTrue(ctx.ValidteConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag3", 1, true)]));
-        assert.isFalse(ctx.ValidteConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag3", 1, false)]));
-        assert.isTrue(ctx.ValidteConditions([new ValueCondition("tag3", 0, false)]));
+        assert.isTrue(ctx.ValidateConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag2", 2, false)]));
+        assert.isTrue(ctx.ValidateConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag3", 1, true)]));
+        assert.isFalse(ctx.ValidateConditions([new ValueCondition("tag1", 1, false), new ValueCondition("tag3", 1, false)]));
+        assert.isTrue(ctx.ValidateConditions([new ValueCondition("tag3", 0, false)]));
     })
 
     it("TestSnapshotFilter", () => {

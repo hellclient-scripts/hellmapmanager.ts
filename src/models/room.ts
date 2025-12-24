@@ -97,7 +97,7 @@ export class RoomFilter {
     }
     Validate(room: Room): boolean {
         if (this.RoomConditions.length > 0) {
-            if (!ValueTag.ValidteConditions(room.Tags, this.RoomConditions)) {
+            if (!ValueTag.ValidateConditions(room.Tags, this.RoomConditions)) {
                 return false;
             }
         }
