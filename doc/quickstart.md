@@ -79,30 +79,30 @@ MapperOption一般和单次计算有关。
 
 查询多到多路线的API,一般是移动,最为常用
 ```js
-var result = MapDatabase.APIQueryPathAny(["start"], ["target1","target1"], ctx, option);
+var result = MapDatabase.APIQueryPathAny(["start"], ["target1","target2"], ctx, option);
 ```
 ```lua
-local result = MapDatabase:APIQueryPathAny(["start"], ["target1","target1"], ctx, option);
+local result = MapDatabase:APIQueryPathAny({"start"}, {"target1","target2"}, ctx, option);
 ```
 
 如果路线查询成功，范围的是一个QueryResult对象。如果查询失败，返回null
 
 查询经过所有Target路线(多次移动模拟)的API,一般是范围遍历
 ```js
-var result = MapDatabase.APIQueryPathAll("start", ["target1","target1"], ctx, option);
+var result = MapDatabase.APIQueryPathAll("start", ["target1","target2"], ctx, option);
 ```
 ```lua
-local result = MapDatabase:APIQueryPath("start", ["target1","target1"], ctx, option);
+local result = MapDatabase:APIQueryPath("start", {"target1","target2"}, ctx, option);
 ```
 
 如果路线查询成功，范围的是一个QueryResult对象。如果查询失败，返回null
 
 查询顺序经过所有Target路线的API,一般是固定房间遍历
 ```js
-var result = MapDatabase.APIQueryPathOrdered("start", ["target1","target1"], ctx, option);
+var result = MapDatabase.APIQueryPathOrdered("start", ["target1","target2"], ctx, option);
 ```
 ```lua
-local result = MapDatabase:APIQueryPathOrdered("start", ["target1","target1"], ctx, option);
+local result = MapDatabase:APIQueryPathOrdered("start", {"target1","target2"}, ctx, option);
 ```
 
 如果路线查询成功，范围的是一个QueryResult对象。如果查询失败，返回null
@@ -133,7 +133,7 @@ local result = MapDatabase:APIQueryPathOrdered("start", ["target1","target1"], c
 ```js
 var output=database.Export("path")
 ```
-```js
+```lua
 local output=database:Export("path")
 ```
 Export的参数为文件名，无实际意义
