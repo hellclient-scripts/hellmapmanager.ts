@@ -2602,3 +2602,87 @@ local ctx=hmm.Context:New()
 | WithBlockedLinks    | list: []Link                 | Context | 链式调用，插入拦截连接     |
 | ClearCommandCosts   | 无                           | Context | 链式调用，清除所有指令消耗 |
 | WithCommandCosts    | list: []CommandCost          | Context | 链式调用，插入指令消耗     |
+
+* 所有的方法都会返回Context本身，方便链式调用
+
+**版本更新**
+
+* 1002 版之后，CommandCosts支持To为空字符串作为通配符，匹配所有出口。
+
+
+## MapperOptions 地图选项
+
+在地图计算时一次性使用的选项
+
+### 创建方式
+
+Javascript:
+```javascript
+var opt=hmm.MapperOptions.New()
+opt.MaxExitCost=0
+opt.TotalCost=0
+opt.DisableShortcuts=false
+```
+
+Lua:
+```lua
+local opt=hmm.MapperOptions:New()
+opt.MaxExitCost=0
+opt.TotalCost=0
+opt.DisableShortcuts=false
+```
+
+### 属性
+
+| 属性名           | 类型         | 说明           |
+| ---------------- | ------------ | -------------- |
+| MaxExitCost      | number = 0   | 最大出口消耗   |
+| MaxTotalCost     | number = 0   | 最大路线总消耗 |
+| DisableShortcuts | bool = false | 禁止使用捷径   |
+
+#### MaxExitCost 属性
+
+最大出口消耗，忽略Cost大于本值的出口，小于等于0忽略
+
+#### MaxTotalCost 属性
+
+最大路线消耗，计算路径超过这个值时路线计算失败，小于等于0忽略
+
+#### DisableShortcuts 属性
+
+计算路线时是否不使用捷径
+
+### 方法
+
+| 方法名               | 参数          | 返回值        | 说明                           |
+| -------------------- | ------------- | ------------- | ------------------------------ |
+| WithMaxExitCost      | cost: number  | MapperOptions | 链式调用，设置MaxExitCost      |
+| WithMaxTotalCost     | cost: number  | MapperOptions | 链式调用，设置MaxTotalCost     |
+| WithDisableShortcuts | disable: bool | MapperOptions | 链式调用，设置DisableShortcuts |
+
+
+## Step 移动步骤
+
+移动步骤对象是查询路线的结果的一部分。
+
+### 属性
+
+| 属性名  | 类型   | 说明       |
+| ------- | ------ | ---------- |
+| Command | string | 指令       |
+| Target  | string | 移动的目标 |
+| Cost    | number | 移动的消耗 |
+
+## QueryResult 路线规划结果
+
+路线规划结果是APIQueryPath系列接口 返回的查询结果
+
+### 属性
+
+| 属性名    | 类型     | 说明                     |
+| --------- | -------- | ------------------------ |
+| From      | string   | 路线规划起点             |
+| To        | string   | 目的地                   |
+| Cost      | number   | 路线总消耗               |
+| Steps     | []Step   | 按顺序的移动步骤         |
+| Unvisited | []string | 多目的时未到达的目的列表 |
