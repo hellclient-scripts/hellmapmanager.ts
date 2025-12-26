@@ -104,5 +104,29 @@ describe("SnapSearchHelperTest", () => {
             })()
         sr = SnapshotHelper.Search(ss, snapshots);
         assert.isEmpty(sr);
+
+        ss = ((): SnapshotSearch => {
+            let model = new SnapshotSearch();
+            model.Type = "type2"
+            model.Keywords = ["value3", "value4", "ue1"]
+            model.PartialMatch = true
+            model.Any = false
+            return model;
+        })()
+
+        sr = SnapshotHelper.Search(ss, snapshots);
+        assert.isEmpty(sr);
+        ss = ((): SnapshotSearch => {
+            let model = new SnapshotSearch();
+            model.Type = "type2"
+            model.Keywords = ["value3", "value4", "ue1"]
+            model.PartialMatch = true
+            model.Any = false
+            model.MaxNoise = 2
+            return model;
+        })()
+
+        sr = SnapshotHelper.Search(ss, snapshots);
+        assert.equal(sr.length,2);
     })
 })

@@ -1559,6 +1559,14 @@ describe("ModelTest", () => {
         assert.isFalse(ss.Validate(snapshot));
         ss.Keywords = ["value1\nvalue2"];
         assert.isTrue(ss.Validate(snapshot));
+
+        ss.PartialMatch = true;
+        ss.Keywords = ["value3", "value4", "value"];
+        ss.Any = false;
+        assert.isFalse(ss.Validate(snapshot));
+        ss.MaxNoise = 2;
+        assert.isTrue(ss.Validate(snapshot));
+
     })
 
     it("TestSnapshotSearchResult", () => {

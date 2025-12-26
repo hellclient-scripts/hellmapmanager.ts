@@ -2413,14 +2413,14 @@ ss.Any=false
 
 ### 属性
 
-| 属性名       | 类型                  | 说明       |
-| ------------ | --------------------- | ---------- |
-| Type         | string \| null = null | 搜索类型   |
-| Group        | string \| null = null | 搜索分组   |
-| Keywords     | []string=[]           | 关键字列表 |
-| PartialMatch | bool= true            | 部分匹配   |
-| Any          | bool=false            | 任意满足   |
-
+| 属性名       | 类型                  | 说明         |
+| ------------ | --------------------- | ------------ |
+| Type         | string \| null = null | 搜索类型     |
+| Group        | string \| null = null | 搜索分组     |
+| Keywords     | []string=[]           | 关键字列表   |
+| PartialMatch | bool= true            | 部分匹配     |
+| Any          | bool=false            | 任意满足     |
+| MaxNoise     | number=0              | 最大噪声数据 |
 #### Type 属性
 
 限制快照类型，留空不限制
@@ -2429,19 +2429,29 @@ ss.Any=false
 
 限制快照分组，留空不限制
 
-#### Keywords 关键字列表
+#### Keywords  属性
+
+关键字列表
 
 搜索关键字，关键字列表，具体效果和下面两个参数相关
 
 留空返回与Any相反的结果。
 
-#### PartialMatch 部分匹配
+#### PartialMatch 属性
 
 部分匹配，默认表现为只要关键字出现在快照内容内就匹配。为false则必须完整匹配
 
-#### Any 任意满足
+#### Any 属性
 
 任意满足一般用在完整匹配时，任何一个关键字匹配则快照匹配
+
+#### MaxNoise 属性
+
+最大噪声数据。
+
+Any为false的情况下，每一个不匹配的关键字为一个噪音数据。
+
+噪音数据数量超过 NaxNoise属性则匹配失败。
 
 ## SnapshotSearchResult
 

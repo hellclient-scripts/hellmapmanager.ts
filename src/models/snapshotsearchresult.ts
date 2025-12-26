@@ -39,6 +39,7 @@ export class SnapshotSearch {
     Keywords: string[] = [];
     PartialMatch: boolean = true;
     Any: boolean = false;
+    MaxNoise: number = 0;
     static New(): SnapshotSearch {
         return new SnapshotSearch()
     }
@@ -61,11 +62,19 @@ export class SnapshotSearch {
         if (this.Keywords.length === 0) {
             return true;
         }
-
+        let noise: number = 0;
         for (let keyword of this.Keywords) {
             if (keyword !== "") {
                 if (this.match(keyword, model) == this.Any) {
-                    return this.Any;
+                    if (!this.Any) {
+                        //在完全匹配时，只有噪音超过允许的最大值才验证失败。
+                        noise++;
+                        if (noise > this.MaxNoise) {
+                            return false;
+                        }
+                    } else {
+                        return true;
+                    }
                 }
             }
         }
