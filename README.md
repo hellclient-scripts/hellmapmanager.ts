@@ -13,3 +13,9 @@
 * [API文档](doc/api.md)
 * [参考文档](doc/reference.md)
 * [更新历史](doc/history.md)
+
+## 注意事项
+
+从API取回的基本数据请不要直接修改。
+
+如果需要修改基本数据，请调用.Clone方法，修改后再调用Insert方法插入回数据库。

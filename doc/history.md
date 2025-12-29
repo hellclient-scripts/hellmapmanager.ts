@@ -1,5 +1,9 @@
 # API变更记录
 
+## Version 1003
+
+* SnapshotSearch 加入 MaxNoise 属性
+
 ## Version 1002
 
 * MapperOptions加入 CommandWhitelist属性和WithCommandWhitelist,ClearCommandWhitelist方法
