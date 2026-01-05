@@ -74,7 +74,7 @@ export class APIListOption {
 
 export class MapDatabase {
     Current: MapFile | null = null;
-    static Version = 1003;
+    static Version = 1004;
     static New(): MapDatabase {
         return new MapDatabase();
     }
@@ -423,21 +423,27 @@ export class MapDatabase {
             this.Current.MarkAsModified();
         }
     }
-    APIQueryPathAny(from: string[], target: string[], context: Context, options: MapperOptions): QueryResult | null {
+    APIQueryPathAny(from: string[], target: string[], context: Context | null, options: MapperOptions | null): QueryResult | null {
         if (this.Current != null) {
+            context ??= new Context();
+            options ??= new MapperOptions();
             return new Walking(new Mapper(this.Current, context, options)).QueryPathAny(from, target, 0).SuccessOrNull();
         }
         return null;
     }
 
-    APIQueryPathAll(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null {
+    APIQueryPathAll(start: string, target: string[], context: Context | null, options: MapperOptions | null): QueryResult | null {
         if (this.Current != null) {
+            context ??= new Context();
+            options ??= new MapperOptions();
             return new Walking(new Mapper(this.Current, context, options)).QueryPathAll(start, target).SuccessOrNull();
         }
         return null;
     }
-    APIQueryPathOrdered(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null {
+    APIQueryPathOrdered(start: string, target: string[], context: Context | null, options: MapperOptions | null): QueryResult | null {
         if (this.Current != null) {
+            context ??= new Context();
+            options ??= new MapperOptions();
             return new Walking(new Mapper(this.Current, context, options)).QueryPathOrdered(start, target).SuccessOrNull();
         }
         return null;
@@ -481,14 +487,18 @@ export class MapDatabase {
         return [];
     }
 
-    APIDilate(src: string[], iterations: number, context: Context, options: MapperOptions): string[] {
+    APIDilate(src: string[], iterations: number, context: Context | null, options: MapperOptions | null): string[] {
         if (this.Current != null) {
+            context ??= new Context();
+            options ??= new MapperOptions();
             return new Walking(new Mapper(this.Current, context, options)).Dilate(src, iterations);
         }
         return [];
     }
-    APITrackExit(start: string, command: string, context: Context, options: MapperOptions): string {
+    APITrackExit(start: string, command: string, context: Context | null, options: MapperOptions | null): string {
         if (this.Current != null) {
+            context ??= new Context();
+            options ??= new MapperOptions();
             let mapper = new Mapper(this.Current, context, options);
             let room = mapper.GetRoom(start);
             if (room != null) {
@@ -511,8 +521,10 @@ export class MapDatabase {
         }
         return "";
     }
-    APIGetRoom(key: string, context: Context, options: MapperOptions): Room | null {
+    APIGetRoom(key: string, context: Context | null, options: MapperOptions | null): Room | null {
         if (this.Current != null) {
+            context ??= new Context();
+            options ??= new MapperOptions();
             return new Mapper(this.Current, context, options).GetRoom(key);
         }
         return null;
@@ -636,8 +648,10 @@ export class MapDatabase {
             }
         }
     }
-    APIGetRoomExits(key: string, context: Context, options: MapperOptions): Exit[] {
+    APIGetRoomExits(key: string, context: Context | null, options: MapperOptions | null): Exit[] {
         if (this.Current != null) {
+            context ??= new Context();
+            options ??= new MapperOptions();
             let mapper = new Mapper(this.Current, context, options);
             let room = mapper.GetRoom(key);
             if (room != null) {

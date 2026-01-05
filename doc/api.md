@@ -629,15 +629,15 @@ database.APIRemoveSnapshots([key1,key2])
 一般常见的是一个起点到一个终点，或者一个起点到多个终点的规划
 
 ```javascript
-MapDatabase.APIQueryPathAny(from: string[], target: string[], context: Context, options: MapperOptions): QueryResult | null
+MapDatabase.APIQueryPathAny(from: string[], target: string[], context: Context|null, options: MapperOptions|null): QueryResult | null
 ```
 
 **参数**
 
 * from 出发地点列表
 * target 目的地列表
-* context 环境上下文
-* options 地图选项
+* context 环境上下文,null为空context
+* options 地图选项,null为空options
 
 **返回值**
 
@@ -652,6 +652,9 @@ var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
 var queryresult=database.APIQueryPathAny(["0"],["799","1946"],ctx,opt)
 ```
+**版本更新**
+
+* 1004 版之后，context和options参数可以为null
 
 ### 范围遍历规划接口
 
@@ -660,15 +663,15 @@ var queryresult=database.APIQueryPathAny(["0"],["799","1946"],ctx,opt)
 无法经过的目标会记录在查询结果的Unvisited里
 
 ```javascript
-MapDatabase.APIQueryPathAll(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null 
+MapDatabase.APIQueryPathAll(start: string, target: string[], context: Context|null, options: MapperOptions|null): QueryResult | null 
 ```
 
 **参数**
 
 * start 起点
 * target 目的地列表
-* context 环境上下文
-* options 地图选项
+* context 环境上下文,null为空context
+* options 地图选项,null为空options
 
 **返回值**
 
@@ -684,6 +687,10 @@ var opt=hmm.MapperOption.New()
 var queryresult=database.APIQueryPathAll("0",["0","1","2","3"],ctx,opt)
 ```
 
+**版本更新**
+
+* 1004 版之后，context和options参数可以为null
+
 ### 顺序遍历规划接口
 
 规划一个起点，按顺序经过所有目标的路线
@@ -691,15 +698,15 @@ var queryresult=database.APIQueryPathAll("0",["0","1","2","3"],ctx,opt)
 无法经过的目标会记录在查询结果的Unvisited里
 
 ```javascript
-MapDatabase.APIQueryPathOrdered(start: string, target: string[], context: Context, options: MapperOptions): QueryResult | null
+MapDatabase.APIQueryPathOrdered(start: string, target: string[], context: Context|null, options: MapperOptions|null): QueryResult | null
 ```
 
 **参数**
 
 * start 起点
 * target 目的地列表
-* context 环境上下文
-* options 地图选项
+* context 环境上下文,null为空context
+* options 地图选项,null为空options
 
 **返回值**
 
@@ -714,6 +721,11 @@ var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
 var queryresult=database.APIQueryPathOrdered("0",["0","1","2","3"],ctx,opt)
 ```
+
+**版本更新**
+
+* 1004 版之后，context和options参数可以为null
+
 ### 膨胀计算接口 
 
 计算从初始房间列表膨胀指定次数后的新的房间列表。
@@ -721,14 +733,14 @@ var queryresult=database.APIQueryPathOrdered("0",["0","1","2","3"],ctx,opt)
 一般用于获取地图上给点的房间，扩展几个房间后的区域。
 
 ```javascript
-MapDatabase.APIDilate(src: string[], iterations: number, context: Context, options: MapperOptions): string[] 
+MapDatabase.APIDilate(src: string[], iterations: number, context: Context|null, options: MapperOptions|null): string[] 
 ```
 **参数**
 
 * src 初始房间列表
 * iterations 膨胀次数
-* context 环境上下文
-* options 地图选项
+* context 环境上下文,null为空context
+* options 地图选项,null为空options
 
 **返回值**
 
@@ -742,6 +754,11 @@ var opt=hmm.MapperOption.New()
 var rooms=database.APIDilate(["0","1","2"],3,ctx,opt)
 ```
 
+**版本更新**
+
+* 1004 版之后，context和options参数可以为null
+
+
 ### 跟踪出口 
 
 追踪指定的起点，通过Command指令能到的房间。
@@ -751,15 +768,15 @@ var rooms=database.APIDilate(["0","1","2"],3,ctx,opt)
 失败返回空字符串
 
 ```javascript
-MapDatabase.APITrackExit(start: string, command: string, context: Context, options: MapperOptions): string 
+MapDatabase.APITrackExit(start: string, command: string, context: Context|null, options: MapperOptions|null): string 
 ```
 
 **参数**
 
 * start 起点房间
 * command 移动指令
-* context 环境上下文
-* options 地图选项
+* context 环境上下文,null为空context
+* options 地图选项,null为空options
 
 **返回值**
 
@@ -773,6 +790,11 @@ var opt=hmm.MapperOption.New()
 var roomkey=database.APITrackExit("0","north",ctx,opt)
 ```
 
+**版本更新**
+
+* 1004 版之后，context和options参数可以为null
+
+
 ### 获取房间 
 
 获取指定Key的房间。
@@ -782,13 +804,14 @@ var roomkey=database.APITrackExit("0","north",ctx,opt)
 成功返回房间对象，失败返回空。
 
 ```javascript
-APIGetRoom(key: string, context: Context, options: MapperOptions): Room | null
+APIGetRoom(key: string, context: Context|null, options: MapperOptions|null): Room | null
 ```
 **参数**
 
 * key 房间Key
-* context 环境上下文
-* options 地图选项
+* context 环境上下文,null为空context
+* options 地图选项,null为空options
+
 
 **返回值**
 
@@ -801,7 +824,14 @@ var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
 var room=database.APIGetRoom("0",ctx,opt)
 ```
-### 获取房间
+
+
+**版本更新**
+
+* 1004 版之后，context和options参数可以为null
+
+
+### 获取房间出口
 
 获取指定Key的房间的出口。
 
@@ -812,14 +842,15 @@ var room=database.APIGetRoom("0",ctx,opt)
 成功返回出口列表，失败返回空列表。
 
 ```javascript
-MapDatabase.APIGetRoomExits(key: string, context: Context, options: MapperOptions): Exit[]
+MapDatabase.APIGetRoomExits(key: string, context: Context|null, options: MapperOptions|null): Exit[]
 ```
 
 **参数**
 
 * key 房间主键
-* context 环境上下文
-* options 地图选项
+* context 环境上下文,null为空context
+* options 地图选项,null为空options
+
 
 **返回值**
 
@@ -832,6 +863,12 @@ var ctx=hmm.Context.New()
 var opt=hmm.MapperOption.New()
 var exits=database.APIGetRoomExits("0",ctx,opt)
 ```
+
+
+**版本更新**
+
+* 1004 版之后，context和options参数可以为null
+
 
 
 ## 标记接口

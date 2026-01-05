@@ -1,5 +1,15 @@
 # API变更记录
 
+## Version 1004
+
+* APIQueryPathAny 接口context和options参数变为可选。
+* APIQueryPathAll 接口context和options参数变为可选。
+* APIQueryPathOrdered 接口context和options参数变为可选。
+* APIDilate 接口context和options参数变为可选。
+* APITrackExit 接口context和options参数变为可选。
+* APIGetRoom 接口context和options参数变为可选。
+* APIGetRoomExits 接口context和options参数变为可选。
+
 ## Version 1003
 
 * SnapshotSearch 加入 MaxNoise 属性
