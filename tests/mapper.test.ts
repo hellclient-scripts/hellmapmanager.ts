@@ -203,7 +203,10 @@ describe("MapperTest", () => {
         opt.ClearCommandWhitelist();
         opt.WithCommandWhitelist(["cmd2"]);
         assert.isFalse(mapper.ValidateExit("key1", exit, 10));
-
+        opt.ClearCommandWhitelist();
+        opt.WithCommandNotContains(["md1"]);
+        assert.isFalse(mapper.ValidateExit("key1", exit, 10));
+        opt.ClearCommandNotContains();
 
     })
     it("TestWalkingStep", () => {

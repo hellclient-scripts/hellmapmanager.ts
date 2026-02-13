@@ -2,7 +2,8 @@ export class MapperOptions {
     MaxExitCost: number = 0;
     MaxTotalCost: number = 0;
     DisableShortcuts: boolean = false;
-    CommandWhitelist:{ [key: string]: boolean } = {};
+    CommandWhitelist: { [key: string]: boolean } = {};
+    CommandNotContains: string[] = [];
     static New(): MapperOptions {
         return new MapperOptions();
     }
@@ -28,10 +29,27 @@ export class MapperOptions {
         this.CommandWhitelist = {};
         return this;
     }
+    WithCommandNotContains(list: string[]): MapperOptions {
+        this.CommandNotContains = list;
+        return this;
+    }
+    ClearCommandNotContains(): MapperOptions {
+        this.CommandNotContains = [];
+        return this;
+    }
     ValidateCommand(cmd: string): boolean {
-        if (Object.keys(this.CommandWhitelist).length === 0) {
-            return true;
+        if (Object.keys(this.CommandWhitelist).length !== 0) {
+            if (this.CommandWhitelist[cmd] === undefined) {
+                return false;
+            }
         }
-        return this.CommandWhitelist[cmd] === true;
+        if (this.CommandNotContains.length > 0) {
+            for (const str of this.CommandNotContains) {
+                if (cmd.includes(str)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

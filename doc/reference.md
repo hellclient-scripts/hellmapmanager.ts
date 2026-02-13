@@ -2655,15 +2655,17 @@ opt.DisableShortcuts=false
 
 ### 属性
 
-| 属性名           | 类型                   | 说明           |
-| ---------------- | ---------------------- | -------------- |
-| MaxExitCost      | number = 0             | 最大出口消耗   |
-| MaxTotalCost     | number = 0             | 最大路线总消耗 |
-| DisableShortcuts | bool = false           | 禁止使用捷径   |
-| CommandWhitelist | [key: string]: boolean | 指令白名单     |
+| 属性名             | 类型                   | 说明           |
+| ------------------ | ---------------------- | -------------- |
+| MaxExitCost        | number = 0             | 最大出口消耗   |
+| MaxTotalCost       | number = 0             | 最大路线总消耗 |
+| DisableShortcuts   | bool = false           | 禁止使用捷径   |
+| CommandWhitelist   | [key: string]: boolean | 指令白名单     |
+| CommandNotContains | list:[]string          | 指令不包含清单 |
 
 **版本更新**
 
+* 1005 加入 CommandNotContains 属性
 * 1002 加入 CommandWhitelist 属性。
 
 #### MaxExitCost 属性
@@ -2682,19 +2684,26 @@ opt.DisableShortcuts=false
 
 指令必须在白名单内，出口才有效，为空忽略。
 
+#### CommandNotContains 指令不包含清单
+
+如果指令包含清单内的字符串，则出口无效
+
 ### 方法
 
-| 方法名                | 参数           | 返回值        | 说明                           |
-| --------------------- | -------------- | ------------- | ------------------------------ |
-| WithMaxExitCost       | cost: number   | MapperOptions | 链式调用，设置MaxExitCost      |
-| WithMaxTotalCost      | cost: number   | MapperOptions | 链式调用，设置MaxTotalCost     |
-| WithDisableShortcuts  | disable: bool  | MapperOptions | 链式调用，设置DisableShortcuts |
-| WithCommandWhitelist  | list: []string | MapperOptions | 链式调用，加入指令白名单       |
-| ClearCommandWhitelist | 无             | MapperOptions | 链式调用，清除白名单           |
+| 方法名                  | 参数           | 返回值        | 说明                           |
+| ----------------------- | -------------- | ------------- | ------------------------------ |
+| WithMaxExitCost         | cost: number   | MapperOptions | 链式调用，设置MaxExitCost      |
+| WithMaxTotalCost        | cost: number   | MapperOptions | 链式调用，设置MaxTotalCost     |
+| WithDisableShortcuts    | disable: bool  | MapperOptions | 链式调用，设置DisableShortcuts |
+| WithCommandWhitelist    | list: []string | MapperOptions | 链式调用，加入指令白名单       |
+| ClearCommandWhitelist   | 无             | MapperOptions | 链式调用，清除白名单           |
+| WithCommandNotContains  | list: []string | MapperOptions | 链式调用，加入指令不包含       |
+| ClearCommandNotContains | 无             | MapperOptions | 链式调用，清除指令不包含       |
 
 
 **版本更新**
 
+* 1005 加入WithCommandNotContains和ClearCommandNotContains
 * 1002 加入 WithCommandWhitelist和ClearCommandWhitelist方法
 
 

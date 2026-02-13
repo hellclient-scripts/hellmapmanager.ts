@@ -1,5 +1,8 @@
 # API变更记录
 
+## Version 1005
+
+* MapperOptions加入 CommandNotContains 属性 和 WithCommandNotContains , Clear CommandNotContains方法
 ## Version 1004
 
 * APIQueryPathAny 接口context和options参数变为可选。

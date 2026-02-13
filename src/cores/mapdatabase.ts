@@ -74,7 +74,7 @@ export class APIListOption {
 
 export class MapDatabase {
     Current: MapFile | null = null;
-    static Version = 1004;
+    static Version = 1005;
     static New(): MapDatabase {
         return new MapDatabase();
     }
