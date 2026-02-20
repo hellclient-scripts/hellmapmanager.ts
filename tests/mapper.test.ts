@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { MapDatabase, Context, MapperOptions, Room, Exit, Shortcut, Step, ValueTag, ValueCondition, Link, CommandCost } from '../src/index';
-import { Path, RoomConditionExit, Mapper, Walking, WalkingStep } from '../src/index';
+import { RoomTag, Path, RoomConditionExit, Mapper, Walking, WalkingStep } from '../src/index';
 
 describe("MapperTest", () => {
 
@@ -323,6 +323,20 @@ describe("MapperTest", () => {
             })()
 
         ]);
+        md.APIInsertShortcuts([
+            ((): Shortcut => {
+                let model = new Shortcut();
+                model.Key = "eshortcut2"
+                model.Command = "ecmd2"
+                model.To = "key4"
+                model.RoomConditions = [
+                    new ValueCondition("etag1", 1, false)
+                ]
+                model.Cost = 1
+                return model
+            })()
+
+        ]);
         exits = mapper.GetRoomExits(room);
         assert.equal(3, exits.length);
         ctx.WithShortcuts([
@@ -358,6 +372,7 @@ describe("MapperTest", () => {
         opt.WithDisableShortcuts(true);
         exits = mapper.GetRoomExits(room);
         assert.equal(2, exits.length);
+        opt.WithDisableShortcuts(false);
         ctx.WithPaths([
             ((): Path => {
                 let model = new Path();
@@ -369,7 +384,22 @@ describe("MapperTest", () => {
             })()
         ]);
         exits = mapper.GetRoomExits(room);
-        assert.equal(3, exits.length);
+        assert.equal(4, exits.length);
+        ctx.WithRoomTags([new RoomTag("key1", "etag1", 5)]);
+        exits = mapper.GetRoomExits(room);
+        assert.equal(6, exits.length);
+        ctx.ClearRoomTags();
+        exits = mapper.GetRoomExits(room);
+        assert.equal(5, exits.length);
+        ctx.WithRoomTags([new RoomTag("key2", "etag1", 5)]);
+        exits = mapper.GetRoomExits(room);
+        assert.equal(5, exits.length);
+        ctx.ClearRoomTags();
+        ctx.WithRoomTags([new RoomTag("", "etag1", 5)]);
+        exits = mapper.GetRoomExits(room);
+        assert.equal(6, exits.length);
+        ctx.ClearRoomTags();
+
     })
 
     it("TestValidateToWalkingStep", () => {

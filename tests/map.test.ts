@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { Path, MapDatabase, Context, MapperOptions, Room, Exit, Shortcut, Step, ValueTag, ValueCondition, Link, CommandCost } from '../src/index';
+import { RoomTag, Path, MapDatabase, Context, MapperOptions, Room, Exit, Shortcut, Step, ValueTag, ValueCondition, Link, CommandCost } from '../src/index';
 describe("MapTest", () => {
 
     let InitMapDatabase = (md: MapDatabase) => {
@@ -164,6 +164,14 @@ describe("MapTest", () => {
                 result.To = "key6"
                 result.Command = "A>6C"
                 result.Conditions = [new ValueCondition("noctxpath", 1, true)]
+                result.Cost = 2
+                return result;
+            })(),
+            ((): Shortcut => {
+                let result = new Shortcut();
+                result.To = "key5"
+                result.Command = "1>5C"
+                result.Conditions = [new ValueCondition("rt1", 1, false)]
                 result.Cost = 2
                 return result;
             })(),
@@ -543,6 +551,100 @@ describe("MapTest", () => {
         rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
         rooms.sort();
         assert.equal("key1;key3;key6", rooms.join(";"));
+
+
+        //CommandWhitelist
+        opt = new MapperOptions();
+        InitContext(ctx);
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        assert.equal("key1", exit);
+        qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
+        rooms.sort();
+        assert.equal("key1;key3;key6", rooms.join(";"));
+        opt.WithCommandWhitelist(["1>2", "1>3", "2>1", "2>3", "3>1", "3>3", "3>4", "4>3", "4>5", "5>3", "6>3", "A>6C"]);
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        assert.equal("", exit);
+        qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("6>3;3>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
+        rooms.sort();
+        assert.equal("key3;key6", rooms.join(";"));
+
+        //CommandNotContains
+        opt = new MapperOptions();
+        InitContext(ctx);
+        opt.WithCommandNotContains([">3"]);
+        exit = mapDatabase.APITrackExit("key1", "1>3", ctx, opt);
+        assert.equal("", exit);
+        qr = mapDatabase.APIQueryPathAll("key1", ["key4", "key6"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>6C", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key4"], ["key6", "key3"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>6C", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key1", ["key5", "key6"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>6C", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key4"], 1, ctx, opt);
+        rooms.sort();
+        assert.equal("key1;key4;key5;key6", rooms.join(";"));
+
+
+        //RoomTags
+        opt = new MapperOptions();
+        InitContext(ctx);
+        ctx.WithRoomTags([new RoomTag("key3", "rt1", 1)]);
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        assert.equal("key1", exit);
+        qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1;1>3;1>5C", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1;1>3;1>5C", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
+        rooms.sort();
+        assert.equal("key1;key3;key6", rooms.join(";"));
+
+        //RoomTags public
+        opt = new MapperOptions();
+        InitContext(ctx);
+        ctx.WithRoomTags([new RoomTag("", "rt1", 1)]);
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        assert.equal("key1", exit);
+        qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1;1>5C", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key5"], ctx, opt);
+        assert.isNotNull(qr);
+        assert.equal("A>1;1>5C", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
+        rooms.sort();
+        assert.equal("key1;key3;key5;key6", rooms.join(";"));
+
+
     })
     it("TestNullableAPI", () => {
 
