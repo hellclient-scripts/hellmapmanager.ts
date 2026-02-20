@@ -3,6 +3,19 @@ import { Exit } from "./exit";
 import { ValueCondition, ValueTag } from "./base";
 import { Room } from "./room";
 import { RoomConditionExit } from "./shortcut";
+export class RoomTag {
+    constructor(room: string, key: string, value: number) {
+        this.Room = room;
+        this.Key = key;
+        this.Value = value;
+    }
+    Room: string = "";
+    Key: string = "";
+    Value: number = 1;
+    static New(room: string, key: string, value: number): RoomTag {
+        return new RoomTag(room, key, value);
+    }
+}
 export class Path extends Exit {
     From: string = "";
     static New(): Path {
@@ -43,6 +56,7 @@ export class Environment {
     Blacklist: string[] = [];
     BlockedLinks: Link[] = [];
     CommandCosts: CommandCost[] = [];
+    RoomTags: RoomTag[] = [];
     static New(): Environment {
         return new Environment();
     }
@@ -58,6 +72,7 @@ export class Context {
     Paths: { [key: string]: Path[] } = {};
     BlockedLinks: { [key: string]: { [key: string]: boolean } } = {};
     CommandCosts: { [key: string]: { [key: string]: number } } = {};
+    RoomTags:{[key: string]:ValueTag[]} = {};
     static New(): Context {
         return new Context();
     }
@@ -160,6 +175,19 @@ export class Context {
     IsBlocked(from: string, to: string): boolean {
         return this.BlockedLinks[from] != null && this.BlockedLinks[from][to] != null;
     }
+    WithRoomTags(list: RoomTag[]): Context {
+        for (let item of list) {
+            if (this.RoomTags[item.Room] == null) {
+                this.RoomTags[item.Room] = [];
+            }
+            this.RoomTags[item.Room].push(new ValueTag(item.Key, item.Value));
+        }
+        return this;
+    }
+    ClearRoomTags(): Context {
+        this.RoomTags = {};
+        return this;
+    }
     static FromEnvironment(env: Environment): Context {
         let context = new Context();
         context.WithTags(env.Tags);
@@ -171,6 +199,7 @@ export class Context {
         context.WithPaths(env.Paths);
         context.WithBlockedLinks(env.BlockedLinks);
         context.WithCommandCosts(env.CommandCosts);
+        context.WithRoomTags(env.RoomTags);
         return context;
     }
     ToEnvironment(): Environment {
@@ -196,6 +225,11 @@ export class Context {
         for (let c in this.CommandCosts) {
             for (let t in this.CommandCosts[c]) {
                 env.CommandCosts.push(new CommandCost(c, t, this.CommandCosts[c][t]));
+            }
+        }
+        for (let r in this.RoomTags) {
+            for (let item of this.RoomTags[r]) {
+                env.RoomTags.push(new RoomTag(r, item.Key, item.Value));
             }
         }
         return env;

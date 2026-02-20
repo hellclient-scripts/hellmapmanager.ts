@@ -224,6 +224,14 @@ export class Mapper {
         }
         return exit.Cost;
     }
+    GetRoomTags(room: Room): ValueTag[] {
+        let result: ValueTag[] = [...room.Tags];
+        let tags = this.Context.RoomTags[room.Key] || [];
+        result = result.concat(tags.map(x => new ValueTag(x.Key, x.Value)));
+        let publictags = this.Context.RoomTags[""] || [];
+        result = result.concat(publictags.map(x => new ValueTag(x.Key, x.Value)));
+        return result;
+    }
     GetRoomExits(room: Room): Exit[] {
         let result: Exit[] = [...room.Exits];
         let list = this.Context.Paths[room.Key];
@@ -232,12 +240,12 @@ export class Mapper {
         }
         if (!this.Options.DisableShortcuts) {
             for (let key of Object.keys(this.MapFile.Records.Shortcuts)) {
-                if (ValueTag.ValidateConditions(room.Tags, this.MapFile.Records.Shortcuts[key].RoomConditions)) {
+                if (ValueTag.ValidateConditions(this.GetRoomTags(room), this.MapFile.Records.Shortcuts[key].RoomConditions)) {
                     result.push(this.MapFile.Records.Shortcuts[key]);
                 }
             }
             for (let shortcut of this.Context.Shortcuts) {
-                if (ValueTag.ValidateConditions(room.Tags, shortcut.RoomConditions)) {
+                if (ValueTag.ValidateConditions(this.GetRoomTags(room), shortcut.RoomConditions)) {
                     result.push(shortcut);
                 }
             }

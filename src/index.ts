@@ -34,8 +34,8 @@ export { MapFile }
 import { Records } from "./models/records";
 export { Records }
 
-import { Context, Path, Link, CommandCost, Environment } from "./models/context";
-export { Context, Path, Link, CommandCost, Environment }
+import { Context, Path, Link, CommandCost, Environment, RoomTag } from "./models/context";
+export { Context, Path, Link, CommandCost, Environment, RoomTag }
 import { UniqueKeyUtil } from "./utils/uniquekeyutil";
 export { UniqueKeyUtil }
 import { Step, QueryResult } from "./models/step";

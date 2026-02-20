@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { Data, Condition, TypedConditions, ValueTag, ValueCondition, KeyValue, ToggleKeyValue, Exit, Room, RoomFilter, Marker, Route, Trace, Region, RegionItem, RegionItemType, Landmark, Shortcut, Variable, Snapshot, SnapshotKey, MapEncoding, Map, MapInfo, MapSettings, MapFile } from "../src/index";
-import { LandmarkKey, ItemKey, Context, RoomConditionExit, Path, Link, Environment, CommandCost, Step, QueryResult, SnapshotFilter, SnapshotSearchResult, SnapshotSearch, MapperOptions } from "../src/index";
+import { RoomTag, LandmarkKey, ItemKey, Context, RoomConditionExit, Path, Link, Environment, CommandCost, Step, QueryResult, SnapshotFilter, SnapshotSearchResult, SnapshotSearch, MapperOptions } from "../src/index";
 
 describe("ModelTest", () => {
     it("TestBase", () => {
@@ -1271,6 +1271,21 @@ describe("ModelTest", () => {
         assert.equal(1, ctx.CommandCosts["cmd1"]["to1"]);
         assert.equal(2, ctx.CommandCosts["cmd2"]["to1"]);
         assert.equal(3, ctx.CommandCosts["cmd1"]["to3"]);
+
+        assert.isEmpty(ctx.RoomTags);
+        assert.equal(ctx, ctx.WithRoomTags([
+            new RoomTag("room1", "tag1", 1),
+            new RoomTag("room2", "tag2", 2),
+            new RoomTag("room2", "tag3", 2),
+        ]));
+        assert.equal(2, Object.keys(ctx.RoomTags).length);
+        assert.equal("tag1", ctx.RoomTags["room1"][0].Key);
+        assert.equal(1, ctx.RoomTags["room1"][0].Value);
+        assert.equal("tag2", ctx.RoomTags["room2"][0].Key);
+        assert.equal(2, ctx.RoomTags["room2"][0].Value);
+        assert.equal("tag3", ctx.RoomTags["room2"][1].Key);
+        assert.equal(2, ctx.RoomTags["room2"][1].Value);
+
         assert.equal(ctx, ctx.ClearTags());
         assert.isEmpty(ctx.Tags);
         assert.equal(ctx, ctx.ClearRoomConditions());
@@ -1289,6 +1304,8 @@ describe("ModelTest", () => {
         assert.isEmpty(ctx.BlockedLinks);
         assert.equal(ctx, ctx.ClearCommandCosts());
         assert.isEmpty(ctx.CommandCosts);
+        assert.equal(ctx, ctx.ClearRoomTags());
+        assert.isEmpty(ctx.RoomTags);
     })
 
     it("TestEnvironment", () => {
@@ -1329,7 +1346,7 @@ describe("ModelTest", () => {
         ]
         env.BlockedLinks = [new Link("from1", "to1"), new Link("from2", "to2"), new Link("from1", "to3")]
         env.CommandCosts = [new CommandCost("cmd1", "to1", 1), new CommandCost("cmd2", "to1", 2), new CommandCost("cmd1", "to3", 3)]
-
+        env.RoomTags = [new RoomTag("room1", "tag1", 1), new RoomTag("room2", "tag2", 2)]
         var ctx = Context.FromEnvironment(env);
         assert.equal(2, Object.keys(ctx.Tags).length);
         assert.equal(1, ctx.Tags["tag1"]);
@@ -1432,6 +1449,14 @@ describe("ModelTest", () => {
             assert.equal(env.CommandCosts[i].To, env2.CommandCosts[i].To);
             assert.equal(env.CommandCosts[i].Cost, env2.CommandCosts[i].Cost);
         }
+        env.RoomTags.sort((a, b) => a.Room < b.Room ? -1 : 1);
+        env2.RoomTags.sort((a, b) => a.Room < b.Room ? -1 : 1);
+        for (var i = 0; i < env.RoomTags.length; i++) {
+            assert.equal(env.RoomTags[i].Room, env2.RoomTags[i].Room);
+            assert.equal(env.RoomTags[i].Key, env2.RoomTags[i].Key);
+            assert.equal(env.RoomTags[i].Value, env2.RoomTags[i].Value);
+        }
+
     })
 
     it("TestMapperOption", () => {
