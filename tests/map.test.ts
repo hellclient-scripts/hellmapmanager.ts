@@ -171,7 +171,7 @@ describe("MapTest", () => {
                 let result = new Shortcut();
                 result.To = "key5"
                 result.Command = "1>5C"
-                result.Conditions = [new ValueCondition("rt1", 1, false)]
+                result.RoomConditions = [new ValueCondition("rt1", 1, false)]
                 result.Cost = 2
                 return result;
             })(),

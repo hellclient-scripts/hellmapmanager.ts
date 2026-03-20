@@ -384,7 +384,7 @@ describe("MapperTest", () => {
             })()
         ]);
         exits = mapper.GetRoomExits(room);
-        assert.equal(4, exits.length);
+        assert.equal(5, exits.length);
         ctx.WithRoomTags([new RoomTag("key1", "etag1", 5)]);
         exits = mapper.GetRoomExits(room);
         assert.equal(6, exits.length);

@@ -1,5 +1,6 @@
 import { Data, ValueTag, Condition, ValueCondition, TypedConditions, RegionItemType, RegionItem } from "./base"
 import { Command, ControlCode } from "../utils/controlcode/controlcode";
+import { ParseInt } from "@include/parseint";
 export class KeyValue {
     constructor(key: string, value: string) {
         this.Key = key;
@@ -196,8 +197,8 @@ export class HMMFormatter {
         return HMMFormatter.Unescape(HMMFormatter.At(list, index));
     }
     static UnescapeInt(val: string, defaultValue: number): number {
-        let result = Number.parseInt(HMMFormatter.Unescape(val))
-        return isNaN(result) || (val.indexOf(".") != -1) ? defaultValue : result;
+        let result = ParseInt.Parse(HMMFormatter.Unescape(val))
+        return result == undefined ? defaultValue : result;
     }
     static UnescapeIntAt(list: string[], index: number, defaultValue: number): number {
         return HMMFormatter.UnescapeInt(HMMFormatter.At(list, index), defaultValue);
