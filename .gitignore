@@ -40,3 +40,11 @@ test/*.js
 *.map
 dist/*
 build/*
+
+dll/*.so
+dll/*.o
+dll/*.obj
+dll/*.dll
+dll/*.exp
+dll/*.lib
+dll/*.bat

@@ -1,0 +1,15 @@
+@echo off
+:: 1. 设置 VS 环境 (路径需根据你的 VS 版本及安装位置修改)
+:: 常用路径: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat
+set VCVARS="C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvarsall.bat"
+
+:: 调用环境脚本，x64 表示编译 64 位 DLL (必须用 call，否则脚本执行完 vcvarsall 就退出了)
+call %VCVARS% x64
+
+:: 2. 执行编译
+:: /LD  : 告诉编译器生成 DLL
+:: /Fe  : 指定输出文件名 (例如 mylib.dll)
+:: /I   : (可选) 指定头文件目录
+cl.exe /LD hmmlua-win.c .\lua-5.1.5_Win64_vc17_lib\lua5.1.lib /Fe:hmmlua.dll /I .\lua-5.1.5_Win64_vc17_lib\\include
+
+pause
