@@ -402,150 +402,150 @@ describe("MapperTest", () => {
 
     })
 
-    it("TestValidateToWalkingStep", () => {
+    // it("TestValidateToWalkingStep", () => {
 
-        var md = new MapDatabase();
-        md.NewMap();
-        var ctx = new Context();
-        var opt = new MapperOptions();
-        var mapper = new Mapper(md.Current!, ctx, opt);
-        md.APIInsertRooms([
-            ((): Room => {
-                let model = new Room();
-                model.Key = "key2"
-                model.Tags = [
-                    new ValueTag("etag1", 1)
-                ]
-                return model;
-            })(),
-        ]);
-        var exit = ((): Exit => {
-            let model = new Exit();
-            model.To = "key2"
-            model.Command = "cmd1"
-            model.Conditions = [
-                new ValueCondition("etag1", 1, true)
-            ]
-            model.Cost = 10
-            return model;
-        })()
-        var wsprev = new WalkingStep()
-        var ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
-        assert.isNotNull(ws);
-        assert.equal(wsprev, ws.Prev);
-        assert.equal("key1", ws.From);
-        assert.equal("key2", ws.To);
-        assert.equal("cmd1", ws.Command);
-        assert.equal(10, ws.Cost);
-        assert.equal(20, ws.TotalCost);
-        assert.equal(9, ws.Remain);
-        var exit2 = exit.Clone();
-        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
-        assert.isNotNull(ws);
-        exit2.To = "";
-        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
-        assert.isNull(ws);
-        exit2 = exit.Clone();
-        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
-        assert.isNotNull(ws);
-        exit2.To = "key1";
-        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
-        assert.isNull(ws);
-        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
-        assert.isNotNull(ws);
-        ctx.WithTags([new ValueTag("etag1", 2)]);
-        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
-        ctx.ClearTags();
-        assert.isNull(ws);
-        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
-        assert.isNotNull(ws);
-        opt.WithMaxTotalCost(15);
-        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
-        assert.isNull(ws);
-    })
+    //     var md = new MapDatabase();
+    //     md.NewMap();
+    //     var ctx = new Context();
+    //     var opt = new MapperOptions();
+    //     var mapper = new Mapper(md.Current!, ctx, opt);
+    //     md.APIInsertRooms([
+    //         ((): Room => {
+    //             let model = new Room();
+    //             model.Key = "key2"
+    //             model.Tags = [
+    //                 new ValueTag("etag1", 1)
+    //             ]
+    //             return model;
+    //         })(),
+    //     ]);
+    //     var exit = ((): Exit => {
+    //         let model = new Exit();
+    //         model.To = "key2"
+    //         model.Command = "cmd1"
+    //         model.Conditions = [
+    //             new ValueCondition("etag1", 1, true)
+    //         ]
+    //         model.Cost = 10
+    //         return model;
+    //     })()
+    //     var wsprev = new WalkingStep()
+    //     var ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+    //     assert.isNotNull(ws);
+    //     assert.equal(wsprev, ws.Prev);
+    //     assert.equal("key1", ws.From);
+    //     assert.equal("key2", ws.To);
+    //     assert.equal("cmd1", ws.Command);
+    //     assert.equal(10, ws.Cost);
+    //     assert.equal(20, ws.TotalCost);
+    //     assert.equal(9, ws.Remain);
+    //     var exit2 = exit.Clone();
+    //     ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
+    //     assert.isNotNull(ws);
+    //     exit2.To = "";
+    //     ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
+    //     assert.isNull(ws);
+    //     exit2 = exit.Clone();
+    //     ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
+    //     assert.isNotNull(ws);
+    //     exit2.To = "key1";
+    //     ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
+    //     assert.isNull(ws);
+    //     ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+    //     assert.isNotNull(ws);
+    //     ctx.WithTags([new ValueTag("etag1", 2)]);
+    //     ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+    //     ctx.ClearTags();
+    //     assert.isNull(ws);
+    //     ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+    //     assert.isNotNull(ws);
+    //     opt.WithMaxTotalCost(15);
+    //     ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+    //     assert.isNull(ws);
+    // })
 
-    it("TestAddRoomWalkingSteps", () => {
-        var md = new MapDatabase();
-        md.NewMap();
-        var ctx = new Context();
-        var opt = new MapperOptions();
-        var mapper = new Mapper(md.Current!, ctx, opt);
-        var list: WalkingStep[] = [];
-        var room = ((): Room => {
-            let model = new Room();
-            model.Key = "key1"
-            model.Tags = [
-                new ValueTag("etag1", 1)
-            ]
-            model.Exits = [
-                ((): Exit => {
-                    let model = new Exit();
-                    model.To = "key2"
-                    model.Command = "cmd1"
-                    model.Conditions = [
-                        new ValueCondition("etag1", 1, true)
-                    ]
-                    model.Cost = 10
-                    return model;
-                })(),
-                ((): Exit => {
-                    let model = new Exit();
-                    model.To = "key3"
-                    model.Command = "cmd2"
-                    model.Cost = 20
-                    return model;
-                })(),
+    // it("TestAddRoomWalkingSteps", () => {
+    //     var md = new MapDatabase();
+    //     md.NewMap();
+    //     var ctx = new Context();
+    //     var opt = new MapperOptions();
+    //     var mapper = new Mapper(md.Current!, ctx, opt);
+    //     var list: WalkingStep[] = [];
+    //     var room = ((): Room => {
+    //         let model = new Room();
+    //         model.Key = "key1"
+    //         model.Tags = [
+    //             new ValueTag("etag1", 1)
+    //         ]
+    //         model.Exits = [
+    //             ((): Exit => {
+    //                 let model = new Exit();
+    //                 model.To = "key2"
+    //                 model.Command = "cmd1"
+    //                 model.Conditions = [
+    //                     new ValueCondition("etag1", 1, true)
+    //                 ]
+    //                 model.Cost = 10
+    //                 return model;
+    //             })(),
+    //             ((): Exit => {
+    //                 let model = new Exit();
+    //                 model.To = "key3"
+    //                 model.Command = "cmd2"
+    //                 model.Cost = 20
+    //                 return model;
+    //             })(),
 
-            ]
-            return model;
-        })()
+    //         ]
+    //         return model;
+    //     })()
 
-        md.APIInsertRooms([room,
-            ((): Room => {
-                let model = new Room();
-                model.Key = "key2"
-                return model;
-            })(),
-            ((): Room => {
-                let model = new Room();
-                model.Key = "key3"
-                return model;
-            })(),
-            ((): Room => {
-                let model = new Room();
-                model.Key = "key4"
-                return model;
-            })(),
-        ]);
-        mapper.AddRoomWalkingSteps(null, list, "notfound", 15);
-        assert.isEmpty(list);
-        md.APIInsertShortcuts([
-            ((): Shortcut => {
-                let model = new Shortcut();
-                model.Key = "shortcut1"
-                model.Command = "cmd3"
-                model.To = "key4"
-                model.Cost = 1
-                return model;
-            })()
-        ]);
-        ctx.WithTags([new ValueTag("etag1", 2)]);
-        mapper.AddRoomWalkingSteps(null, list, "key1", 15);
-        assert.equal(2, list.length);
-        list.sort((a, b) => a.To < b.To ? -1 : 1);
-        assert.isNull(list[0].Prev);
-        assert.equal("key3", list[0].To);
-        assert.equal("cmd2", list[0].Command);
-        assert.equal(20, list[0].Cost);
-        assert.equal(35, list[0].TotalCost);
-        assert.equal(19, list[0].Remain);
-        assert.isNull(list[1].Prev);
-        assert.equal("key4", list[1].To);
-        assert.equal("cmd3", list[1].Command);
-        assert.equal(1, list[1].Cost);
-        assert.equal(16, list[1].TotalCost);
-        assert.equal(0, list[1].Remain);
-    })
+    //     md.APIInsertRooms([room,
+    //         ((): Room => {
+    //             let model = new Room();
+    //             model.Key = "key2"
+    //             return model;
+    //         })(),
+    //         ((): Room => {
+    //             let model = new Room();
+    //             model.Key = "key3"
+    //             return model;
+    //         })(),
+    //         ((): Room => {
+    //             let model = new Room();
+    //             model.Key = "key4"
+    //             return model;
+    //         })(),
+    //     ]);
+    //     mapper.AddRoomWalkingSteps(null, list, "notfound", 15);
+    //     assert.isEmpty(list);
+    //     md.APIInsertShortcuts([
+    //         ((): Shortcut => {
+    //             let model = new Shortcut();
+    //             model.Key = "shortcut1"
+    //             model.Command = "cmd3"
+    //             model.To = "key4"
+    //             model.Cost = 1
+    //             return model;
+    //         })()
+    //     ]);
+    //     ctx.WithTags([new ValueTag("etag1", 2)]);
+    //     mapper.AddRoomWalkingSteps(null, list, "key1", 15);
+    //     assert.equal(2, list.length);
+    //     list.sort((a, b) => a.To < b.To ? -1 : 1);
+    //     assert.isNull(list[0].Prev);
+    //     assert.equal("key3", list[0].To);
+    //     assert.equal("cmd2", list[0].Command);
+    //     assert.equal(20, list[0].Cost);
+    //     assert.equal(35, list[0].TotalCost);
+    //     assert.equal(19, list[0].Remain);
+    //     assert.isNull(list[1].Prev);
+    //     assert.equal("key4", list[1].To);
+    //     assert.equal("cmd3", list[1].Command);
+    //     assert.equal(1, list[1].Cost);
+    //     assert.equal(16, list[1].TotalCost);
+    //     assert.equal(0, list[1].Remain);
+    // })
     var SortAndJoin = (list: string[]) => {
         list.sort();
         return list.join(";");

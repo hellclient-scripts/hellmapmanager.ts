@@ -6,6 +6,8 @@ import { MapperOptions } from "../models/mapperoption"
 import { MapFile } from "../models/mapfile"
 import { Room } from "../models/room"
 import { ValueTag } from "../models/base"
+import { Shortcut, RoomConditionExit } from "../models/shortcut";
+
 export class WalkingStep {
     static FromExit(prev: WalkingStep | null, from: string, exit: Exit, cost: number, TotalCost: number): WalkingStep {
         let result = new WalkingStep()
@@ -16,7 +18,7 @@ export class WalkingStep {
         result.Cost = cost
         result.TotalCost = TotalCost + cost
         result.Remain = cost - 1
-
+        result.Exit = exit;
         return result;
     }
     ToStep(): Step {
@@ -29,6 +31,7 @@ export class WalkingStep {
     Cost: number = 0;
     TotalCost: number = 0;
     Remain: number = 0;
+    Exit: Exit | null = null;
 }
 
 export class Walking {
@@ -36,7 +39,21 @@ export class Walking {
         this.Mapper = mapper;
     }
     private Walked: { [key: string]: WalkingStep } = {};
+    public InitShortcuts() {
+        for (let key of Object.keys(this.Mapper.MapFile.Records.Shortcuts)) {
+            let s = this.Mapper.MapFile.Records.Shortcuts[key];
+            if (this.Mapper.ValidateExitStatic(s)) {
+                this.Shortcuts.push(s);
+            }
+        };
+        this.Mapper.Context.Shortcuts.forEach(s => {
+            if (this.Mapper.ValidateExitStatic(s)) {
+                this.Shortcuts.push(s);
+            }
+        });
+    }
 
+    private Shortcuts: RoomConditionExit[] = [];
     Mapper: Mapper;
     private static BuildResult(last: WalkingStep, targets: string[]): QueryResult {
         let result = new QueryResult();
@@ -58,6 +75,7 @@ export class Walking {
         return result;
     }
     QueryPathAny(from: string[], target: string[], initTotalCost: number): QueryResult {
+        this.InitShortcuts();
         from = from.filter(x => x !== "");
         target = target.filter(x => x !== "");
         if (from.length == 0 || target.length == 0) {
@@ -87,7 +105,7 @@ export class Walking {
             step.From = "";
             step.Command = "";
             this.Walked[f] = step
-            this.Mapper.AddRoomWalkingSteps(null, pending, f, initTotalCost);
+            this.AddRoomWalkingSteps(null, pending, f, initTotalCost);
         }
         while (pending.length > 0) {
             current = pending;
@@ -99,7 +117,11 @@ export class Walking {
                             return Walking.BuildResult(step, target);
                         }
                         this.Walked[step.To] = step;
-                        this.Mapper.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
+                        this.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
+                        let sc = step.Exit as RoomConditionExit;
+                        if (sc != null) {
+                            this.Shortcuts = this.Shortcuts.filter(s => s !== sc);
+                        }
                     }
                     else {
                         step.Remain--;
@@ -111,6 +133,7 @@ export class Walking {
         return QueryResult.Fail;
     }
     Dilate(src: string[], iterations: number): string[] {
+        this.InitShortcuts();
         this.Walked = {};
         let current: WalkingStep[];
         let pending: WalkingStep[] = [];
@@ -120,7 +143,7 @@ export class Walking {
                 step.From = "";
                 step.Command = "";
                 this.Walked[f] = step;
-                this.Mapper.AddRoomWalkingSteps(null, pending, f, 0);
+                this.AddRoomWalkingSteps(null, pending, f, 0);
             }
         }
         let i = 0;
@@ -130,7 +153,7 @@ export class Walking {
             for (let step of current) {
                 if (this.Walked[step.To] == null) {
                     this.Walked[step.To] = step;
-                    this.Mapper.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
+                    this.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
                 }
             }
             i++;
@@ -166,6 +189,7 @@ export class Walking {
         return result;
     }
     QueryPathOrdered(start: string, target: string[]): QueryResult {
+        this.InitShortcuts();
         target = target.filter(x => x !== "");
         if (target.length == 0 || start == "") {
             return QueryResult.Fail;
@@ -188,6 +212,71 @@ export class Walking {
             return QueryResult.Fail;
         }
         return result;
+    }
+    private GetRoomExitsWithoutShortcuts(room: Room): Exit[] {
+        let result: Exit[] = [...room.Exits];
+        //加入上下文中的临时出口
+        let list = this.Mapper.Context.Paths[room.Key]
+        if (list != null) {
+            result = result.concat(list);
+        }
+        return result;
+    }
+    //验证并转换路径
+    //如果路径无效，返回空
+    private ValidateToWalkingStep(prev: WalkingStep | null, from: string, exit: Exit, TotalCost: number): WalkingStep | null {
+        if (exit.To == "" || exit.To == from) {
+            return null;
+        }
+        let cost = this.Mapper.GetExitCost(exit);
+        //验证出口
+        if (!this.Mapper.ValidateExit(from, exit, cost)) {
+            return null;
+        }
+        //判断最大消耗
+        if (this.Mapper.Options.MaxTotalCost > 0 && this.Mapper.Options.MaxTotalCost < (cost + TotalCost)) {
+            return null;
+        }
+        //转换
+        return WalkingStep.FromExit(prev, from, exit, cost, TotalCost);
+    }
+    private ValidateShortcutToWalkingStep(prev: WalkingStep | null, from: string, shortcut: RoomConditionExit, TotalCost: number): WalkingStep | null {
+        if (shortcut.To == "" || shortcut.To == from) {
+            return null;
+        }
+        let cost = this.Mapper.GetExitCost(shortcut);
+        //验证出口
+        if (!this.Mapper.ValidateExitDynamic(from, shortcut, cost)) {
+            return null;
+        }
+        //判断最大消耗
+        if (this.Mapper.Options.MaxTotalCost > 0 && this.Mapper.Options.MaxTotalCost < (cost + TotalCost)) {
+            return null;
+        }
+        //转换
+        return WalkingStep.FromExit(prev, from, shortcut, cost, TotalCost);
+    }
+    private AddRoomWalkingSteps(prev: WalkingStep | null, list: WalkingStep[], from: string, TotalCost: number) {
+        let room = this.Mapper.GetRoom(from);
+        if (room != null) {
+            for (let exit of this.GetRoomExitsWithoutShortcuts(room)) {
+                let step = this.ValidateToWalkingStep(prev, from, exit, TotalCost);
+                if (step != null) {
+                    list.push(step);
+                }
+            }
+            //判断是否禁用捷径(飞行)出口
+            if (!this.Mapper.Options.DisableShortcuts) {
+                for (let shortcut of this.Shortcuts) {
+                    if (ValueTag.ValidateConditions(this.Mapper.GetRoomTags(room), shortcut.RoomConditions)) {
+                        let step = this.ValidateShortcutToWalkingStep(prev, from, shortcut, TotalCost);
+                        if (step != null) {
+                            list.push(step);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -280,6 +369,40 @@ export class Mapper {
 
         return true;
     }
+    public ValidateExitStatic(exit: Exit): boolean {
+        let room = this.GetRoom(exit.To);
+        if (room == null) {
+            return false;
+        }
+        //验证房间符合当前移动的上下文设置
+        if (!this.ValidateRoom(room)) {
+            return false;
+        }
+        //判断出口的条件是否匹配当前上下文
+        if (!this.Context.ValidateConditions(exit.Conditions)) {
+            return false;
+        }
+        if (!this.Options.ValidateCommand(exit.Command)) {
+            return false;
+        }
+        return true;
+    }
+    public ValidateExitDynamic(start: string, exit: Exit, cost: number): boolean {
+        //判断房间不在上下文中的拦截名单里
+        if (this.Context.IsBlocked(start, exit.To)) {
+            return false;
+        }
+        //判断出口不超时
+        if (this.Options.MaxExitCost > 0 && cost > this.Options.MaxExitCost) {
+            return false;
+        }
+        //判断出口不超过整个移动的最大消耗
+        if (this.Options.MaxTotalCost > 0 && cost > this.Options.MaxTotalCost) {
+            return false;
+        }
+        return true;
+    }
+
     ValidateRoom(room: Room): boolean {
         if (this.Context.Blacklist[room.Key] == true) {
             return false;
@@ -297,30 +420,5 @@ export class Mapper {
             return false;
         }
         return this.ValidateExit(start, exit, this.GetExitCost(exit));
-    }
-    ValidateToWalkingStep(prev: WalkingStep | null, from: string, exit: Exit, TotalCost: number): WalkingStep | null {
-        if (exit.To == "" || exit.To == from) {
-            return null;
-        }
-        let cost = this.GetExitCost(exit);
-        if (!this.ValidateExit(from, exit, cost)) {
-            return null;
-        }
-        if (this.Options.MaxTotalCost > 0 && this.Options.MaxTotalCost < (cost + TotalCost)) {
-            return null;
-        }
-        return WalkingStep.FromExit(prev, from, exit, cost, TotalCost);
-
-    }
-    AddRoomWalkingSteps(prev: WalkingStep | null, list: WalkingStep[], from: string, TotalCost: number) {
-        let room = this.GetRoom(from);
-        if (room != null) {
-            for (let exit of this.GetRoomExits(room)) {
-                let step = this.ValidateToWalkingStep(prev, from, exit, TotalCost);
-                if (step != null) {
-                    list.push(step);
-                }
-            }
-        }
     }
 }
