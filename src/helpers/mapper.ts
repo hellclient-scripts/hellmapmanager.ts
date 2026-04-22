@@ -153,6 +153,10 @@ export class Walking {
             for (let step of current) {
                 if (this.Walked[step.To] == null) {
                     this.Walked[step.To] = step;
+                    let sc = step.Exit as RoomConditionExit;
+                    if (sc != null) {
+                        this.Shortcuts = this.Shortcuts.filter(s => s !== sc);
+                    }
                     this.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
                 }
             }
@@ -189,7 +193,6 @@ export class Walking {
         return result;
     }
     QueryPathOrdered(start: string, target: string[]): QueryResult {
-        this.InitShortcuts();
         target = target.filter(x => x !== "");
         if (target.length == 0 || start == "") {
             return QueryResult.Fail;
